@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="hexo博客建好了，除了视觉美化最好还有声觉美化，也就是BGM。早在当年QQ空间时代就已经开始弄BGM了，到了hexo这里自然不能落下。 今天用到的一个js组件是aplayer，一个非常漂亮好用的HTML5音乐播放器，和dplayer师出同门。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Aplayer在hexo博客上添加音乐播放器并全局适用不中断播放">
+<meta property="og:url" content="https://direct5dom.github.io/2021/09/07/%E5%9F%BA%E4%BA%8EAplayer%E5%9C%A8hexo%E5%8D%9A%E5%AE%A2%E4%B8%8A%E6%B7%BB%E5%8A%A0%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E5%B9%B6%E5%85%A8%E5%B1%80%E9%80%82%E7%94%A8%E4%B8%8D%E4%B8%AD%E6%96%AD%E6%92%AD%E6%94%BE/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="hexo博客建好了，除了视觉美化最好还有声觉美化，也就是BGM。早在当年QQ空间时代就已经开始弄BGM了，到了hexo这里自然不能落下。 今天用到的一个js组件是aplayer，一个非常漂亮好用的HTML5音乐播放器，和dplayer师出同门。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-09-06T20:28:10.000Z">
+<meta property="article:modified_time" content="2021-10-05T07:15:58.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="博客搭建">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/09/07/%E5%9F%BA%E4%BA%8EAplayer%E5%9C%A8hexo%E5%8D%9A%E5%AE%A2%E4%B8%8A%E6%B7%BB%E5%8A%A0%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E5%B9%B6%E5%85%A8%E5%B1%80%E9%80%82%E7%94%A8%E4%B8%8D%E4%B8%AD%E6%96%AD%E6%92%AD%E6%94%BE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>基于Aplayer在hexo博客上添加音乐播放器并全局适用不中断播放 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/09/07/%E5%9F%BA%E4%BA%8EAplayer%E5%9C%A8hexo%E5%8D%9A%E5%AE%A2%E4%B8%8A%E6%B7%BB%E5%8A%A0%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E5%B9%B6%E5%85%A8%E5%B1%80%E9%80%82%E7%94%A8%E4%B8%8D%E4%B8%AD%E6%96%AD%E6%92%AD%E6%94%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于Aplayer在hexo博客上添加音乐播放器并全局适用不中断播放
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-07 04:28:10" itemprop="dateCreated datePublished" datetime="2021-09-07T04:28:10+08:00">2021-09-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-05 15:15:58" itemprop="dateModified" datetime="2021-10-05T15:15:58+08:00">2021-10-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>hexo博客建好了，除了视觉美化最好还有声觉美化，也就是BGM。早在当年QQ空间时代就已经开始弄BGM了，到了hexo这里自然不能落下。</p>
+<p>今天用到的一个js组件是aplayer，一个非常漂亮好用的HTML5音乐播放器，和dplayer师出同门。</p>
+<span id="more"></span>
+<h2 id="下载部署">下载部署</h2>
+<p>虽然理论上可以通过npm安装，但是我这里通过npm安装无法实现想要的效果，因此选择提取dist文件的方式部署。</p>
+<p>在<a target="_blank" rel="noopener" href="https://github.com/DIYgod/APlayer/releases">APlayer GitHub发布页面</a>下载源码，将其中的<code>dist</code>文件夹解压到<code>hexo/themes/next/source</code>，即Next主题的<code>source</code>文件夹下。</p>
+<h2 id="创建播放器样式">创建播放器样式</h2>
+<p>新建播放器样式的js文件，在<code>hexo/themes/next/source/dist</code>文件夹中新建<code>music.js</code>，在其中添加样式代码。</p>
+<p>播放器样式代码完整调用及说明：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ap = <span class="keyword">new</span> APlayer(&#123;</span><br><span class="line">    <span class="attr">container</span>: <span class="built_in">document</span>.getElementById(<span class="string">&#x27;player&#x27;</span>),	<span class="comment">//播放器HTML容器元素</span></span><br><span class="line">    <span class="attr">mini</span>: <span class="literal">false</span>,		<span class="comment">//迷你模式开关</span></span><br><span class="line">    <span class="attr">autoplay</span>: <span class="literal">false</span>,	<span class="comment">//自动播放开关（Chromium现已禁止自动播放）</span></span><br><span class="line">    <span class="attr">theme</span>: <span class="string">&#x27;#FADFA3&#x27;</span>,	<span class="comment">//主题色</span></span><br><span class="line">    <span class="attr">loop</span>: <span class="string">&#x27;all&#x27;</span>,		<span class="comment">//音频循环播放, 可选值: &#x27;all&#x27;全部循环, &#x27;one&#x27;单曲循环, &#x27;none&#x27;不循环</span></span><br><span class="line">    <span class="attr">order</span>: <span class="string">&#x27;random&#x27;</span>,	<span class="comment">//音频循环顺序, 可选值: &#x27;list&#x27;列表循环, &#x27;random&#x27;随机循环</span></span><br><span class="line">    <span class="attr">preload</span>: <span class="string">&#x27;auto&#x27;</span>,	<span class="comment">//预加载，可选值: &#x27;none&#x27;, &#x27;metadata&#x27;, &#x27;auto&#x27;</span></span><br><span class="line">    <span class="attr">volume</span>: <span class="number">0.7</span>,		<span class="comment">//默认音量，请注意播放器会记忆用户设置，用户手动设置音量后默认音量即失效</span></span><br><span class="line">    <span class="attr">mutex</span>: <span class="literal">true</span>,		<span class="comment">//互斥，阻止多个播放器同时播放，当前播放器播放时暂停其他播放器</span></span><br><span class="line">    <span class="attr">listFolded</span>: <span class="literal">false</span>,	<span class="comment">//列表默认折叠</span></span><br><span class="line">    <span class="attr">listMaxHeight</span>: <span class="number">90</span>,	<span class="comment">//列表最大高度</span></span><br><span class="line">    <span class="attr">lrcType</span>: <span class="number">3</span>,			<span class="comment">//歌词传递方式</span></span><br><span class="line">    <span class="attr">audio</span>: [			<span class="comment">////音频信息,包含以下</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">name</span>: <span class="string">&#x27;name1&#x27;</span>,			<span class="comment">//音频名称</span></span><br><span class="line">            <span class="attr">artist</span>: <span class="string">&#x27;artist1&#x27;</span>,		<span class="comment">//音频艺术家</span></span><br><span class="line">            <span class="attr">url</span>: <span class="string">&#x27;url1.mp3&#x27;</span>,		<span class="comment">//音频外链</span></span><br><span class="line">            <span class="attr">cover</span>: <span class="string">&#x27;cover1.jpg&#x27;</span>,	<span class="comment">//音频封面</span></span><br><span class="line">            <span class="attr">lrc</span>: <span class="string">&#x27;lrc1.lrc&#x27;</span>,		<span class="comment">//音频歌词，配合上面的lrcType使用</span></span><br><span class="line">            <span class="attr">theme</span>: <span class="string">&#x27;#ebd0c2&#x27;</span>		<span class="comment">//切换到此音频时的主题色，比上面的 theme 优先级高</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;		<span class="comment">//如果只有一首歌，删掉这一块，如有更多歌曲按此格式逐渐往下添加</span></span><br><span class="line">            <span class="attr">name</span>: <span class="string">&#x27;name2&#x27;</span>,</span><br><span class="line">            <span class="attr">artist</span>: <span class="string">&#x27;artist2&#x27;</span>,</span><br><span class="line">            <span class="attr">url</span>: <span class="string">&#x27;url2.mp3&#x27;</span>,</span><br><span class="line">            <span class="attr">cover</span>: <span class="string">&#x27;cover2.jpg&#x27;</span>,</span><br><span class="line">            <span class="attr">lrc</span>: <span class="string">&#x27;lrc2.lrc&#x27;</span>,</span><br><span class="line">            <span class="attr">theme</span>: <span class="string">&#x27;#46718b&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>更多内容请参考<a target="_blank" rel="noopener" href="https://aplayer.js.org/#/zh-Hans/?id=%E5%AE%89%E8%A3%85">APlayer中文文档</a></p>
+<h2 id="部署到博客">部署到博客</h2>
+<p>按照上面的设置，已经将播放器样式设置好了，这时候只需要将播放器部署到合适的位置即可。</p>
+<p>下面是部署到页面的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/dist/APlayer.min.css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;aplayer&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;/dist/APlayer.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;/dist/music.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以将其放在<code>hexo/themes/next/layout/***.swig</code>，在不同.swig文件中的效果也不同。</p>
+<p>个人建议放置在<code>hexo/themes/next/layout/_partials/header/brand.swig</code>中，因为brand是全局存在的，这样设置的播放器全局都能看到：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;%- if theme.favicon.apple_touch_icon %&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;apple-touch-icon&quot;</span> <span class="attr">sizes</span>=<span class="string">&quot;180x180&quot;</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123; url_for(theme.favicon.apple_touch_icon) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--音乐播放器--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/dist/APlayer.min.css&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;aplayer&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;/dist/APlayer.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;/dist/music.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--音乐播放器--&gt;</span></span><br><span class="line">&#123;%- endif %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="利用pajx实现全局播放不暂停">利用<code>pajx</code>实现全局播放不暂停</h2>
+<p>在切换博文页面的时候，一般情况下都会整页刷新，这导致我们的播放器组件每次切换页面的时候都被”重置“了一次，为了避免这个重置，我们要让浏览器的部分内容（音乐播放器）在切换页面的时候不刷新，换个角度来说就是每次只让页面发生部分内容更新。</p>
+<p><code>pjax</code>是一个jQuery插件，它的工作是让页面上的页面资源不被重新执行或应用，并且每次切换页面都部分重新渲染页面。这样就可以避免我们正在播放的音乐播放器随着页面切换被刷新掉了。</p>
+<p>我这里同样将<code>pajx</code>部署在<code>hexo/themes/next/layout/_partials/head/head.swig</code>中：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1, maximum-scale=2&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;theme-color&quot;</span> <span class="attr">content</span>=<span class="string">&quot;&#123;&#123; theme.android_chrome_color &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;generator&quot;</span> <span class="attr">content</span>=<span class="string">&quot;Hexo &#123;&#123; hexo_version &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--pjax：防止跳转页面音乐暂停--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>网上很多教程部署在了<code>_layout.swig</code>中，但实测这样并没有全局应用，从部分页面进入的时候<code>pajx</code>并没有部署好。因此和播放器本身一样，我将其都部署在了head中，因为每个页面都存在head，所以部署在head中的内容从那个页面开始访问都是会被调用出来的。</p>
+</blockquote>
+<h2 id="参考">参考</h2>
+<p>[1] <a target="_blank" rel="noopener" href="https://blog.yleao.com/2018/0902/hexo%E4%B8%8A%E7%9A%84aplayer%E5%BA%94%E7%94%A8.html">hexo上的aplayer应用 | Y’s BLOG (yleao.com)</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://aplayer.js.org/#/zh-Hans/?id=%E5%AE%89%E8%A3%85">APlayer中文文档</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hexo/" rel="tag"># hexo</a>
+              <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag"># 博客搭建</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/06/%E5%9B%9E%E8%BD%A6%E5%92%8C%E6%8D%A2%E8%A1%8C%E7%9A%84%E5%8E%86%E5%8F%B2/" rel="prev" title="回车和换行的历史">
+      <i class="fa fa-chevron-left"></i> 回车和换行的历史
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/07/Drawbridge-Overview%EF%BC%88Drawbridge%E6%A6%82%E8%BF%B0%EF%BC%89/" rel="next" title="Drawbridge Overview（Drawbridge概述）">
+      Drawbridge Overview（Drawbridge概述） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E9%83%A8%E7%BD%B2"><span class="nav-number">1.</span> <span class="nav-text">下载部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%92%AD%E6%94%BE%E5%99%A8%E6%A0%B7%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">创建播放器样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0%E5%8D%9A%E5%AE%A2"><span class="nav-number">3.</span> <span class="nav-text">部署到博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8pajx%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E6%92%AD%E6%94%BE%E4%B8%8D%E6%9A%82%E5%81%9C"><span class="nav-number">4.</span> <span class="nav-text">利用pajx实现全局播放不暂停</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

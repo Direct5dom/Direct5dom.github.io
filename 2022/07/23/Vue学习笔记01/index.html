@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Vue学习笔记01：声明式渲染和组件化应用构建">
+<meta property="og:url" content="https://direct5dom.github.io/2022/07/23/Vue%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTk2QkI4RkE3NjE2MTFFNUE4NEU4RkIxNjQ5MTYyRDgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTk2QkI4Rjk3NjE2MTFFNUE4NEU4RkIxNjQ5MTYyRDgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NjU2QTEyNzk3NjkyMTFFMzkxODk4RDkwQkY4Q0U0NzYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NjU2QTEyN0E3NjkyMTFFMzkxODk4RDkwQkY4Q0U0NzYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5WHowqAAAXNElEQVR42uxda4xd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">
+<meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABX4AAAIgCAMAAAAFsYFWAAAByFBMVEX///9HcEz0+/iU2LmL1bOT0LSA0axkyJuAzaowlWiL1LNpyJ5ryp87uoL19fXz8/P4+Pjp6enr6+vMzMzU1NRWp4Lx9/S25c+d3L94kIVtdHFxgHlubm5mZmZlZWVra2vh4eFkZGTExMSLi4uUlJSnp6e7u7vOzs58fHx3d3esrKz09PR4eHixsbGBgYGenp6KiorX19eysrKVlZWoqKjc3NzFxcXv7+/t7e3o6Oje3t7f39/Y2NilpaWZmZm+vr7r9/LY8ObB1cyBh4Tg9Ousu7SQmZXU7eJtyqDK49jE6dlYroaurq63t7fn9u+D06590aqBzKnC6NfN7N9WqoT7+/vx8fHu7u7R0dHLy8vk5OTd3d3b29t9vJ+x1sWRy7G5ubnPz89nZ2erq6t/f3+Pj4+Tk5OGhoZpaWmOjo5sbGy8vLyCgoKfn59vb2/s7Ozi4uKy482UsqWKo5jD5ten0b/m8+275tOUs6aLpJmdwbGy4cx4zadutpVzwJ2e3L+XybI9nHJiroyR17eA0Kxer4p4wqCs4cqCxqZbu5BYsIlpwZnIyMhitY/Y6uJvxJ47mm/C5tew3MmEzqzZ8ee53s59yqeZzrYqJtSlAAAAAnRSTlP/AOW3MEoAABYfSURBVHja7NrVYSMwEIbBf2XdhaH/Cp00EKZnM+NMEZ9gNwDsQI0KAMeSXwDkF0B+AZBfAPkFoPbRXwAqAPh8AJBfAOQXQH4BkF8A+QVAfgHkFwD5BZhPfgHkFwD5BZBfAOQXQH4BkF8A+QVAfgHkF0B+AZBfAPkFQH4B5BcA+QWQXwDkF0B+AZBfAPkFkF8A5BdAfgGQXwD5BUB+AeQXAPkFkF8A5BdAfgHkFwD5BZBfAOQXQH4BkF8A+QVAfgEWIb8A8guA/ALILwDyCyC/AMgvgPwCIL8A8gsgvwDIL4D8AiC/APILgPwCyC8A8gsgvwDIL4D8AsgvAPILIL8AyC+A/AIgvwDyC4D8AsgvALWP/gJQAeA4Ph8AkF8A+QVAfgHkFwCLZ0CrymrqI2xOZUQLcMpa74PV9B62qQU4Ya1XVlMV5BdQX/kF1Bf5BdRXfgH15QTyC6iv/ALqi/wC6iu/gPoiv4D6rkR+AfWVX0B9kV9AfeUXUF/kF1Bf+QXUF4Drm1VdjQkbVKNagFPSVhYW5/MBQH7vHzgjjwGO5vYLgPwCyC+A/AIgvwDyC4D8AsgvAPILIL+NkzQIIL/sQ4CT+3wAkF8A5BdAfgGQXwD5BUB+AeQXAPkFkF8A5BdAfgHkFwD5BZBfAOQXQH4BkF8A+QVAfgHkF4AegIluX8LOb78AtxX2kF9AfZ/DwuQXUF/5BdQX+QXUV34B9UV+AfWVX0B95RdQX+QXUF/5BdQX+QXUV34B9UV+AfWVX0B9kV9AfeUXUF96gFNyU5mmKvWVqb7Vd3Vuv8DTcKrBn+F06rs18gv8hIMhv/DL3n01tXHFARQ/Mrj3C+nayY4A7ZAFCYHS8/0f40p6SHtyE4O7KVEy4LDYQbE3aHeFOb9n+1FnLv+95cgYA2JkfiWVKxyr4Ccv8yvp0lYNaqgC5lfy174eUJnMr6TwDIAJVCbzK2kC+jV4GqPymF9J4Qk7xlB5zK+kyzWgX4P1JiqL+ZWUrMMZ4Bw8aaBymF9J8SPoH4P+n8B6jMpgfiWl52pwYgz4/jjUNmNUPPMrKR1bg7ACwEqA2mYDFc/8StZ3FSau8QiAawFqGw1UAvMrWd/LG3CR3f6y0U5RgcyvpLi2Cpe3ltmWAtdOA71ajApjfiU1ttbI6ssJgB+O92FtaxEVw8eGJKXjPWBiY5kXrMQXVuHO3PEraPjMr6TORg+4dJWX/crMU1hj6ZceGi6HD5LS7t016J+5wT5+nDwH3D7bDuiQu3AxM6E30uTFXZfQ6GvWo78tBHZFUdQhM7/9D+qLKSpB7WVvZn5lftWZ225rE17IbxMyYTraCXBAb0h+J/VG+vjw5FedqShb+u7N7zwv6CxE2xxBHO786ogY/fwq3onvbAKvyG8W4KkEHYT5lflVZynaNp/yktksv/sEeM4ZxP9nfmV+lUwNHicsRFGbfXTa0Y6lT1B+5lfmV+knc1l8983vAvsKM/VoW70bUC7mV+ZXoV3P4psvv5A2FqIdrWZAr8v8yvzqk6loW30+MMB8lt8BS+BcBZb5lflV6D4v52wzBQbnN+I/Naaj3TFwig5hfj+9rME+M78arvSTVrRjOgEOkl8IzVZW4IAOW34/n9BgX1zc48vDxPyOpGQp2lGfeVUtk9fILxDmZ6PnWosxejPza34nDhPzO3o67Xq28H2lTnbpwyvEM7sFnusmoIz5Nb/mV3F3LtoxOx8gR35zFrjedhBsfkeO+VX17a23Y15TFEUJry/enQM7hsiYX/Nrfm1vNnTIkd95ckkb01Exi2DzO46kwyWefLp2i20n/zy9TA7nHpLTMpCculcDqPWgNd77FfnYkGR78zn5kCfk9j3E52urAKxCfeLkTz1UEYcPDh9UhWTPzKGRkl926ji/tNGuZ5PgboKc/Zpf83s0JO36wdoLzERRiwOI51vRrqVmjDLm1/yaX9ub49hbfmnSno3+MefHOPNbGfOr4qWfLEXDaC/QyPJ7EHFzOtrVWvwKmd/qmF8V3956O0k5mE4URTFD0ZnJ5hB1b4cwv9Uxvyq+veSR/9hbfuHFj3FfIfNbAfOrIts7O4z2ZsfehiluLrgINr+VML8qvr0zMTC8/M4zZGkyM7tnERwj81sk86uC9zkU0V6gnuV3qEL2MS6bUcv8Vsj8Kr+4W0R7s3MX0xRk7yLYMYT5rZT5VX6huXuP2bDbmx17K07IJsG+F2d+C2J+VezDFe2EQswUl9/sWEbdApvf6phf5Re6OR6uqObYW46b2qstsPmV+VX+hW+rmcII5zf/7RCtT1JkfitkfjVY2pzLBr6FSgrN7+A3kxNUdX5lfjV46rDQoFDZsbfyC1zvBqpmfmV+tVdoZ8/Ec9jym+vV+qlPqIb5lfnV4PjONlLKEErPLxC369G2+mKgAuZX5leD4rvQIYfqL33IL1mIdrSD+f3HMSRVI+2e7QGEyatXKNEJyvf91Uen+gC9s1MdVOVTm5Kaa/cBwh9/cBT0ejQu3APW705duIKqeGpTDh8AdVrV/C3eiqJ5KtNpR9uqWQE7+5X5RWk3m/mWayGKZqhQeP4ZbimY33EklS2u3QLOPbtKFc5WO4NI158Ct8/EX3PEHUNSyRa31oBLx1Y4ipZ/fBSA2p25jp/eJJUpPXUbuHz/BkdVrxfCM1ij+2TZ1a+kssRjt4FL13+lEo8YBb2fJs8Bt8Zi8yupJPHmKvQnb1CRU4yGK99eAla3GuZXUkn1rcHli1eo0CYj4cbYZWCj7exXUln1Ddeo1Bqj4df01FPotTeXXf2qUh+l+cwBfPh//tNcms+HaFjC3vpq+cfjQG8sdfUrqVjp2Kr1fcFKvFlj9W1Xv5KKdcr6vuzX8XNwu21+JRUpuQ2XN9Fev97qQ69hfiUVJ30E/a1lqrXOiOmN92EjmF9JhVmvwYllKnaGUfPrWeCy+ZVUlPAUJlbQv3x/CtYb5ldSQT4AamgfJ/qwbn4lFaQPE1cYCR1Gy/IJqCXmV1IhOmtwH+1rpQ9b5ldSITaBFbS/0/AsmF9JRRiDCTTAPeCS+ZVUUGC20AC9PoyZX0mln3jQJJw1v5IKEIAzaJBHHEF/sXcPypKcYRyH/9/aUim2bXM29uL2YhfDlUpJMVZxbZu9tieZTm+f57mC92B+9dU7DfmF/8xTT5/VXTfccMPYp8+qX22DjK11kJM99/RZXXXDDZOePqvJHjgJnMtzA+amO2Xyt60c5GQvzU53Bj4pv0BvoldaMEgv6ztHfgH1VV/5BfVVX/kF1Fd95RfUV31bkF9AfdVXfkF91Vd+AfVVX/kF9VXfFtx0DKiv+jr9gvqqr/wC6qu+8gvqq74NJb+gvurrq7eHb+GIR0J91Fd9nX43lnDY0vCvqa/6yi/wWikvpivlu3YOcrK39r2Y7uw+V30tH4CBc2Z3qX9LBznZjNndal595RdAfgGw+wVw+gVAfmHKlED95BfKnEemBeonv/D3rBuvGhWonfzCms0Dpz88JlA7+YWZ//R/bNyUQO3kF/60BubMXPfLH+nCwnTht/RRf/994851mwJtPv2CNTDIL3Q6nfrXwCC/MGPGjE6nr6+BkV94rEZzcsTBAHf69NXAyC/8WaPnTzkCd/6vNTDIL5YQJ6+BA73nwjPo5CTlj2c/D/Sc/KK9M3Lc8z9s2BD1pe/kFyanPuWE9s6YkeMmjL/sk0Cfyi98lPpMPR7fnODFb/4O9Jr8wsnxLddf9kGg9+QXZpy88F0TqIH8Qv0LX5BfqH/hC/IL9S98QX6h5wtfkF+w8EV+wcIX5Bc+CzRWvwDQivwCIL8A8guA/ALIL/DOtwY5lynyC/TEO+8b5FymvCe/gPqqr/yC+qqv/ALqq77yC+qrvvILqK/6yi+or/rKL6C+6iu/cDr1VV/P+wX1VV+nX0B91Vd+QX3VV34B9VVf+QX1VV/5BdRXfeUX1Fd95RcY/r5Buq6v/AJfbu7Wu7UN8vaYMWPeqW2Qk23ZfFaXjRkzZfPZXfL1lV+gf5Kf0kQzg/xCiy1IIz2a5Ma0l/wCQ9JIpSRPpt3kF3zAtzZzrO/HpbXkF9ibZHAaZ1b/ZN/YtJX8ArduLM38kO8tya4b5Bdoqz1JUtJEJdl+jfwCbf7mbW2ap8pBu6+RX6CVbj1c3nFpoKok2X2f/AJttL3koIlpnurlqiRZecc4+QXaZ0Qypkr2pYFKqpJk/bB75Bdom2vWJ1uGJIPTQD+OT1VeTcrqO+6WX6BVbt2VVEP3JRuvSsPsSrKoSvXV8CTr11x7VdrDm46BfiUZ9Putu5NBaaB1V65JtXVktSXZlTsXrwtdGzX6BA+PP+rVezjiyfFHPDL6BOMvJcfHHpM+bz97d8zbNBCGcfyBhQUxHIz3SCc7sRWd7YudqlMEn4UZAD4rEgsD34AdsYDT0hzUhDQOwZfq+U2dqnb562Tf+zp5LckGQENWSAzJDsjYezXnlbzEfffgtlPnVyLlV/4jb0m2uI5cm15+LwHU7HUm8EpVeJw95Vf5VX6lITm/6fAMSXlCco3enL2AmwAzlDie8ivKr0wpkGzijwYpWd/kFxl7jYOZW16pLhyOpPyK8isT19caXDEkV4nmF5klaQvAZwveiwIrv8qv8qv6biM2I9mmlt8nuOYW7OUGgAt2W+A1RlN+RfmVSevLGFxDMkdCOpK44Wfs2Q4b2Yw/2VB6jKL8ivIrE/ErkrZENCdZpJbfqLDsVS02fCww885hBOVXlF+ZhGlIWnf7Epo1SMYF+RqIzJIbK4NBgW24NBhF+X3xXG4ov/I/tHZb36hI6/FDPvhrygU3gsE1XwbLG1W49Eib8qv8Kr/SsdcY3DIjWaSU3zf4na8tN0IMrasbbjUXCZ+ClV/lV/kVn7O39H+egXNIxFuyw20mcMN2Bls+CwtuVSHNBCu/yq/yK6Vlr8YflCQrn9LKh6F2ye0jiMgUM8stuyqc8qv8Kr+SFn/BeOVhYJ7O8MU7kmtgb4Ajt0lwlHdrr/wqv8qvpKKt2Fv6PUsgkhp62x3gVQsMErxg1IRLp/wqv8qvJKDjRo2djCWZIQGXJBHtCHDeYsBkoWFkV91a+VV+lV+ZlGvYa9y+BcDWJTd1MdTOeKW6xB/4sl6SCd2JUH6VX+VXR9+5x18Vibx+e7P3EvLeFcBtMVukcQxWfpVf5VdH30V7wBbKxKYuhkxtuWE7jx1MNm/IKL8ojfKr/Cq/8h8VNh5992hIBkytIjvs5esFN2ww2K2tZ5ZRFQqHSPkV5VdOPWmxaO/+BaIs0Wu/Q9licA9t/zE4PolQfkX5lVOveODM426cJa1L4VNDd1PGi8B7tPXy1tVgKL+i/MrpdHHS4m4yko1P89rvvkmMvVwWFoMEK7+i/MrJVjwYHCBMPv32kuQT4NAA287jDkw5bxjlhVN+RfmVf81V7NU4iG9Ililf+x1yPwNcYK94Nfi0K4OVX+VX+dVm3xYHciStnza/FaJDTsBNiztrf01wc+GU33tD+ZWpZXGz72GKiW+frcgcGBng4HGAct7wBB+PU36VX+VX9Q0eIyxJtqlOXeyW2QPfMw5XBq8uvfJ7/pRfSaC+c4xiSOaT5vcCY/iaGyuPA7liyVhg5ffcKb8yfX0zjDQnmaU/dTFklozPuw89BFtes8Epv2dN+ZUpOR4VUG/J6pzyGxV2/L9ebgtcFV75PV/Kr0zIWJIFxqtJlhPm9+Wx+4UCcGSBg1F+z5XyK9M5fnOOt2SOabwnucYR6tjfMcoZr+Wt8nuelF+Zzpzk7PhfYdKeOd4tYy/HaL5oYoCnzO9DiMhZcV+Bx49wlC8AnuJMfX72HfgWMNbHTx9+sHfXaHIDYRiEa5h5MpNMkZnpVL6cT+B8UZGZWcs0DLlk6H+hH3/vIUpq7rYBej9dAuwujYh4JQMUQ5xEBShwbJ7jZCE7hshl+mVhaac4ngf4xhXlV0T+zIUetBdwNIKNgONwGXdv5/29gIPoRaM5BqKN+/hFc7+a+5XjctXkyoYr88t6vLhxJ/7d0DYx7M9xaO5XRG5tQDnEVViADP5ayEGqhZtwJdMBvmcCjkUWEfHIFoxzuCsd8AuPvb50QO/Ca9y85UIvxdr41oLmfkUkWfsAWiHuskCAx6IxlHH2ercFqR+B8isiyZrAJwz0gDTHI4+BqAUbF3AWLbchNQiUXxFJlIZWhIGwChl8tlKFKgaW5v29ovyKSJJ92MNEASp4LQtrbbP+ZpVfEUkQpKCKiR2OxxOsfAK6WFjqQHRL+RWReAWgh4ki/OIYPMNK1IERJvpj2FR+RSReHggxcYD3dqCIibAFvbbyKyKx0tDBRgVo47UhbFzBxAg4pfyKSKwUps7htQaQx0TYgYzyKyJy5HZg9J/nV0TST+NN2rtL8DbCOIDDXxn15k29N2Mi1SSq3o+ZmYn85t2YyI55Xk7OP3mmyvzl1n9ufV9bSI5+R7SyVlu5dVo70kSrt05rda1Wm+HHu1Ijdm+dVnVoqFrQICyfeRDWpYkGZ/hatdqardPavwie+QC0tt9KeXa2TEpX9v/a/TY14PCZJhiElj2P03gb76U8HcsWw9YvqG9Lbro6Oial62Vufc8XUN/YQZj8KrWNz7Pr+0J+YQbqe6b89T1TgvoG5BdQX/UNyC+gvuobkF9AfdU3IL+A+qpvQH4B9VXfgPwC6qu+MfkF1Fd9o+56A9RXfeO3fgH1Vd/4/ALqq77x+QXUV33j8wuor/rG5xdQX/WNzy+gvuobn1/g6MYNeQ5OSldbX/eGPIcbqu/pz00wCBsn1be7c0OmjPqWL7/AueeZJqUrdbx4nulDasTJZhiEtjRR2/NcL1Lp8wuA/ALILwDyCyC/APILgPwCyC8A8gsgvwDIL4D8bmlhWAJYuFdtnk4AjHLwAUB+AeQXAPkFkF8A5BdAfgGQXwD5rQ8wvXoaY6BMEtDsd739SszRjwTY+gVAfgHkFwD5BZBfAIrPLwDyCyC/AMgvgLve/iQAFmbrFwD5BdpScdbYtx/jdMAXBMqjv8DFubotRTjdmgpTOVvc16rb+gWm19/yprj63ompb/11cfW9W+DX2ia/wAz1/V3++m4rQX0D8guor/oG5BdQX/UNyC+gvuobkF9AfdU3IL+A+qpvQH4B9VXfgPwC6qu+gfkF1Fd94/MLqK/6xucXUF/1jc8voL7qG59fQH3VNz6/gPqqb3x+AfVVXyBef67rS9IEN/pz3UyNON6f6dal4gbhdppoaX+uS+lfaJkoATCe/ALILwDyCyC/AJQ+vwDyC4D8AsgvAPILIL8AyC+A/AIgvwDyCyC/AMgvgPwCIL8A8guA/ALILwDyCyC/AMgvgPwCyC8A8gsgvwDIL4D8AiC/APILgPwCyC8ALRH9BUBtARx8AJBfAOQXQH4BkF8A+QVAfgHkFwD5BZgD+QWQXwDkF0B+AZBfAPkFQH4B5BcA+QWQXwD5bU8AAODgAwDyCyC/AMgvgPwCIL8A8guA/ALIL4D8AiC/APILwP+fXwD5BUB+AeQXAPkFkF8A5BdAfgGQXwD5BZDf1gRAgL+wMu2CEMx3CQAAAABJRU5ErkJggg==">
+<meta property="article:published_time" content="2022-07-23T04:03:15.000Z">
+<meta property="article:modified_time" content="2022-07-23T04:03:15.664Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="JS">
+<meta property="article:tag" content="HTML">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTk2QkI4RkE3NjE2MTFFNUE4NEU4RkIxNjQ5MTYyRDgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTk2QkI4Rjk3NjE2MTFFNUE4NEU4RkIxNjQ5MTYyRDgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NjU2QTEyNzk3NjkyMTFFMzkxODk4RDkwQkY4Q0U0NzYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NjU2QTEyN0E3NjkyMTFFMzkxODk4RDkwQkY4Q0U0NzYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5WHowqAAAXNElEQVR42uxda4xd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">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/07/23/Vue%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Vue学习笔记01：声明式渲染和组件化应用构建 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/07/23/Vue%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue学习笔记01：声明式渲染和组件化应用构建
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-23 12:03:15" itemprop="dateCreated datePublished" datetime="2022-07-23T12:03:15+08:00">2022-07-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Vue学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTk2QkI4RkE3NjE2MTFFNUE4NEU4RkIxNjQ5MTYyRDgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTk2QkI4Rjk3NjE2MTFFNUE4NEU4RkIxNjQ5MTYyRDgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NjU2QTEyNzk3NjkyMTFFMzkxODk4RDkwQkY4Q0U0NzYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NjU2QTEyN0E3NjkyMTFFMzkxODk4RDkwQkY4Q0U0NzYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5WHowqAAAXNElEQVR42uxda4xd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" alt="img"></p>
+<span id="more"></span>
+<h2 id="关于安装方式">关于安装方式</h2>
+<p>对于学习Vue或制作原型来说，直接用<code>&lt;script&gt;</code>嵌入CDN是最好的选择。只需要再HTML文件中使用：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://unpkg.com/vue@next&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>对于生产环境，我们推荐链接到一个明确的版本号和构建文件，以避免新版本造成的不可预期的破坏。</p>
+<h2 id="声明式渲染">声明式渲染</h2>
+<p>Vue.js的核心是一个允许采用简洁的模板语法来声明式地将数据渲染进DOM的系统。</p>
+<p>一个最简单的例子就是：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;counter&quot;</span>&gt;</span></span><br><span class="line">  Counter: &#123;&#123; counter &#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const Counter = &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      counter: 0</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vue.createApp(Counter).mount(&#x27;#counter&#x27;)</span><br></pre></td></tr></table></figure>
+<p>而Vue在这之后做了大量的工作，数据和DOM已经被建立了关联，所有东西都是<strong>响应式</strong>的。所以你可以添加一个自增的<code>mounted</code>来观察这一点：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Counter = &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">counter</span>: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">mounted</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.counter++</span><br><span class="line">    &#125;, <span class="number">1000</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Vue指令">Vue指令</h3>
+<p>在Vue项目中，你会经常用到很多前缀<code>v-</code>的attribute，这些是Vue提供的特殊attribute，被称为<strong>指令</strong>。它们会在渲染的DOM上应用特殊的响应式行为。</p>
+<h4 id="v-bind"><code>v_bind</code></h4>
+<p><code>v-bind</code>：将这个元素节点的 <code>title</code> attribute 和当前活跃实例的 <code>message</code> property 保持一致。</p>
+<p>案例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;bind-attribute&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-bind:title</span>=<span class="string">&quot;message&quot;</span>&gt;</span></span><br><span class="line">    鼠标悬停几秒钟查看此处动态绑定的提示信息！</span><br><span class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AttributeBinding = &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&#x27;You loaded this page on &#x27;</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().toLocaleString()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vue.createApp(AttributeBinding).mount(<span class="string">&#x27;#bind-attribute&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="v-on"><code>v-on</code></h4>
+<p><code>v-on</code>：添加事件监听器。</p>
+<p>案例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;event-handling&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;&#123; message &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">v-on:click</span>=<span class="string">&quot;reverseMessage&quot;</span>&gt;</span>反转 Message<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> EventHandling = &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&#x27;Hello Vue.js!&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="function"><span class="title">reverseMessage</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.message = <span class="built_in">this</span>.message</span><br><span class="line">        .split(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        .reverse()</span><br><span class="line">        .join(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vue.createApp(EventHandling).mount(<span class="string">&#x27;#event-handling&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意在这个方法中，我们更新了应用的状态，但没有触碰 DOM——所有的 DOM 操作都由 Vue 来处理，你编写的代码只需要关注逻辑层面即可。</p>
+</blockquote>
+<h4 id="v-model"><code>v-model</code></h4>
+<p><code>v-model</code>：实现表单输入和应用状态之间的双向绑定。</p>
+<p>案例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;two-way-binding&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;&#123; message &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">v-model</span>=<span class="string">&quot;message&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TwoWayBinding = &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&#x27;Hello Vue!&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vue.createApp(TwoWayBinding).mount(<span class="string">&#x27;#two-way-binding&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="v-if"><code>v-if</code></h4>
+<p><code>v-if</code>：Vue的条件指令。</p>
+<p>案例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;conditional-rendering&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-if</span>=<span class="string">&quot;seen&quot;</span>&gt;</span>现在你看到我了<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ConditionalRendering = &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">seen</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vue.createApp(ConditionalRendering).mount(<span class="string">&#x27;#conditional-rendering&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个案例演示了Vue不仅可以把数据绑定到DOM文本或attribute，还可以绑定到DOM的<strong>结构</strong>。比如可以将上述代码在浏览器中，将<code>true</code>改成<code>false</code>，就能看到文本被隐藏了。</p>
+</blockquote>
+<h4 id="v-for"><code>v-for</code></h4>
+<p><code>v-for</code>：Vue的循环指令。</p>
+<p>案例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;list-rendering&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">&quot;todo in todos&quot;</span>&gt;</span></span><br><span class="line">      &#123;&#123; todo.text &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ListRendering = &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">todos</span>: [</span><br><span class="line">        &#123; <span class="attr">text</span>: <span class="string">&#x27;Learn JavaScript&#x27;</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">text</span>: <span class="string">&#x27;Learn Vue&#x27;</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">text</span>: <span class="string">&#x27;Build something awesome&#x27;</span> &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vue.createApp(ListRendering).mount(<span class="string">&#x27;#list-rendering&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="组件化应用构建">组件化应用构建</h2>
+<p>组件系统是Vue的另一个重要概念，因为它是一种抽象，允许我们使用小型、独立和通常可复用的组件构建大型应用。仔细想想，几乎任意类型的应用界面都可以抽象为一个组件树：</p>
+<p><img src="data:image/png;base64,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" alt=""></p>
+<p>Vue种的组件，本质上是一个具有预定义选项的实例。</p>
+<p>在Vue种注册组件很简单：如对<code>app</code>对象所做的那样创建一个组件对象，并将其定义在父级组件的<code>components</code>选项中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TodoItem = &#123;</span><br><span class="line">  <span class="attr">template</span>: <span class="string">`&lt;li&gt;This is a todo&lt;/li&gt;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 Vue 应用</span></span><br><span class="line"><span class="keyword">const</span> app = Vue.createApp(&#123;</span><br><span class="line">  <span class="attr">components</span>: &#123;</span><br><span class="line">    TodoItem <span class="comment">// 注册一个新组件</span></span><br><span class="line">  &#125;,</span><br><span class="line">  ... <span class="comment">// 组件的其它 property</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 挂载 Vue 应用</span></span><br><span class="line">app.mount(...)</span><br></pre></td></tr></table></figure>
+<p>现在，你可以将其放到另一个组件的模板中：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 创建一个 todo-item 组件实例 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">todo-item</span>&gt;</span><span class="tag">&lt;/<span class="name">todo-item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但是这样会为每个待办项渲染同样的文本，这看起来并不炫酷。我们应该能将数据从父组件传入子组件才对。让我们来修改一下组件的定义，使之能够接受一个<code>prop</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TodoItem = &#123;</span><br><span class="line">  <span class="attr">props</span>: [<span class="string">&#x27;todo&#x27;</span>],</span><br><span class="line">  <span class="attr">template</span>: <span class="string">`&lt;li&gt;&#123;&#123; todo.text &#125;&#125;&lt;/li&gt;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，我们可以使用<code>v-bind</code>指令将待办项传到循环输出的每个组件中：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;todo-list-app&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">     <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">      现在我们为每个 todo-item 提供 todo 对象</span></span><br><span class="line"><span class="comment">      todo 对象是变量，即其内容可以是动态的。</span></span><br><span class="line"><span class="comment">      我们也需要为每个组件提供一个“key”，稍后再</span></span><br><span class="line"><span class="comment">      作详细解释。</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">todo-item</span></span></span><br><span class="line"><span class="tag">      <span class="attr">v-for</span>=<span class="string">&quot;item in groceryList&quot;</span></span></span><br><span class="line"><span class="tag">      <span class="attr">v-bind:todo</span>=<span class="string">&quot;item&quot;</span></span></span><br><span class="line"><span class="tag">      <span class="attr">v-bind:key</span>=<span class="string">&quot;item.id&quot;</span></span></span><br><span class="line"><span class="tag">    &gt;</span><span class="tag">&lt;/<span class="name">todo-item</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TodoItem = &#123;</span><br><span class="line">  <span class="attr">props</span>: [<span class="string">&#x27;todo&#x27;</span>],</span><br><span class="line">  <span class="attr">template</span>: <span class="string">`&lt;li&gt;&#123;&#123; todo.text &#125;&#125;&lt;/li&gt;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> TodoList = &#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">groceryList</span>: [</span><br><span class="line">        &#123; <span class="attr">id</span>: <span class="number">0</span>, <span class="attr">text</span>: <span class="string">&#x27;Vegetables&#x27;</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">text</span>: <span class="string">&#x27;Cheese&#x27;</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">text</span>: <span class="string">&#x27;Whatever else humans are supposed to eat&#x27;</span> &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">components</span>: &#123;</span><br><span class="line">    TodoItem</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = Vue.createApp(TodoList)</span><br><span class="line"></span><br><span class="line">app.mount(<span class="string">&#x27;#todo-list-app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>尽管这只是一个刻意设计的例子，但是我们已经设法将应用分割成了两个更小的单元。子单元通过<code>prop</code>接口与父单元进行了良好的解耦。我们现在可以进一步改进<code>&lt;todo-item&gt;</code>组件，提供一个更为复杂的模板和逻辑，而不会影响到父应用。</p>
+<p>在一个大型应用中，有必要将整个应用程序划分为多个组件，以使开发更易管理。在这里有一个 (假想的) 例子，以展示使用了组件的应用模板是什么样的：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">app-nav</span>&gt;</span><span class="tag">&lt;/<span class="name">app-nav</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">app-view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">app-sidebar</span>&gt;</span><span class="tag">&lt;/<span class="name">app-sidebar</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">app-content</span>&gt;</span><span class="tag">&lt;/<span class="name">app-content</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">app-view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="与自定义元素的关系">与自定义元素的关系</h3>
+<p>你可能已经注意到Vue组件与自定义元素非常类似——它是Web Components规范的一部分。确实，Vue的组件设计 (如插槽API) 在浏览器原生支持该规范前就部分受到了它的影响。</p>
+<p>它们之间主要的不同在于，Vue组件的数据模型是作为框架的一部分而设计的，而该框架为构建复杂应用提供了很多必要的附加功能。例如响应式模板和状态管理——这两者都没有被该规范所覆盖。</p>
+<p>Vue 也为创建和使用自定义元素提供了很好的支持。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/JS/" rel="tag"># JS</a>
+              <a href="/tags/HTML/" rel="tag"># HTML</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/20/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/" rel="prev" title="JavaScript学习笔记03：JavaScript正则表达式、错误调试、声明提升、this、let与const">
+      <i class="fa fa-chevron-left"></i> JavaScript学习笔记03：JavaScript正则表达式、错误调试、声明提升、this、let与const
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/25/%E5%9C%A8Linux%E7%8E%AF%E5%A2%83%E4%B8%8B%E6%9E%B6%E8%AE%BECSGO%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="next" title="在Linux环境下架设CSGO服务器">
+      在Linux环境下架设CSGO服务器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">关于安装方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%B8%B2%E6%9F%93"><span class="nav-number">2.</span> <span class="nav-text">声明式渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">Vue指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v-bind"><span class="nav-number">2.1.1.</span> <span class="nav-text">v_bind</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v-on"><span class="nav-number">2.1.2.</span> <span class="nav-text">v-on</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v-model"><span class="nav-number">2.1.3.</span> <span class="nav-text">v-model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v-if"><span class="nav-number">2.1.4.</span> <span class="nav-text">v-if</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v-for"><span class="nav-number">2.1.5.</span> <span class="nav-text">v-for</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BA%94%E7%94%A8%E6%9E%84%E5%BB%BA"><span class="nav-number">3.</span> <span class="nav-text">组件化应用构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E5%85%83%E7%B4%A0%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.1.</span> <span class="nav-text">与自定义元素的关系</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

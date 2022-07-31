@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="描述 SysVinit Systemd     启动服务 service example start systemctl start example   停止服务 service example stop systemctl stop example   重新启动服务 service example restart systemctl restart example   重新加载服务配置文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SysVinit和Systemd对比">
+<meta property="og:url" content="https://direct5dom.github.io/2021/09/01/SysVinit%E5%92%8CSystemd%E5%AF%B9%E6%AF%94/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="描述 SysVinit Systemd     启动服务 service example start systemctl start example   停止服务 service example stop systemctl stop example   重新启动服务 service example restart systemctl restart example   重新加载服务配置文件">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-09-01T09:03:02.000Z">
+<meta property="article:modified_time" content="2022-05-23T13:43:17.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="WSL">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/09/01/SysVinit%E5%92%8CSystemd%E5%AF%B9%E6%AF%94/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>SysVinit和Systemd对比 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/09/01/SysVinit%E5%92%8CSystemd%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SysVinit和Systemd对比
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-01 17:03:02" itemprop="dateCreated datePublished" datetime="2021-09-01T17:03:02+08:00">2021-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-23 21:43:17" itemprop="dateModified" datetime="2022-05-23T21:43:17+08:00">2022-05-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WSL/" itemprop="url" rel="index"><span itemprop="name">WSL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <table>
+<thead>
+<tr>
+<th>描述</th>
+<th>SysVinit</th>
+<th>Systemd</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>启动服务</td>
+<td>service example start</td>
+<td>systemctl start example</td>
+</tr>
+<tr>
+<td>停止服务</td>
+<td>service example stop</td>
+<td>systemctl stop example</td>
+</tr>
+<tr>
+<td>重新启动服务</td>
+<td>service example restart</td>
+<td>systemctl restart example</td>
+</tr>
+<tr>
+<td>重新加载服务配置文件</td>
+<td>service example reload</td>
+<td>systemctl reload example</td>
+</tr>
+<tr>
+<td>查看服务状态</td>
+<td>service example status</td>
+<td>systemctl status example</td>
+</tr>
+<tr>
+<td>系统启动时启用服务</td>
+<td>chkconfig example on</td>
+<td>systemctl enable example</td>
+</tr>
+<tr>
+<td>系统启动时禁用服务</td>
+<td>chkconfig example off</td>
+<td>systemctl disable example</td>
+</tr>
+<tr>
+<td>打印服务列表</td>
+<td>chkconfig --list</td>
+<td>systemctl list-unit-files --type=service</td>
+</tr>
+</tbody>
+</table>
+<span id="more"></span>
+<h2 id="WSL2中遇到的问题">WSL2中遇到的问题</h2>
+<p>在WSL2中使用<code>systemd</code>命令时可能会遇到错误，如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System has not been booted with systemd as init system (PID 1). Can&#x27;t operate.</span><br></pre></td></tr></table></figure>
+<p><strong>原因</strong>：Linux系统可能没有使用systemd。</p>
+<p>当你想用systemd命令来管理Linux上的服务时，你的系统可能并没有使用systemd，很可能使用的是经典的SysV init（sysvinit）。</p>
+<p>这个情况在WSL上十分常见，</p>
+<p>如何知道你使用的是哪个init系统？你可以使用这个命令来知道与PID 1（系统上运行的第一个进程）相关联的进程名称。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -p 1 -o comm=</span><br></pre></td></tr></table></figure>
+<p>它应该在输出中显示systemd或sysv，或类似的东西。</p>
+<p>如何解决<code>System has not been booted with systemd</code>错误？</p>
+<ol>
+<li>启动systemd服务</li>
+<li>使用等同的sysvinit命令</li>
+</ol>
+<p><strong>systemd和sysvinit的命令对照表：</strong></p>
+<table>
+<thead>
+<tr>
+<th>描述</th>
+<th>SysVinit</th>
+<th>Systemd</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>启动服务</td>
+<td>service example start</td>
+<td>systemctl start example</td>
+</tr>
+<tr>
+<td>停止服务</td>
+<td>service example stop</td>
+<td>systemctl stop example</td>
+</tr>
+<tr>
+<td>重新启动服务</td>
+<td>service example restart</td>
+<td>systemctl restart example</td>
+</tr>
+<tr>
+<td>重新加载服务配置文件</td>
+<td>service example reload</td>
+<td>systemctl reload example</td>
+</tr>
+<tr>
+<td>查看服务状态</td>
+<td>service example status</td>
+<td>systemctl status example</td>
+</tr>
+<tr>
+<td>系统启动时启用服务</td>
+<td>chkconfig example on</td>
+<td>systemctl enable example</td>
+</tr>
+<tr>
+<td>系统启动时禁用服务</td>
+<td>chkconfig example off</td>
+<td>systemctl disable example</td>
+</tr>
+<tr>
+<td>打印服务列表</td>
+<td>chkconfig --list</td>
+<td>systemctl list-unit-files --type=service</td>
+</tr>
+</tbody>
+</table>
+<h2 id="SysVinit和Systemd对比">SysVinit和Systemd对比</h2>
+<p>原文来自：<a target="_blank" rel="noopener" href="http://www.linuxcoming.com/blog/2019/03/18/sysvinit_vs_systemd.html">SysVinit 和 Systemd 对比 · linuxcoming.com</a></p>
+<p>systemd是一个全新的init系统和系统管理器，兼容传统的基于SysV init系统的所有主要的Linux发行版。 systemd兼容SysV和LSB init脚本，它作为SysV init系统的直接替代品。 systemd是内核启动并保持PID 1的第一个进程，它是系统运行后的所有进程的的父进程，Fedora 15是第一个支持systemd发行版。</p>
+<p>systemctl是用于管理systemd守护程序/服务命令行实用程序和主要工具，例如（start, restart, stop, enable, disable, reload &amp; status）。 systemd使用.service文件而不是bash脚本（SysV init使用）。systemd将所有守护进程排序到他们自己的Linux cgroup中，你可以通过搜索/cgroup/systemd文件来查看系统层次结构。</p>
+<p>以下三个init系统在Linux中广泛使用。</p>
+<ul>
+<li>System V (Sys V): System V（Sys V）是Unix操作系统的第一个和传统的init系统之一。</li>
+<li>Upstart: Upstart是基于事件的/sbin/init守护程序。</li>
+<li>systemd: Systemd是一个新的init系统和系统管理器，它通过传统的SysV init系统实现/适用于所有主要的Linux发行版。</li>
+</ul>
+<p>什么是System V（Sys V）？</p>
+<p>System V（Sys V）是Unix操作系统的第一个和传统的init系统之一。init是内核启动系统期间启动的第一个进程，它是所有内容的父进程。</p>
+<p>大多数Linux发行版首先使用称为System V（Sys V）的传统初始化系统。多年来，发布了几个替换初始化系统，以解决标准版本中的设计限制，例如launchd，Service Management Facility，systemd和Upstart。</p>
+<p>但是，与传统的SysV init系统相比，systemd已经被几个主要的Linux发行版所采用。</p>
+<p>什么是systemd？</p>
+<p>systemd是一个新的init系统和系统管理器，它已成为大多数Linux发行版中非常流行并广泛适应的新标准init系统。systemctl是一个systemd实用程序，它可以帮助我们管理systemd系统。</p>
+<h3 id="系统功能">系统功能</h3>
+<ul>
+<li>systemd提供了强大的并行处理能力</li>
+<li>使用socket和D-Bus激活来启动服务</li>
+<li>提供按需启动（on-demand starting）守护进程</li>
+<li>使用Linux cgroup跟踪进程</li>
+<li>支持快照（snapshotting）和恢复（restoring）系统状态</li>
+<li>维护挂载和自动挂载点</li>
+<li>完善实现了基于事务依赖性的服务控制逻辑</li>
+</ul>
+<h3 id="常见操作对比">常见操作对比</h3>
+<table>
+<thead>
+<tr>
+<th>描述</th>
+<th>SysVinit</th>
+<th>Systemd</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>启动服务</td>
+<td>service example start</td>
+<td>systemctl start example</td>
+</tr>
+<tr>
+<td>停止服务</td>
+<td>service example stop</td>
+<td>systemctl stop example</td>
+</tr>
+<tr>
+<td>重新启动服务</td>
+<td>service example restart</td>
+<td>systemctl restart example</td>
+</tr>
+<tr>
+<td>重新加载服务配置文件</td>
+<td>service example reload</td>
+<td>systemctl reload example</td>
+</tr>
+<tr>
+<td>查看服务状态</td>
+<td>service example status</td>
+<td>systemctl status example</td>
+</tr>
+<tr>
+<td>系统启动时启用服务</td>
+<td>chkconfig example on</td>
+<td>systemctl enable example</td>
+</tr>
+<tr>
+<td>系统启动时禁用服务</td>
+<td>chkconfig example off</td>
+<td>systemctl disable example</td>
+</tr>
+<tr>
+<td>打印服务列表</td>
+<td>chkconfig --list</td>
+<td>systemctl list-unit-files --type=service</td>
+</tr>
+</tbody>
+</table>
+<h3 id="参考链接">参考链接</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html">http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.2daygeek.com/sysvinit-vs-systemd-cheatsheet-systemctl-command-usage/">https://www.2daygeek.com/sysvinit-vs-systemd-cheatsheet-systemctl-command-usage/</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WSL/" rel="tag"># WSL</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/30/Linux%E5%91%BD%E4%BB%A4%E5%85%A8%E6%8B%BC%E5%AF%B9%E7%85%A7%E7%9B%AE%E5%BD%95/" rel="prev" title="Linux命令全拼对照目录">
+      <i class="fa fa-chevron-left"></i> Linux命令全拼对照目录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/01/WSL2-Linux%E5%AE%89%E8%A3%85Docker/" rel="next" title="WSL2 Linux安装Docker">
+      WSL2 Linux安装Docker <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WSL2%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">WSL2中遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SysVinit%E5%92%8CSystemd%E5%AF%B9%E6%AF%94"><span class="nav-number">2.</span> <span class="nav-text">SysVinit和Systemd对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD"><span class="nav-number">2.1.</span> <span class="nav-text">系统功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94"><span class="nav-number">2.2.</span> <span class="nav-text">常见操作对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">2.3.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="近期新购入的一块4TB西数紫盘，当仓库使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于计算机存储单位的那些事">
+<meta property="og:url" content="https://direct5dom.github.io/2022/05/15/%E5%85%B3%E4%BA%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="近期新购入的一块4TB西数紫盘，当仓库使用。">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205152053193.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205152145026.png">
+<meta property="article:published_time" content="2022-05-15T13:51:24.000Z">
+<meta property="article:modified_time" content="2022-05-15T13:51:24.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="存储">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205152053193.jpg">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/05/15/%E5%85%B3%E4%BA%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>关于计算机存储单位的那些事 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/05/15/%E5%85%B3%E4%BA%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于计算机存储单位的那些事
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-15 21:51:24" itemprop="dateCreated datePublished" datetime="2022-05-15T21:51:24+08:00">2022-05-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205152053193.jpg" alt=""></p>
+<blockquote>
+<p>近期新购入的一块4TB西数紫盘，当仓库使用。</p>
+</blockquote>
+<span id="more"></span>
+<p>最近在搞和硬盘相关的东西，突然就被各种混用的存储单位搞昏了头，一时间竟然分不清谁是谁。</p>
+<p>个人感觉这玩意要比光刻工艺被玩的更坏，不过其实分辨起来还是比较简单的。</p>
+<h2 id="单位基底：bit和Byte">单位基底：bit和Byte</h2>
+<p>bit和Byte的区别较为简单，任何拥有信息知识的人基本都能分辨二者。</p>
+<h3 id="bit（比特-位）">bit（比特/位）</h3>
+<p>bit是英文binary digit的缩写。</p>
+<p>bit是表示信息的最小单位，是二进制数的一位包含的信息，或2个选项中特别指定1个的需要信息量（即：0或1）。</p>
+<p>一般来说，n bit的信息量可以表现出2的n次方种状态。</p>
+<h3 id="Byte（字节）">Byte（字节）</h3>
+<p>Byte是计算机信息技术用于计量存储容量的一种计量单位。</p>
+<p>一个Byte可以存储8bit的数据，故存在2的8次方种状态，即可以表示256种状态。</p>
+<p>正因如此，bit和Byte的换算为：1Byte=8bit。</p>
+<h2 id="单位前缀：十进制前缀-SI-和二进制前缀-IEC-60027-2">单位前缀：十进制前缀(<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/SI">SI</a>)和二进制前缀(<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/IEC_60027-2">IEC 60027-2</a>)</h2>
+<p>相比较容易分辨的bit和Byte，两种前缀实际上经常被混淆、混用。</p>
+<h3 id="十进制前缀（SI）">十进制前缀（SI）</h3>
+<p>十进制前缀即国际单位制词头，目前有20个词头，大多数都是千的整数次幂。</p>
+<p>在存储单位中用到的词头共8个，具体如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">中国大陆SI词头</th>
+<th>英语SI词头</th>
+<th>符号</th>
+<th>十进制</th>
+<th>启用时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">尧（尧它）</td>
+<td>yotta</td>
+<td>Y</td>
+<td>1000000000000000000000000</td>
+<td>1991</td>
+</tr>
+<tr>
+<td style="text-align:center">泽（泽它）</td>
+<td>zetta</td>
+<td>Z</td>
+<td>1000000000000000000000</td>
+<td>1991</td>
+</tr>
+<tr>
+<td style="text-align:center">艾（艾可萨）</td>
+<td>exa</td>
+<td>E</td>
+<td>1000000000000000000</td>
+<td>1975</td>
+</tr>
+<tr>
+<td style="text-align:center">拍（拍它）</td>
+<td>peta</td>
+<td>P</td>
+<td>1000000000000000</td>
+<td>1975</td>
+</tr>
+<tr>
+<td style="text-align:center">太（太拉）</td>
+<td>tera</td>
+<td>T</td>
+<td>1000000000000</td>
+<td>1960</td>
+</tr>
+<tr>
+<td style="text-align:center">吉（吉咖）</td>
+<td>giga</td>
+<td>G</td>
+<td>1000000000</td>
+<td>1960</td>
+</tr>
+<tr>
+<td style="text-align:center">兆</td>
+<td>mega</td>
+<td>M</td>
+<td>1000000</td>
+<td>1873</td>
+</tr>
+<tr>
+<td style="text-align:center">千</td>
+<td>kilo</td>
+<td>k</td>
+<td>1000</td>
+<td>1795</td>
+</tr>
+</tbody>
+</table>
+<h3 id="二进制前缀（IEC-60027-2）">二进制前缀（IEC 60027-2）</h3>
+<p>二进制前缀即二进制乘数词头（<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/IEEE_1541-2002">IEEE 1541-2002</a>），采用的是2的幂次而非10的幂次。</p>
+<p>在存储单位中用到的词头同样共8个，具体如下：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>符号</th>
+<th>十进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kibi</td>
+<td>Ki</td>
+<td>= 1,024</td>
+</tr>
+<tr>
+<td>mebi</td>
+<td>Mi</td>
+<td>= 1,048,576</td>
+</tr>
+<tr>
+<td>gibi</td>
+<td>Gi</td>
+<td>= 1,073,741,824</td>
+</tr>
+<tr>
+<td>tebi</td>
+<td>Ti</td>
+<td>= 1,099,511,627,776</td>
+</tr>
+<tr>
+<td>pebi</td>
+<td>Pi</td>
+<td>= 1,125,899,906,842,624</td>
+</tr>
+<tr>
+<td>exbi</td>
+<td>Ei</td>
+<td>= 1,152,921,504,606,846,976</td>
+</tr>
+<tr>
+<td>zebi</td>
+<td>Zi</td>
+<td>= 1,180,591,620,717,411,303,424</td>
+</tr>
+<tr>
+<td>yobi</td>
+<td>Yi</td>
+<td>= 1,208,925,819,614,629,174,706,176</td>
+</tr>
+</tbody>
+</table>
+<h2 id="关于存储单位的混用">关于存储单位的混用</h2>
+<p>bit和Byte作为信息学科最基础的知识，基本上都能被大众所分辨。</p>
+<p>宽带厂商往往喜欢使用bit而非Byte，因为这样可以让自己的带宽“看起来更大”。比如宽带厂商经常宣传自己的带宽是1000M，实际上说的是1000Mbps，换算到计算机常用的Byte则为125MB/s。此外还有一些硬件厂商，也会逮着较大的数据来展示。比如西数硬盘的DateSheet，就将Gb/s和MB/s混用。</p>
+<img src="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205152145026.png" style="zoom: 67%;" />
+<p>与bit和Byte相比，前缀是混用更加严重的情况。个人认为根本原因可能在于国际电工委员会（IEC）自己的问题。</p>
+<p>在2008年新标准出现之前，IEC的前缀和SI的前缀实际上是相同的（除了IEC的“千”可以使用大写“K”）。而在2008年新标准发布后，所有的前缀相比之间都多了一个“i”（例如：GiB），他们是1024（2的十次方）相乘得到。而没有“i”的存储单位则完全属于SI的标准（例如：GB），他们是1000（10的3次方）相乘得到。</p>
+<p>虽然国际电工委员会（IEC）自己是这场混乱的罪魁祸首，但是包括Windows在内的很多厂商也是混乱的传播者之一。比如至今Windows的单位虽然采用IEC的标准，但仍然写着“GB”、“TB”等，而非“GiB”、“TiB”。</p>
+<p>而因为前缀的混乱，导致很多硬件厂商会更加猖獗的在这上面做文章。比如大多数硬盘厂商都是按照SI的标准去制作硬盘，但却宣传的好像IEC标准一样。厂商所言1TB的硬盘确实是1TB(1000GB)，同时也是931GiB，很容易就“缩水”了93GiB，即便他们确实“没做错什么”，而这种情况在越大的硬盘上表现出来的就会更加严重（即把IEC标准换算成Byte之后砍去所有零头）。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%98%E5%82%A8/" rel="tag"># 存储</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/08/GPUs-in-the-task-manager-%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E7%9A%84GPU/" rel="prev" title="GPUs in the task manager（任务管理器中的GPU）">
+      <i class="fa fa-chevron-left"></i> GPUs in the task manager（任务管理器中的GPU）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/16/%E8%A5%BF%E6%95%B0%E7%B4%AB%E7%9B%98WD42EJRX%E5%AE%9E%E6%B5%8B%E4%BD%93%E9%AA%8C/" rel="next" title="挑选硬盘的经历 + 西数紫盘(WD42EJRX)实测">
+      挑选硬盘的经历 + 西数紫盘(WD42EJRX)实测 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E4%BD%8D%E5%9F%BA%E5%BA%95%EF%BC%9Abit%E5%92%8CByte"><span class="nav-number">1.</span> <span class="nav-text">单位基底：bit和Byte</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bit%EF%BC%88%E6%AF%94%E7%89%B9-%E4%BD%8D%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">bit（比特&#x2F;位）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Byte%EF%BC%88%E5%AD%97%E8%8A%82%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">Byte（字节）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E4%BD%8D%E5%89%8D%E7%BC%80%EF%BC%9A%E5%8D%81%E8%BF%9B%E5%88%B6%E5%89%8D%E7%BC%80-SI-%E5%92%8C%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%89%8D%E7%BC%80-IEC-60027-2"><span class="nav-number">2.</span> <span class="nav-text">单位前缀：十进制前缀(SI)和二进制前缀(IEC 60027-2)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%81%E8%BF%9B%E5%88%B6%E5%89%8D%E7%BC%80%EF%BC%88SI%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">十进制前缀（SI）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%89%8D%E7%BC%80%EF%BC%88IEC-60027-2%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">二进制前缀（IEC 60027-2）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E7%9A%84%E6%B7%B7%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">关于存储单位的混用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

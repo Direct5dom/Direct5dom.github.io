@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="此前曾在一个半条命的科普视频中看到Boids相关的内容，便对这玩意产生了兴趣。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Boids 算法简述">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/09/Boids%20%E7%AE%97%E6%B3%95%E7%AE%80%E8%BF%B0/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="此前曾在一个半条命的科普视频中看到Boids相关的内容，便对这玩意产生了兴趣。">
+<meta property="og:locale">
+<meta property="og:image" content="http://github.com/Direct5dom/imageDB/blob/main/Boids/separation.gif?raw=true">
+<meta property="og:image" content="http://github.com/Direct5dom/imageDB/blob/main/Boids/alignment.gif?raw=true">
+<meta property="og:image" content="http://github.com/Direct5dom/imageDB/blob/main/Boids/cohesion.gif?raw=true">
+<meta property="og:image" content="http://github.com/Direct5dom/imageDB/blob/main/Boids/neighborhood.gif?raw=true">
+<meta property="article:published_time" content="2021-10-09T01:49:59.000Z">
+<meta property="article:modified_time" content="2021-10-12T13:06:07.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="计算机图形学">
+<meta property="article:tag" content="游戏技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://github.com/Direct5dom/imageDB/blob/main/Boids/separation.gif?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/09/Boids%20%E7%AE%97%E6%B3%95%E7%AE%80%E8%BF%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Boids 算法简述 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/09/Boids%20%E7%AE%97%E6%B3%95%E7%AE%80%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Boids 算法简述
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-09 09:49:59" itemprop="dateCreated datePublished" datetime="2021-10-09T09:49:59+08:00">2021-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-12 21:06:07" itemprop="dateModified" datetime="2021-10-12T21:06:07+08:00">2021-10-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B8%B8%E6%88%8F/" itemprop="url" rel="index"><span itemprop="name">游戏</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/ucPLCf05VrI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<blockquote>
+<p>此前曾在一个半条命的科普视频中看到Boids相关的内容，便对这玩意产生了兴趣。</p>
+</blockquote>
+<span id="more"></span>
+<h1>Boids简介</h1>
+<p>Boids最早是计算机图形学家Craig Reynolds于1986年研制的人工生命计算机模型，用于模拟动物的结群行为。</p>
+<blockquote>
+<p>有关论文可以在 <a target="_blank" rel="noopener" href="https://www.red3d.com/cwr/boids/">这里</a> 找到。</p>
+</blockquote>
+<p>这个模型可以用于所有的集群动物（包括：鱼群、鸟群等）的计算模拟。</p>
+<p>模型基于通常用于计算机动画或计算机辅助设计的那种三维计算几何。</p>
+<p>基本的群聚模型由三个简单的转向行为组成，它们描述了个体群体如何根据其附近的群体成员的位置和速度进行机动：</p>
+<img src="http://github.com/Direct5dom/imageDB/blob/main/Boids/separation.gif?raw=true" alt="separation.gif" style="zoom:150%;" />
+<blockquote>
+<p><strong>分离</strong>：转向避免拥挤区域内同类的方向。</p>
+</blockquote>
+<img src="http://github.com/Direct5dom/imageDB/blob/main/Boids/alignment.gif?raw=true" alt="alignment.gif" style="zoom:150%;" />
+<blockquote>
+<p><strong>对齐</strong>：转向区域内集群平均航向的方向。</p>
+</blockquote>
+<img src="http://github.com/Direct5dom/imageDB/blob/main/Boids/cohesion.gif?raw=true" alt="cohesion.gif" style="zoom:150%;" />
+<blockquote>
+<p><strong>凝聚</strong>：转向区域内集群的平均位置移动。</p>
+</blockquote>
+<p>虽然理论上每个Boid都可以直接访问整个场景的几何描述，但实际上我们要求它只关注以自己为中心的一个邻域，并对这个邻域内的其他同类做出反应。</p>
+<img src="http://github.com/Direct5dom/imageDB/blob/main/Boids/neighborhood.gif?raw=true" alt="neighborhood.gif" style="zoom:150%;" />
+<blockquote>
+<p>a boid’s neighborhood</p>
+</blockquote>
+<p>每个Boid所关注的邻域由两个特征参数组成：</p>
+<ul>
+<li><code>angle</code>：角度</li>
+<li><code>distance</code>：距离（半径）</li>
+</ul>
+<blockquote>
+<p>其中角度是从Boid的飞行方向上开始测量。</p>
+</blockquote>
+<p>对于一个Boid来说，它并不会对自己所关注的邻域之外的同类作出反应。</p>
+<p>这种邻域可以算是一种“有限感知模型”（例如：浑水中的鱼），但是将其视为定义同类影响群体转向的区域更加合适。</p>
+<p>目前Boids模型已成为人工生命原理的一个经常被引用的例子。集群是一个特别令人回味的涌现例子：复杂的全球行为可以从简单的本地规则的相互作用中产生。</p>
+<p>在Boids模型（以及相关系统，如多智能体转向行为演示）中，个体的简单行为之间的交互会产生复杂但有组织的群体行为。</p>
+<p>个体行为本质上是非线性的，因此将它们混合在一起会给群体带来混乱的一面。同时，行为控制者提供的负面反馈往往会使群体动态保持有序。这样的最终结果是栩栩如生的群体行为。</p>
+<p>需要注意的是，Boids算法的直接实现具有$O(n^2)$的渐进复杂度。为了确定彼此是否属于邻域，每个个体都要考虑彼此的影响。</p>
+<p>然而可以使用合理的空间数据结构将复杂度降低至接近$O(n)$ ，该数据结构允许按位置对Boid进行排序。找到给定群体的附近的同类，然后只需要检查一般附近的群体部分。使用这种算法加速和现代硬件，可以实时模拟大型鸡群，从而实现交互式应用程序。</p>
+<h1>Boids的部分应用</h1>
+<h2 id="Simulated-boid-flock-avoiding-cylindrical-obstacles-1986">Simulated boid flock avoiding cylindrical obstacles (1986)</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/86iQiV3-3IA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h2 id="Stanley-and-Stella-in-Breaking-the-Ice-1987">Stanley and Stella in: Breaking the Ice  (1987)</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3bTqWsVqyzE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h2 id="Half-Life-Boid">Half-Life Boid</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ucPLCf05VrI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 计算机图形学</a>
+              <a href="/tags/%E6%B8%B8%E6%88%8F%E6%8A%80%E6%9C%AF/" rel="tag"># 游戏技术</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/08/%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E7%99%BB%E5%BD%95%E4%BF%A1%E6%81%AF%E4%B8%AD%E5%8A%A0%E5%85%A5%E6%B8%A9%E5%BA%A6%20CPU%E3%80%81%E5%86%85%E5%AD%98%E7%A1%AC%E7%9B%98%E5%8D%A0%E7%94%A8%E7%8E%87%E4%BF%A1%E6%81%AF/" rel="prev" title="在树莓派登录信息中加入温度 CPU、内存硬盘占用率信息">
+      <i class="fa fa-chevron-left"></i> 在树莓派登录信息中加入温度 CPU、内存硬盘占用率信息
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/10/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004%EF%BC%9A%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%87%A0%E4%BD%95%E5%8F%98%E6%8D%A2/" rel="next" title="Open CV (Python) 学习笔记04：色彩空间与几何变换">
+      Open CV (Python) 学习笔记04：色彩空间与几何变换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">Boids简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Boids的部分应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Simulated-boid-flock-avoiding-cylindrical-obstacles-1986"><span class="nav-number">2.1.</span> <span class="nav-text">Simulated boid flock avoiding cylindrical obstacles (1986)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stanley-and-Stella-in-Breaking-the-Ice-1987"><span class="nav-number">2.2.</span> <span class="nav-text">Stanley and Stella in: Breaking the Ice  (1987)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Half-Life-Boid"><span class="nav-number">2.3.</span> <span class="nav-text">Half-Life Boid</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="图：Alan Mathison Turing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCV (Python) 学习笔记06：平滑图像">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/13/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B006%EF%BC%9A%E5%B9%B3%E6%BB%91%E5%9B%BE%E5%83%8F/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="图：Alan Mathison Turing">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/filter.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/blur.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/gaussian.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/median.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/bilateral.jpg?raw=true">
+<meta property="article:published_time" content="2021-10-13T15:57:22.000Z">
+<meta property="article:modified_time" content="2022-05-25T15:01:07.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Open CV">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/13/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B006%EF%BC%9A%E5%B9%B3%E6%BB%91%E5%9B%BE%E5%83%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>OpenCV (Python) 学习笔记06：平滑图像 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/13/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B006%EF%BC%9A%E5%B9%B3%E6%BB%91%E5%9B%BE%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenCV (Python) 学习笔记06：平滑图像
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-13 23:57:22" itemprop="dateCreated datePublished" datetime="2021-10-13T23:57:22+08:00">2021-10-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-25 23:01:07" itemprop="dateModified" datetime="2022-05-25T23:01:07+08:00">2022-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Open-CV-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Open CV 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true" alt="Alan_Turing_Aged_16_16_9.png"></p>
+<blockquote>
+<p>图：Alan Mathison Turing</p>
+</blockquote>
+<span id="more"></span>
+<h1>二维卷积（图像滤波）</h1>
+<p>与一维信号一样，图像也可以用各种低通滤波器（LPF）、高通滤波器（HPF）等进行滤波。</p>
+<ul>
+<li>LPF有助于去除噪声、模糊图像。</li>
+<li>HPF有助于在图像中找到边缘。</li>
+</ul>
+<p>OpenCV提供了函数<code>cv.filter2D()</code>来卷积内核与图像。</p>
+<p>例如：我们尝试对图像使用平均滤波器，$5 \times 5$平均滤波器的内核如下所示：<br>
+$$<br>
+K=\frac{1}{25}<br>
+\begin{bmatrix}<br>
+1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\<br>
+1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\<br>
+1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\<br>
+1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\<br>
+1 &amp; 1 &amp; 1 &amp; 1 &amp; 1<br>
+\end{bmatrix}<br>
+$$<br>
+操作是：将该内核的中心与一个像素对其，然后这个内核下面所有25个像素相加取平均值，并用新的平均值替换中心像素。之后继续对图像中所有的像素进行该操作。</p>
+<p>一个示例代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;OpenCV_Logo.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line">kernel = np.ones((<span class="number">5</span>,<span class="number">5</span>),np.float32)/<span class="number">25</span></span><br><span class="line">dst = cv.filter2D(img,-<span class="number">1</span>,kernel)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(img),plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(dst),plt.title(<span class="string">&#x27;Averaging&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/filter.jpg?raw=true" alt="filter.jpg"></p>
+<h1>图像模糊（图像平滑）</h1>
+<p>图像模式是通过低通滤波器内核对图像进行卷积来实现的。它对于消除噪声很有用。</p>
+<p>它从图像中删除高频内容（例如：噪声、边缘）。所以在这个操作过后边缘会有明显的模糊。（当然也有一些模糊技术不会让边缘太模糊）。OpenCV主要提供四种模糊技术：</p>
+<ul>
+<li>均值模糊</li>
+<li>高斯模糊</li>
+<li>中值模糊</li>
+<li>双边滤波</li>
+</ul>
+<h2 id="均值模糊">均值模糊</h2>
+<p>这是通过用一个归一化的滤波器内核与图像进行卷积来完成的。它只需取内核区域下所有像素的平均值并替换中心元素。这可以通过函数<code>cv.blur()</code>或<code>cv.boxFilter()</code>完成的。有关内核的更多详细信息，请查看文档。</p>
+<p>我们应该指定滤波器内核的宽度和高度。$3 \times 3$ 标准化盒式滤波器（normalized box filter）如下所示：<br>
+$$<br>
+K=\frac{1}{9}<br>
+\begin{bmatrix}<br>
+1 &amp; 1 &amp; 1 \\<br>
+1 &amp; 1 &amp; 1 \\<br>
+1 &amp; 1 &amp; 1<br>
+\end{bmatrix}<br>
+$$</p>
+<blockquote>
+<p>注意：</p>
+<p>如果不想使用标准化矿滤波器，请使用<code>cv.boxFilter()</code>，传入<code>normalize=False</code>参数。</p>
+</blockquote>
+<p>$5 \times 5$的内核简单应用如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;OpenCV_Logo.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line">blur = cv.blur(img,(<span class="number">5</span>,<span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(img),plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(blur),plt.title(<span class="string">&#x27;Blurred&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/blur.jpg?raw=true" alt="blur.jpg"></p>
+<h2 id="高斯模糊">高斯模糊</h2>
+<p>高斯模糊使用了高斯核代替盒式滤波器。通过调用函数<code>cv.GaussianBlur()</code>来完成。</p>
+<p>我们指定内核的宽度和高度，它应该是整数且必须是奇数（只有奇数存在中位数）。</p>
+<p>我们还应该分别指定 $x$ 和 $y$ 方向的标准差—— $\sigma_x$ 和 $\sigma_y$ 。（若只指定 $\sigma_x$ ，则 $\sigma_y$ 与 $\sigma_x$相同。如果这两个值都为零，那么它们会根据内核大小计算出来）。</p>
+<p>高斯模糊是消除图像高斯噪声的有效方法。</p>
+<blockquote>
+<p>如果需要，您可以使用函数 cv.getGaussianKernel() 创建一个高斯核。</p>
+</blockquote>
+<p>一个简单的实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;OpenCV_Logo.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line">blur = cv.GaussianBlur(img,(<span class="number">5</span>,<span class="number">5</span>),<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(img),plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(blur),plt.title(<span class="string">&#x27;Blurred&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/gaussian.jpg?raw=true" alt="gaussian.jpg"></p>
+<h2 id="中值模糊">中值模糊</h2>
+<p>中值模糊取内核区域下所有像素的中值，并用这个中值替换中心元素。使用函数<code>cv.medianBlur()</code>来完成。</p>
+<p>这对于图像中的脉冲噪声（也被称为椒盐噪声）非常有效。</p>
+<p>需要注意的一点是，上面所介绍的方法往往都是重新计算了一个中心元素的值（也许是新计算的，也许是图像中的像素值）。但中值模糊中，中心元素总是被图像中的某个像素值替换。有效的降低了噪音。</p>
+<p>还需要说明的是，中值模糊的内核大小应该是一个正奇数。</p>
+<p>在这个演示中，我向原始图像添加了 50% 的噪声并应用了中值模糊。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;OpenCV_Logo.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line">median = cv.medianBlur(img,<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(img),plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(median),plt.title(<span class="string">&#x27;Blurred&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/median.jpg?raw=true" alt="median.jpg"></p>
+<h2 id="双边滤波">双边滤波</h2>
+<p>双边滤波在保持边缘清晰的同时去除噪声非常有效，但与其他滤波器相比，操作速度较慢。通过调用函数<code>cv.bilateralFilter()</code>来使用。</p>
+<p>我们已经看到高斯滤波器获取像素周围的邻域并找到其高斯加权平均值。这个高斯滤波器是单独的空间函数，即滤波时考虑附近的像素。它不考虑像素是否具有几乎相同的强度。它不考虑像素是否是边缘像素。所以它也模糊了边缘，这是我们不想要的。</p>
+<p>双边滤波在空间上也采用了高斯滤波器，但多了一个像素差函数的高斯滤波器。空间的高斯函数确保仅考虑附近像素进行模糊处理，而强度差的高斯函数确保仅考虑与中心像素强度相似的像素进行模糊处理。所以它保留了边缘，因为边缘的像素会有很大的强度变化。</p>
+<p>一个简单的案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;OpenCV_Logo.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line">blur = cv.bilateralFilter(img,<span class="number">9</span>,<span class="number">75</span>,<span class="number">75</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(img),plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(blur),plt.title(<span class="string">&#x27;Blurred&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/bilateral.jpg?raw=true" alt="median.jpg"></p>
+<p>可以看到图像上的纹理消失了，但是边缘依旧清晰。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Open-CV/" rel="tag"># Open CV</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/" rel="prev" title="C++ Primer学习笔记01：伊始">
+      <i class="fa fa-chevron-left"></i> C++ Primer学习笔记01：伊始
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/14/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%8D%B7%E7%A7%AF/" rel="next" title="数学基础：卷积">
+      数学基础：卷积 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">二维卷积（图像滤波）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">图像模糊（图像平滑）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%87%E5%80%BC%E6%A8%A1%E7%B3%8A"><span class="nav-number">2.1.</span> <span class="nav-text">均值模糊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A"><span class="nav-number">2.2.</span> <span class="nav-text">高斯模糊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%80%BC%E6%A8%A1%E7%B3%8A"><span class="nav-number">2.3.</span> <span class="nav-text">中值模糊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2"><span class="nav-number">2.4.</span> <span class="nav-text">双边滤波</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

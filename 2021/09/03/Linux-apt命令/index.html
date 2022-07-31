@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="第一次接触Linux时，除了cd、ls这种基础的命令外，最熟悉的莫过于apt命令。 然而或许是因为apt用起来太方便和直观，以至于一直都是在“这么做”，而从没想过为什么。一些教程的内容也是漏洞百出，居然还有“apt update仅用来查看可更新的软件包”这种玄幻的错误。 为了搞明白这个既简单又复杂的东西，我翻阅了官方文档，并翻译了一下，以备自己以后查阅。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux apt命令">
+<meta property="og:url" content="https://direct5dom.github.io/2021/09/03/Linux-apt%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="第一次接触Linux时，除了cd、ls这种基础的命令外，最熟悉的莫过于apt命令。 然而或许是因为apt用起来太方便和直观，以至于一直都是在“这么做”，而从没想过为什么。一些教程的内容也是漏洞百出，居然还有“apt update仅用来查看可更新的软件包”这种玄幻的错误。 为了搞明白这个既简单又复杂的东西，我翻阅了官方文档，并翻译了一下，以备自己以后查阅。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-09-03T09:21:33.000Z">
+<meta property="article:modified_time" content="2021-09-04T07:34:44.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="文档翻译">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/09/03/Linux-apt%E5%91%BD%E4%BB%A4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Linux apt命令 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/09/03/Linux-apt%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux apt命令
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-03 17:21:33" itemprop="dateCreated datePublished" datetime="2021-09-03T17:21:33+08:00">2021-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-04 15:34:44" itemprop="dateModified" datetime="2021-09-04T15:34:44+08:00">2021-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>第一次接触Linux时，除了<code>cd</code>、<code>ls</code>这种基础的命令外，最熟悉的莫过于<code>apt</code>命令。</p>
+<p>然而或许是因为<code>apt</code>用起来太方便和直观，以至于一直都是在“这么做”，而从没想过为什么。一些教程的内容也是漏洞百出，居然还有“<code>apt update</code>仅用来查看可更新的软件包”这种玄幻的错误。</p>
+<p>为了搞明白这个既简单又复杂的东西，我翻阅了<a target="_blank" rel="noopener" href="https://manpages.debian.org/bullseye/apt/apt.8.en.html">官方文档</a>，并翻译了一下，以备自己以后查阅。</p>
+<span id="more"></span>
+<h2 id="语法">语法</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt [h] [options] [command] [package ...]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>**options：**可选，选项包括 -h（帮助），-y（当安装过程提示选择全部为&quot;yes&quot;），-q（不显示安装的过程）等等。</li>
+<li>**command：**要进行的操作。</li>
+<li><strong>package</strong>：安装的包名。</li>
+</ul>
+<p><strong>完整语法：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt [-h] [-o=config_string] [-c=config_file] [-t=target_release] [-a=architecture] &#123;list | search | show | update | install pkg [&#123;=pkg_version_number | /target_release&#125;]... | remove pkg... | upgrade | full-upgrade | edit-sources | &#123;-v | --version&#125; | &#123;-h | --help&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="常用命令">常用命令</h2>
+<h3 id="Update"><code>Update</code></h3>
+<p><strong>Update</strong>用于从所配置的源（即：<code>/etc/apt/sources.list</code>配置的源列表）下载包信息。</p>
+<p>其他命令都将基于此命令传回的数据进行操作，以获取所有可用于安装的软件包。如：执行软件包升级或搜索并显示详细信息</p>
+<blockquote>
+<p><strong>update</strong> is used to download package information from all configured sources.</p>
+<p>Other commands operate on this data to e.g. perform package upgrades or search in and display details about all packages available for installation.</p>
+</blockquote>
+<h3 id="upgrade"><code>upgrade</code></h3>
+<p><strong>upgrade</strong> 用于从所配置的源（即：<code>/etc/apt/sources.list</code>配置的源列表）安装系统上当前安装所有软件包的可用升级。 如果需要满足依赖关系，将安装新包，但永远不会删除现有包。 如果软件包的升级需要删除已安装的软件包，则不会执行此软件包的升级。</p>
+<blockquote>
+<p><strong>upgrade</strong> is used to install available upgrades of all packages currently installed on the system from the sources configured via sources.list. New packages will be installed if required to satisfy dependencies, but existing packages will never be removed. If an upgrade for a package requires the removal of an installed package the upgrade for this package isn’t performed.</p>
+</blockquote>
+<h3 id="full-upgrade"><code>full-upgrade</code></h3>
+<p><strong>full-upgrade</strong> 执行升级功能，但如果需要将当前安装的软件包作为整体升级，则会删除当前安装的软件包。</p>
+<blockquote>
+<p><strong>full-upgrade</strong> performs the function of upgrade but will remove currently installed packages if this is needed to upgrade the system as a whole.</p>
+</blockquote>
+<h3 id="install-reinstall-remove-purge"><code>install, reinstall, remove, purge</code></h3>
+<p>对通过 regex、glob 或完全匹配指定的一个或多个包执行请求的操作。 可以通过在包名称后添加加号 (+) 来安装此包或添加减号 (-) 来删除它，从而为特定包覆盖请求的操作。</p>
+<ul>
+<li>
+<p>可以通过在包名称后面加上等号 (=) 和要选择的包版本来选择安装包的特定版本。 或者，可以通过在包名称后面加上正斜杠 (/) 和代号（bullseye、bookworm、sid …）或套件名称（stable、testing、unstable）来选择特定发行版的版本。 如果需要满足请求，这还将从此版本中为此包的依赖项选择版本。</p>
+</li>
+<li>
+<p>删除包会删除所有打包的数据，但通常会留下小的（修改过的）用户配置文件，以防删除是意外。 在这种情况下，只需为意外删除的包发出安装请求即可恢复其功能。 另一方面，即使在已经删除的包上，您也可以通过调用 purge 来清除这些剩余物。 请注意，这不会影响存储在主目录中的任何数据或配置。</p>
+</li>
+</ul>
+<blockquote>
+<p>Performs the requested action on one or more packages specified via regex(7), glob(7) or exact match. The requested action can be overridden for specific packages by appending a plus (+) to the package name to install this package or a minus (-) to remove it.</p>
+<ul>
+<li>
+<p>A specific version of a package can be selected for installation by following the package name with an equals (=) and the version of the package to select. Alternatively the version from a specific release can be selected by following the package name with a forward slash (/) and codename (bullseye, bookworm, sid …) or suite name (stable, testing, unstable). This will also select versions from this release for dependencies of this package if needed to satisfy the request.</p>
+</li>
+<li>
+<p>Removing a package removes all packaged data, but leaves usually small (modified) user configuration files behind, in case the remove was an accident. Just issuing an installation request for the accidentally removed package will restore its function as before in that case. On the other hand you can get rid of these leftovers by calling <strong>purge</strong> even on already removed packages. Note that this does not affect any data or configuration stored in your home directory.</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="autoremove"><code>autoremove</code></h3>
+<p><strong>autoremove</strong> 用于删除自动安装的软件包以满足其他软件包的依赖关系，现在不再需要，因为依赖关系发生了变化或同时删除了需要它们的软件包。</p>
+<ul>
+<li>您应该检查该列表是否不包括您喜欢的应用程序，即使它们曾经作为另一个包的依赖项安装。 您可以使用 apt-mark 将此类软件包标记为手动安装。 您通过 install 显式安装的软件包也不会被建议自动删除。</li>
+</ul>
+<blockquote>
+<p>autoremove is used to remove packages that were automatically installed to satisfy dependencies for other packages and are now no longer needed as dependencies changed or the package(s) needing them were removed in the meantime.</p>
+<ul>
+<li>You should check that the list does not include applications you have grown to like even though they were once installed just as a dependency of another package. You can mark such a package as manually installed by using apt-mark. Packages which you have installed explicitly via <strong>install</strong> are also never proposed for automatic removal.</li>
+</ul>
+</blockquote>
+<h3 id="satisfy"><code>satisfy</code></h3>
+<p><strong>satisfy</strong> 满足依赖字符串，在 Build-Depends 中使用。 它还通过在参数前加上“Conflicts:”来处理冲突。</p>
+<ul>
+<li>示例：<code>apt satisfy &quot;foo, bar (&gt;= 1.0)&quot; &quot;Conflicts: baz, fuzz&quot;</code></li>
+</ul>
+<blockquote>
+<p><strong>satisfy</strong> satisfies dependency strings, as used in Build-Depends. It also handles conflicts, by prefixing an argument with &quot;Conflicts: &quot;.</p>
+<ul>
+<li>Example:<code>apt satisfy &quot;foo, bar (&gt;= 1.0)&quot; &quot;Conflicts: baz, fuzz&quot;</code></li>
+</ul>
+</blockquote>
+<h3 id="search"><code>search</code></h3>
+<p><strong>search</strong> 可用于在可用包列表中搜索给定的正则表达式并显示匹配项。 如果您正在寻找具有特定功能的软件包，此命令将会很有用。 如果您正在寻找包含特定文件的包，请尝试 apt-file。</p>
+<blockquote>
+<p><strong>search</strong> can be used to search for the given regex term(s) in the list of available packages and display matches. This can e.g. be useful if you are looking for packages having a specific feature. If you are looking for a package including a specific file try apt-file.</p>
+</blockquote>
+<h3 id="show"><code>show</code></h3>
+<p><strong>show</strong>有关给定包的信息，包括其依赖项、安装和下载大小、包的可用来源、包内容的描述等等。 在使用apt命令删除软件包或者搜索安装新的软件包之前，此命令将会很有用。</p>
+<blockquote>
+<p>Show information about the given package(s) including its dependencies, installation and download size, sources the package is available from, the description of the packages content and much more. It can e.g. be helpful to look at this information before allowing apt to remove a package or while searching for new packages to install.</p>
+</blockquote>
+<h3 id="list"><code>list</code></h3>
+<p><strong>list</strong> 与 <strong>dpkg-query --list</strong> 有点相似，因为它可以显示满足特定条件的软件包列表。 它支持用于匹配包名称的 glob 模式以及列出已安装 (<strong>–installed</strong>)、可升级 (<strong>–upgradeable</strong>) 或所有可用 (<strong>–all-versions</strong>) 版本的选项。</p>
+<blockquote>
+<p><strong>list</strong> is somewhat similar to <strong>dpkg-query --list</strong> in that it can display a list of packages satisfying certain criteria. It supports glob patterns for matching package names as well as options to list installed (<strong>–installed</strong>), upgradeable (<strong>–upgradeable</strong>) or all available (<strong>–all-versions</strong>) versions.</p>
+</blockquote>
+<h3 id="edit-sources-work-in-progress"><code>edit-sources (work-in-progress)</code></h3>
+<p>edit-sources 允许您在首选文本编辑器中编辑您的 sources.list 文件，同时还提供基本的完整性检查。</p>
+<blockquote>
+<p>edit-sources lets you edit your sources.list files in your preferred text editor while also providing basic sanity checks.</p>
+</blockquote>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>[1] <a target="_blank" rel="noopener" href="https://manpages.debian.org/bullseye/apt/apt.8.en.html">apt(8) — apt — Debian bullseye — Debian Manpages</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%96%87%E6%A1%A3%E7%BF%BB%E8%AF%91/" rel="tag"># 文档翻译</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/03/Linux%E7%9B%AE%E5%BD%95/" rel="prev" title="Linux目录">
+      <i class="fa fa-chevron-left"></i> Linux目录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/04/%E5%85%B3%E4%BA%8Ehexo%E7%9A%84%E8%8D%89%E7%A8%BF%E5%8A%9F%E8%83%BD/" rel="next" title="关于hexo的草稿功能">
+      关于hexo的草稿功能 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Update"><span class="nav-number">2.1.</span> <span class="nav-text">Update</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade"><span class="nav-number">2.2.</span> <span class="nav-text">upgrade</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#full-upgrade"><span class="nav-number">2.3.</span> <span class="nav-text">full-upgrade</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-reinstall-remove-purge"><span class="nav-number">2.4.</span> <span class="nav-text">install, reinstall, remove, purge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#autoremove"><span class="nav-number">2.5.</span> <span class="nav-text">autoremove</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#satisfy"><span class="nav-number">2.6.</span> <span class="nav-text">satisfy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search"><span class="nav-number">2.7.</span> <span class="nav-text">search</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show"><span class="nav-number">2.8.</span> <span class="nav-text">show</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">2.9.</span> <span class="nav-text">list</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-sources-work-in-progress"><span class="nav-number">2.10.</span> <span class="nav-text">edit-sources (work-in-progress)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

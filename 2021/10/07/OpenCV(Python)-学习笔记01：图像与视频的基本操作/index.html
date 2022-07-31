@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="图：Alan Mathison Turing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Open CV (Python) 学习笔记01：图像与视频的基本操作">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001%EF%BC%9A%E5%9B%BE%E5%83%8F%E4%B8%8E%E8%A7%86%E9%A2%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="图：Alan Mathison Turing">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+<meta property="article:published_time" content="2021-10-06T20:40:59.000Z">
+<meta property="article:modified_time" content="2022-05-25T15:00:33.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Open CV">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001%EF%BC%9A%E5%9B%BE%E5%83%8F%E4%B8%8E%E8%A7%86%E9%A2%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Open CV (Python) 学习笔记01：图像与视频的基本操作 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001%EF%BC%9A%E5%9B%BE%E5%83%8F%E4%B8%8E%E8%A7%86%E9%A2%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Open CV (Python) 学习笔记01：图像与视频的基本操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-07 04:40:59" itemprop="dateCreated datePublished" datetime="2021-10-07T04:40:59+08:00">2021-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-25 23:00:33" itemprop="dateModified" datetime="2022-05-25T23:00:33+08:00">2022-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Open-CV-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Open CV 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true" alt="Alan_Turing_Aged_16_16_9.png"></p>
+<blockquote>
+<p>图：Alan Mathison Turing</p>
+</blockquote>
+<span id="more"></span>
+<h1>下载安装</h1>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install opencv-contrib-python</span><br></pre></td></tr></table></figure>
+<p>这里有几个选择：</p>
+<ul>
+<li><code>opencv-python</code>：只包含opencv库的主要模块. 一般不推荐安装.</li>
+<li><code>opencv-contrib-python</code>：包含主要模块和contrib模块, 功能基本完整, 推荐安装.</li>
+<li><code>opencv-python-headless</code>：和<code>opencv-python</code>一样, 但是没有GUI功能, 无外设系统可用.</li>
+<li><code>opencv-contrib-python-headless</code>：和<code>opencv-contrib-python</code>一样但是没有GUI功能. 无外设系统可用.</li>
+</ul>
+<p>因此一般来说都会选择安装<code>opencv-contrib-python</code></p>
+<p>不要同时安装<code>opencv-python</code>和<code>opencv-contrib-python</code></p>
+<h1>引入所需要的库</h1>
+<p>OpenCV的运行需要引入最基本的<code>cv2</code>库，因为涉及大量数学运算，因此还需要引入<code>numpy</code>库，这是所需最基本的两个库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 引入所需要的库</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br></pre></td></tr></table></figure>
+<p>在VSCode中，可能会遇到<code>Module 'cv2' has no 'xxx' member</code>的报错，其实代码是没问题的，只是VSCode没检测到<code>cv2</code>的模块，这是因为<code>cv2</code>模块下还有<code>cv2</code>模块，因此一个简单的做法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> cv2 <span class="keyword">import</span> cv2 <span class="keyword">as</span> cv </span><br></pre></td></tr></table></figure>
+<h1>图像入门</h1>
+<h2 id="读取图像（cv-imread-）">读取图像（<code>cv.imread()</code>）</h2>
+<p>使用<code>cv.imread()</code>函数读取一张图像，图片应该在<strong>工作目录</strong>中，或者应该提供<strong>完整的图像路径</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">retval = cv.imread( filename[, flags] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>来自：<a target="_blank" rel="noopener" href="https://docs.opencv.org/4.0.0/d4/da8/group__imgcodecs.html#ga288b8b3da0892bd651fce07b3bbd3a56">OpenCV: Image file reading and writing</a></p>
+</blockquote>
+<p>其中参数<code>flags</code>指定了读取的方式：</p>
+<ul>
+<li><strong><code>cv.IMREAD_COLOR</code></strong>：加载彩色图像，任何图像的透明度都会被忽略，它是默认<code>flag</code></li>
+<li><strong><code>cv.IMREAD_GRAYSCALE</code></strong>：以灰度模式加载图像</li>
+<li><strong><code>cv.IMREAD_UNCHANGED</code></strong>：加载图像，包括 alpha 通道</li>
+</ul>
+<blockquote>
+<p>NOTE：可以简单的通过<code>1</code>、<code>0</code>、<code>-1</code>来调用这三个<code>flag</code>，而不是输入<code>flag</code>全名。</p>
+</blockquote>
+<p>看一个案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = cv.imread(<span class="string">&#x27;Alan_Turing_Aged_16.jpg&#x27;</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要注意的是，这只是一个简单的读取函数，如果因为图像错误/路径错误导致读取不成功，可以通过<code>print img</code>看到变量<code>img</code>为<code>None</code>。</p>
+<p>当然，如果读取成功你便可以看到OpenCV读取图像的形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> img</span><br><span class="line">[[<span class="number">129</span> <span class="number">128</span> <span class="number">127</span> ... <span class="number">112</span> <span class="number">111</span> <span class="number">109</span>]</span><br><span class="line"> [<span class="number">128</span> <span class="number">128</span> <span class="number">128</span> ... <span class="number">114</span> <span class="number">112</span> <span class="number">112</span>]</span><br><span class="line"> [<span class="number">122</span> <span class="number">122</span> <span class="number">122</span> ... <span class="number">112</span> <span class="number">114</span> <span class="number">115</span>]</span><br><span class="line"> ...</span><br><span class="line"> [ <span class="number">62</span>  <span class="number">60</span>  <span class="number">61</span> ...  <span class="number">92</span>  <span class="number">91</span>  <span class="number">91</span>]</span><br><span class="line"> [ <span class="number">65</span>  <span class="number">63</span>  <span class="number">62</span> ...  <span class="number">88</span>  <span class="number">88</span>  <span class="number">88</span>]</span><br><span class="line"> [ <span class="number">67</span>  <span class="number">64</span>  <span class="number">63</span> ...  <span class="number">87</span>  <span class="number">86</span>  <span class="number">85</span>]]</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="显示图像（cv-imshow-）">显示图像（<code>cv.imshow()</code>）</h2>
+<p>用<code>cv.imshow()</code>函数在窗口中显示图像，窗口自动适应图像的大小。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line"><span class="literal">None</span> = cv.imshow( winname, mat )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>来自：<a target="_blank" rel="noopener" href="https://docs.opencv.org/4.0.0/d4/da8/group__imgcodecs.html#ga288b8b3da0892bd651fce07b3bbd3a56">OpenCV: Image file reading and writing</a></p>
+</blockquote>
+<p>第一个参数是窗口名，它是一个字符串，第二个参数就是我们的图像。你可以根据需要创建任意数量的窗口，但是窗口名字要不同。</p>
+<p>如果单独用<code>cv.imshow()</code>，会发现打开的窗口一瞬间被关闭，一方面这是因为Python程序运行终止导致的；另一方面在OpenCV中还需要另一个函数去会处理许多其他GUI事件才能保证窗口的持续存在。</p>
+<h3 id="等待键盘函数（cv-waitKey-）">等待键盘函数（<code>cv.waitKey()</code>）</h3>
+<p><code>cv.waitKey()</code>是一个键盘绑定函数，它的参数是以毫秒为单位的时间。该函数为任意键盘事件等待指定毫秒。如果你在这段时间内按下任意键，程序将继续。如果传的是<code>0</code>，它会一直等待键盘按下。</p>
+<blockquote>
+<p>它也可以设置检测特定的击键。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">retval = cv.waitKey( [, delay] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>来自：<a target="_blank" rel="noopener" href="https://docs.opencv.org/4.0.0/d7/dfc/group__highgui.html#ga5628525ad33f52eab17feebcfba38bd7">OpenCV: High-level GUI</a></p>
+</blockquote>
+<blockquote>
+<p>Note：除了绑定键盘事件，该函数还会处理许多其他 GUI 事件，因此你必须用它来实际显示图像。</p>
+</blockquote>
+<p>如此，一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cv.imshow(<span class="string">&#x27;image&#x27;</span>, img)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此时按下按键<code>0</code>才会结束程序的运行。</p>
+</blockquote>
+<h2 id="窗口名与窗口摧毁（cv-namedWindow-与cv-destroyWindow-）">窗口名与窗口摧毁（<code>cv.namedWindow()</code>与<code>cv.destroyWindow()</code>）</h2>
+<p>虽然Python程序结束运行也能关闭窗口，但这毕竟是一个“非法”的操作。</p>
+<p>OpenCV提供了一个窗口摧毁函数，以及与其对应的窗口名函数。</p>
+<h3 id="窗口名函数（cv-namedWindow-）">窗口名函数（<code>cv.namedWindow()</code>）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line"><span class="literal">None</span> = cv.namedWindow( winname[, flags] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>来自：<a target="_blank" rel="noopener" href="https://docs.opencv.org/4.0.0/d7/dfc/group__highgui.html#ga5afdf8410934fd099df85c75b2e0888b">OpenCV: High-level GUI</a></p>
+</blockquote>
+<p>其中<code>flags</code>参数决定了一些特性：</p>
+<ul>
+<li><strong><code>cv.WINDOW_AUTOSIZE</code></strong>，这也是默认的<code>flag</code>，此时长宽比是自动设置的。</li>
+<li><strong><code>cv.WINDOW_NORMAL</code></strong>，此时你能调整窗口大小。当图像尺寸太大，在窗口中添加跟踪条是很有用的。</li>
+</ul>
+<h3 id="窗口摧毁函数（cv-destroyAllWindows-）">窗口摧毁函数（<code>cv.destroyAllWindows()</code>）</h3>
+<p>OpenCV中提供了两个摧毁函数：</p>
+<ul>
+<li><strong><code>cv.destroyAllWindows()</code></strong>：简单的销毁我们创建的所有窗口。</li>
+<li><strong><code>cv.destroyWindow()</code></strong>：销毁任意指定窗口，参数是确切的窗口名。</li>
+</ul>
+<blockquote>
+<p>Note：有一种特殊情况，你可以先创建一个窗口然后加载图像到该窗口。在这种情况下，你能指定窗口是否可调整大小。它是由这个函数完成的：<strong><code>cv.namedWindow()</code></strong>。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  destroyAllWindows()</span></span><br><span class="line"><span class="comment">## Python:</span></span><br><span class="line"><span class="literal">None</span> = cv.destroyAllWindows(  )</span><br><span class="line"><span class="comment">#  destroyWindow()</span></span><br><span class="line"><span class="comment">## Python:</span></span><br><span class="line"><span class="literal">None</span> = cv.destroyWindow( winname )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>来自：<a target="_blank" rel="noopener" href="https://docs.opencv.org/4.0.0/d7/dfc/group__highgui.html#ga6b7fc1c1a8960438156912027b38f481">OpenCV: High-level GUI</a></p>
+</blockquote>
+<p>如此，一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cv.namedWindow(<span class="string">&#x27;image&#x27;</span>, cv.WINDOW_NORMAL)</span><br><span class="line">cv.imshow(<span class="string">&#x27;image&#x27;</span>,img)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h2 id="保存图像">保存图像</h2>
+<p>保存图像，用**<code>cv.imwrite()</code>**。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">retval = cv.imwrite( filename, img[, params] )</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一个参数是文件名；</li>
+<li>第二个参数是你要保存的图像。</li>
+</ul>
+<p>一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cv.imwrite(<span class="string">&#x27;messigray.png&#x27;</span>,img)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>将该图像用 PNG 格式保存在工作目录。</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>下面的程序以灰度模式读取图像，显示图像，如果你按下<code>s</code>会保存和退出图像，或者按下<code>ESC</code>退出不保存。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np	<span class="comment"># 引入numpy库</span></span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv	<span class="comment"># 引入opencv库</span></span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;Alan_Turing_Aged_16.jpg&#x27;</span>,<span class="number">0</span>)	<span class="comment"># 读取文件“Alan_Turing_Aged_16.jpg”</span></span><br><span class="line">cv.imshow(<span class="string">&#x27;image&#x27;</span>,img)	<span class="comment"># 显示图片</span></span><br><span class="line">k = cv.waitKey(<span class="number">0</span>)		<span class="comment"># 获取键盘按键</span></span><br><span class="line"><span class="keyword">if</span> k == <span class="number">27</span>: 			<span class="comment"># ESC 退出</span></span><br><span class="line">    cv.destroyAllWindows()	<span class="comment"># 关闭全部窗口</span></span><br><span class="line"><span class="keyword">elif</span> k == <span class="built_in">ord</span>(<span class="string">&#x27;s&#x27;</span>):			<span class="comment"># &#x27;s&#x27; 保存退出</span></span><br><span class="line">    cv.imwrite(<span class="string">&#x27;Alan.png&#x27;</span>,img)	<span class="comment"># 保存为“Alan.png”于工作目录</span></span><br><span class="line">    cv.destroyAllWindows()	<span class="comment"># 关闭全部窗口</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用Matplotlib">使用Matplotlib</h2>
+<blockquote>
+<p>Matplotlib是一个Python的绘图库，提供了丰富多样的绘图函数。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt	<span class="comment"># 注意引入 matplotlib</span></span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;Alan_Turing_Aged_16.jpg&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">plt.imshow(img, cmap = <span class="string">&#x27;gray&#x27;</span>, interpolation = <span class="string">&#x27;bicubic&#x27;</span>)</span><br><span class="line">plt.xticks([]), plt.yticks([]) <span class="comment"># 隐藏 X 和 Y 轴的刻度值</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>参考</strong></p>
+<p>Matplotlib 提供了大量的绘图选项。有关更多详情信息，请参阅 Matplotlib 文档。</p>
+<p><strong>注意</strong></p>
+<p>彩色图像 OpenCV 用的 BGR 模式，但是 Matplotlib 显示用的 RGB 模式。因此如果图像用 OpenCV 加载，则 Matplotlib 中彩色图像将无法正常显示。</p>
+</blockquote>
+<h1>视频入门</h1>
+<h2 id="从相机捕捉视频">从相机捕捉视频</h2>
+<p>OpenCV提供了一个简单的接口，用于捕捉视频内容。</p>
+<h3 id="VideoCapture的对象"><code>VideoCapture</code>的对象</h3>
+<p>要捕获视频，需要创建一个**<code>VideoCapture</code>**的对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">&lt;VideoCapture <span class="built_in">object</span>&gt; = cv.VideoCapture(  )</span><br><span class="line">&lt;VideoCapture <span class="built_in">object</span>&gt; = cv.VideoCapture( filename[, apiPreference] )</span><br><span class="line">&lt;VideoCapture <span class="built_in">object</span>&gt; = cv.VideoCapture( index[, apiPreference] )</span><br></pre></td></tr></table></figure>
+<p>它的可以有两个参数：</p>
+<ul>
+<li><strong><code>filename</code></strong>：一个视频文件名。</li>
+<li><strong><code>index</code></strong>：一个设备索引。</li>
+</ul>
+<blockquote>
+<p>设备索引仅仅是摄像机编号，从<code>0</code>开始计算。之后可以逐帧捕获。但是最后，不要忘记释放这个<code>VideoCapture</code>对象。</p>
+</blockquote>
+<h3 id="捕获帧（cap-read-）">捕获帧（<code>cap.read()</code>）</h3>
+<p>我们使用<code>cap.read()</code>来进行帧捕获。而要进行视频的捕获就必须使用循环。</p>
+<p><code>cap.read()</code>返回一个<code>bool</code>值(<code>True</code>/<code>False</code>)。如果加载成功，它会返回<code>True</code>。因此，你可以通过这个返回值判断视频是否结束。</p>
+<blockquote>
+<p>有时，<code>cap</code>可能没有初始化<code>capture</code>。在这种情况下，此代码显示错误。你可以通过<code>cap.isOpened()</code>检查它是否初始化。如果它是<code>True</code>，那么意味着<code>cap</code>成功初始化；否则意味着未成功初始化，需要用<code>cap.open()</code>打开在使用。</p>
+</blockquote>
+<h3 id="获取一些视频的特征（cv-VideoCapture-get-propID-）">获取一些视频的特征（<code>cv.VideoCapture.get( propID )</code>）</h3>
+<p>可以通过使用**<code>cap.get(propId)</code><strong>函数获取一些视频的特征。或者使用</strong><code>cv.VideoCapture.get()</code><strong>获取全部细节。它们中有些值可以使用</strong><code>cap.set(propId, value)</code>**修改。Value就是你想要的新值</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">retval = cv.VideoCapture.get( propId )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里的 propld 是一个 0-18 的数字，每个数字代表视频的一个特征（如果这个视频有）。</p>
+<p>例如：</p>
+<ul>
+<li>
+<p>使用<code>cap.get(cv.CAP_PROP_FRAME_WIDTH)</code>获得宽，</p>
+</li>
+<li>
+<p>使用<code>cap.get(cv.CAP_PROP_FRAME_HEIGHT)</code> 获得高。</p>
+</li>
+</ul>
+<p>它返回的是 640x480，但是我想把它修改为 320x240。</p>
+<ul>
+<li>使用<code>ret = cap.set(cv.CAP_PROP_FRAME_WIDTH,320)</code>和<code>ret = cap.set(cv.CAP_PROP_FRAME_HEIGHT,240)</code></li>
+</ul>
+<p>NOTE：如果报错，确保相机用任意其他的相机程序 (如 Linux 下的 Cheese 程序) 可以正常工作。</p>
+</blockquote>
+<h3 id="一个简单的案例">一个简单的案例</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line">cap = cv.VideoCapture(<span class="number">1</span>)	<span class="comment"># 创建一个 VideoCapture 对象</span></span><br><span class="line"><span class="keyword">while</span>(<span class="literal">True</span>):</span><br><span class="line">    <span class="comment"># 一帧一帧捕捉</span></span><br><span class="line">    ret, frame = cap.read()</span><br><span class="line">    <span class="comment"># 我们对帧的操作在这里</span></span><br><span class="line">    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)</span><br><span class="line">    <span class="comment"># 显示长和宽</span></span><br><span class="line">    <span class="built_in">print</span> (cap.get(cv.CAP_PROP_FRAME_HEIGHT))</span><br><span class="line">    <span class="built_in">print</span> (cap.get(cv.CAP_PROP_FRAME_WIDTH))</span><br><span class="line">    <span class="comment"># 显示返回的每帧</span></span><br><span class="line">    cv.imshow(<span class="string">&#x27;frame&#x27;</span>,gray)</span><br><span class="line">    <span class="keyword">if</span> cv.waitKey(<span class="number">1</span>) &amp; <span class="number">0xFF</span> == <span class="built_in">ord</span>(<span class="string">&#x27;q&#x27;</span>):</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"><span class="comment"># 当所有事完成，释放 VideoCapture 对象</span></span><br><span class="line">cap.release()</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h2 id="播放视频文件">播放视频文件</h2>
+<p>原理和捕获摄像头一摸一样，只是把对象<code>VideoCapture</code>的参数改成文件名：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cap = cv.VideoCapture(<span class="string">&#x27;vtest.avi&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>NOTE：确保 ffmpeg 和 gstreamer 安装合适的版本。有时，使用 Video Capture 是比较头痛的，主要是因为错误的安装 ffmpeg 或 gstreamer。</p>
+</blockquote>
+<h2 id="保存视频">保存视频</h2>
+<p>在图像上，我们使用**<code>cv.imwrite()</code>**去保存，这里需要更多的工作。</p>
+<p>这次需要创建一个**<code>VideoWriter</code>**对象。我们应该指定输出文件的名字 (例如：output.avi)。</p>
+<p>之后我们应该指定<strong>FourCC</strong>码。再之后传递每秒帧数和帧大小。最后一个是<strong>isColor</strong> <code>flag</code>。如果是<code>True</code>，编码器期望彩色帧，否则它适用于灰度帧。</p>
+<blockquote>
+<p>FourCC是用于指定视频解码器的4字节代码。<a href="fourcc.org">fourcc.org</a>是可用编码的列表。它取决于平台，下面的编码就很好：</p>
+<ul>
+<li>In Fedora: DIVX, XVID, MJPG, X264, WMV1, WMV2. (XVID 是最合适的. MJPG 结果比较大. X264 结果比较小)</li>
+<li>In Windows: DIVX (还需要测试和添加跟多内容)</li>
+<li>In OSX: MJPG (.mp4), DIVX (.avi), X264 (.mkv).</li>
+</ul>
+<p>*对于MJPG，FourCC的代码作为<code>cv.VideoWriter_fourcc('M','J','P','G')</code>或 <strong><code>cv.VideoWriter_fourcc('MJPG')</code></strong> 传递。</p>
+</blockquote>
+<p>下面的代码从相机捕获，在垂直方向翻转每一帧然后保存它：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line">cap = cv.VideoCapture(<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 声明编码器和创建 VideoWrite 对象</span></span><br><span class="line">fourcc = cv.VideoWriter_fourcc(*<span class="string">&#x27;XVID&#x27;</span>)</span><br><span class="line">out = cv.VideoWriter(<span class="string">&#x27;output.avi&#x27;</span>,fourcc, <span class="number">20.0</span>, (<span class="number">640</span>,<span class="number">480</span>))</span><br><span class="line"><span class="keyword">while</span>(cap.isOpened()):</span><br><span class="line">    ret, frame = cap.read()</span><br><span class="line">    <span class="keyword">if</span> ret==<span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># 帧垂直方向翻转</span></span><br><span class="line">        frame = cv.flip(frame,<span class="number">0</span>)</span><br><span class="line">        <span class="comment"># 写入已经翻转好的帧</span></span><br><span class="line">        out.write(frame)</span><br><span class="line">        cv.imshow(<span class="string">&#x27;frame&#x27;</span>,frame)</span><br><span class="line">        <span class="keyword">if</span> cv.waitKey(<span class="number">1</span>) &amp; <span class="number">0xFF</span> == <span class="built_in">ord</span>(<span class="string">&#x27;q&#x27;</span>):</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"><span class="comment"># 释放已经完成的工作</span></span><br><span class="line">cap.release()</span><br><span class="line">out.release()</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Open-CV/" rel="tag"># Open CV</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/06/pip%E6%8D%A2%E6%BA%90/" rel="prev" title="pip换源">
+      <i class="fa fa-chevron-left"></i> pip换源
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002%EF%BC%9A%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6%E4%B8%8E%E6%BB%91%E8%BD%A8/" rel="next" title="Open CV (Python) 学习笔记02：图像绘制与滑轨">
+      Open CV (Python) 学习笔记02：图像绘制与滑轨 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">引入所需要的库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">图像入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E5%9B%BE%E5%83%8F%EF%BC%88cv-imread-%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">读取图像（cv.imread()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%9B%BE%E5%83%8F%EF%BC%88cv-imshow-%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">显示图像（cv.imshow()）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%89%E5%BE%85%E9%94%AE%E7%9B%98%E5%87%BD%E6%95%B0%EF%BC%88cv-waitKey-%EF%BC%89"><span class="nav-number">3.2.1.</span> <span class="nav-text">等待键盘函数（cv.waitKey()）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E5%90%8D%E4%B8%8E%E7%AA%97%E5%8F%A3%E6%91%A7%E6%AF%81%EF%BC%88cv-namedWindow-%E4%B8%8Ecv-destroyWindow-%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">窗口名与窗口摧毁（cv.namedWindow()与cv.destroyWindow()）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E5%90%8D%E5%87%BD%E6%95%B0%EF%BC%88cv-namedWindow-%EF%BC%89"><span class="nav-number">3.3.1.</span> <span class="nav-text">窗口名函数（cv.namedWindow()）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E6%91%A7%E6%AF%81%E5%87%BD%E6%95%B0%EF%BC%88cv-destroyAllWindows-%EF%BC%89"><span class="nav-number">3.3.2.</span> <span class="nav-text">窗口摧毁函数（cv.destroyAllWindows()）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E5%AD%98%E5%9B%BE%E5%83%8F"><span class="nav-number">3.4.</span> <span class="nav-text">保存图像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Matplotlib"><span class="nav-number">3.6.</span> <span class="nav-text">使用Matplotlib</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">视频入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E7%9B%B8%E6%9C%BA%E6%8D%95%E6%8D%89%E8%A7%86%E9%A2%91"><span class="nav-number">4.1.</span> <span class="nav-text">从相机捕捉视频</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VideoCapture%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.1.1.</span> <span class="nav-text">VideoCapture的对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7%E5%B8%A7%EF%BC%88cap-read-%EF%BC%89"><span class="nav-number">4.1.2.</span> <span class="nav-text">捕获帧（cap.read()）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E4%B8%80%E4%BA%9B%E8%A7%86%E9%A2%91%E7%9A%84%E7%89%B9%E5%BE%81%EF%BC%88cv-VideoCapture-get-propID-%EF%BC%89"><span class="nav-number">4.1.3.</span> <span class="nav-text">获取一些视频的特征（cv.VideoCapture.get( propID )）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%88%E4%BE%8B"><span class="nav-number">4.1.4.</span> <span class="nav-text">一个简单的案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%92%AD%E6%94%BE%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6"><span class="nav-number">4.2.</span> <span class="nav-text">播放视频文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E5%AD%98%E8%A7%86%E9%A2%91"><span class="nav-number">4.3.</span> <span class="nav-text">保存视频</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

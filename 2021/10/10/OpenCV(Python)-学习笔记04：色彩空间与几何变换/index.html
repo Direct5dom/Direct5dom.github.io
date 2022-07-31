@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="图：Alan Mathison Turing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Open CV (Python) 学习笔记04：色彩空间与几何变换">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/10/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004%EF%BC%9A%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%87%A0%E4%BD%95%E5%8F%98%E6%8D%A2/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="图：Alan Mathison Turing">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/%E9%AB%98%E8%BE%BE%E6%94%AF%E6%9E%B6.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/Joy-Con%E6%89%8B%E6%9F%84.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/warpAffine.png?raw=true">
+<meta property="og:image" content="http://github.com/Direct5dom/imageDB/blob/main/CV/warpAffine_Rotation.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/Geometric_Transformations_3.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/Geometric_Transformations_4.jpg?raw=true">
+<meta property="article:published_time" content="2021-10-10T08:19:59.000Z">
+<meta property="article:modified_time" content="2022-05-25T15:00:54.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Open CV">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/10/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004%EF%BC%9A%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%87%A0%E4%BD%95%E5%8F%98%E6%8D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Open CV (Python) 学习笔记04：色彩空间与几何变换 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/10/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004%EF%BC%9A%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%87%A0%E4%BD%95%E5%8F%98%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Open CV (Python) 学习笔记04：色彩空间与几何变换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-10 16:19:59" itemprop="dateCreated datePublished" datetime="2021-10-10T16:19:59+08:00">2021-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-25 23:00:54" itemprop="dateModified" datetime="2022-05-25T23:00:54+08:00">2022-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Open-CV-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Open CV 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true" alt="Alan_Turing_Aged_16_16_9.png"></p>
+<blockquote>
+<p>图：Alan Mathison Turing</p>
+</blockquote>
+<span id="more"></span>
+<h1>改变色彩空间</h1>
+<blockquote>
+<p><strong>色彩空间</strong>，即<strong>Color-Space</strong>，是一种用于描述色彩的数学模型，以一维、 二维 、三维甚至四维空间坐标来表示某一色彩，这种<strong>坐标系统</strong>所能定义的色彩范围即色彩空间。例如RGB 、 CMYK 、Lab等。</p>
+</blockquote>
+<p>在OpenCV中提供超过150种色彩空间转换的方法。这里仅实践两个最常用的方法：</p>
+<ul>
+<li>BGR -&gt; Gray</li>
+<li>BGR -&gt; HSV</li>
+</ul>
+<p>我们使用<code>cv.cvtColor()</code>函数进行色彩空间转换。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">dst = cv.cvtColor( src, code[, dst[, dstCn]] )</span><br><span class="line"><span class="comment"># 或者可以更简单的看作：</span></span><br><span class="line">dst = cv.cvtColor( src, flag )</span><br></pre></td></tr></table></figure>
+<p>其中参数：</p>
+<ul>
+<li>
+<p><code>src</code>：输入图像</p>
+</li>
+<li>
+<p><code>flag</code>：决定转换的类型</p>
+<ul>
+<li>
+<p>对于BGR -&gt; Gray，使用<code>cv.COLOR_BGR2GRAY</code></p>
+</li>
+<li>
+<p>对于BGR -&gt; HSV，使用<code>cv.COLOR_BGR2HSV</code></p>
+</li>
+<li>
+<p>如果想得到其他<code>flag</code>值，只需要在Python Shell中输入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>flags = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">dir</span>(cv) <span class="keyword">if</span> i.startswith(<span class="string">&#x27;COLOR_&#x27;</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( flags )</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：对于HSV，色调(Hue)范围为[0,179]，饱和度(Saturation)范围为[0,255]，明亮度(Value)为[0,255]。不同的软件使用不同的比例，所以如果想用OpenCV的值与别的软件的值作对比，你需要归一化这些范围。</p>
+</blockquote>
+<h2 id="依据HSV值进行目标追踪">依据HSV值进行目标追踪</h2>
+<p>知道了如何将BGR图片转化为HSV图片后，我们可以使用它去提取彩色对象。</p>
+<p>HSV比BGR在颜色空间上更容易标识颜色，在我们 的应用中，我们会尝试提取一个蓝色的对象，方法为：</p>
+<ul>
+<li>从摄像头画面提取每一帧</li>
+<li>将 BGR 转换为 HSV</li>
+<li>在 HSV 中定义蓝色范围，并对 HSV 图像设置阈值以仅获取蓝色</li>
+<li>按位与掩码和原始图像</li>
+</ul>
+<p>下面是代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">cap = cv.VideoCapture(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">    <span class="comment"># 从摄像头画面提取每一帧</span></span><br><span class="line">    _, frame = cap.read()</span><br><span class="line">    <span class="comment"># 将 BGR 转换为 HSV</span></span><br><span class="line">    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)</span><br><span class="line">    <span class="comment"># 在 HSV 中定义蓝色范围</span></span><br><span class="line">    lower_blue = np.array([<span class="number">50</span>,<span class="number">50</span>,<span class="number">50</span>])</span><br><span class="line">    upper_blue = np.array([<span class="number">130</span>,<span class="number">255</span>,<span class="number">255</span>])</span><br><span class="line">    <span class="comment"># 对 HSV 图像设置阈值以仅获取蓝色</span></span><br><span class="line">    mask = cv.inRange(hsv, lower_blue, upper_blue)</span><br><span class="line">    <span class="comment"># 按位与掩码和原始图像</span></span><br><span class="line">    res = cv.bitwise_and(frame,frame, mask= mask)</span><br><span class="line">    cv.imshow(<span class="string">&#x27;frame&#x27;</span>,frame)</span><br><span class="line">    cv.imshow(<span class="string">&#x27;mask&#x27;</span>,mask)</span><br><span class="line">    cv.imshow(<span class="string">&#x27;res&#x27;</span>,res)</span><br><span class="line">    k = cv.waitKey(<span class="number">5</span>) &amp; <span class="number">0xFF</span></span><br><span class="line">    <span class="keyword">if</span> k == <span class="number">27</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p>此代码可以去跟踪一些浅蓝色的对象，如：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/%E9%AB%98%E8%BE%BE%E6%94%AF%E6%9E%B6.png?raw=true" alt="高达支架.png"></p>
+<blockquote>
+<p>浅蓝色的高达支架</p>
+</blockquote>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/Joy-Con%E6%89%8B%E6%9F%84.png?raw=true" alt="Joy-Con手柄.png"></p>
+<blockquote>
+<p>浅蓝色的Joy-Con手柄</p>
+</blockquote>
+<blockquote>
+<p><strong>注意</strong>：在跟踪的图片中可以看到一些噪点，之后会学习如何消除。这是最简单的目标跟踪例子，当学会了轮廓函数，就可以做的更多，例如找到对象的质心并且使用它来追踪对象，只需在相机前面移动你的手，手指或者掌心的轨迹就可以绘制图形，还有许多其他有趣的东西。</p>
+</blockquote>
+<h2 id="如何找到合适的HSV值">如何找到合适的HSV值</h2>
+<p>和BGR或RGB不同，HSV似乎并不是那么的“直观”，如何寻找一个合适的HSV值也就成为了很多新手苦恼的地方。</p>
+<p>除了去网上找各种颜色选择器外，还可以使用OpenCV提供的函数<code>cv.cvtColor()</code>来完成，不需要输入图片，只需要输入需要的BGR值，例如为了找到绿色的HSV值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>green = np.uint8([[[<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span> ]]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hsv_green = cv.cvtColor(green,cv.COLOR_BGR2HSV)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( hsv_green )</span><br><span class="line">[[[ <span class="number">60</span> <span class="number">255</span> <span class="number">255</span>]]]</span><br></pre></td></tr></table></figure>
+<p>现在可以取 [H-10, 100,100] 和 [H+10, 255, 255] 分别作为上界和下界。</p>
+<h1>图像的几何变换</h1>
+<p>OpenCV提供了几个变换函数，用他们可以完成所有类型的变换：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 仿射变换:</span></span><br><span class="line">dst = cv.warpAffine( src, M, dsize[, dst[, flags[, borderMode[, borderValue]]]] )</span><br><span class="line"><span class="comment"># 透视变换:</span></span><br><span class="line">dst = cv.warpPerspective( src, M, dsize[, dst[, flags[, borderMode[, borderValue]]]] )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>两个函数的区别在于：</p>
+<p><code>cv.warpAffine</code>输入为$2 \times 3$的变换矩阵， <code>cv.getPerspectiveTransform</code>输入为$3 \times 3$的变换矩阵。</p>
+<h2 id="仿射平移变换">仿射平移变换</h2>
+<p>已知$(x,y)$方向的偏移量$(t_x,t_y)$，则可以创建仿射变换矩阵$M$：<br>
+$$<br>
+M=<br>
+\begin{bmatrix}<br>
+1 &amp; 0 &amp; t_x \\<br>
+0 &amp; 1 &amp; t_y<br>
+\end{bmatrix}<br>
+$$<br>
+可以将仿射变换矩阵村委<code>np.float32</code>类型的Numpy数组，并将其作为<code>cv.warpAffine()</code>的<code>M</code>参数。</p>
+<p>在<code>cv.warpAffine()</code>中，会对传入的仿射变换矩阵对源图像进行变换：<br>
+$$<br>
+dst(x,y)=src(M_{11} x+M_{12} y+M_{13},M_{21} x+M_{22} y+M_{23})<br>
+$$</p>
+<blockquote>
+<p>表面上看似是<code>src -&gt; dst</code>，但这样计算的前提是设置了flag<code>WARP_INVERSE_MAP</code>。</p>
+<p>否则实际计算中首先使用<code>cv2.invertAffineTransform(affine_matrix)</code>将仿射变换矩阵进行求逆，然后再代入上面的公式，而不是M。这实际上是<code>dst -&gt; src</code>。</p>
+<p>这样的话每次就是从<code>dst</code>对应的坐标中寻找<code>src</code>所对应的像素点（也许是整数点，也许的带小数点的，也是不在<code>src</code>的图像范围内）。整数点就直接copy， 小数点就直接双线性插值，超出边界了要么外推该像素点的像素要么就不改变该点的像素值。</p>
+</blockquote>
+<p>一个案例（仿射平移变换）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;Alan_Turing_Aged_16.jpg&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">rows,cols = img.shape</span><br><span class="line">M = np.float32([[<span class="number">1</span>,<span class="number">0</span>,<span class="number">100</span>],[<span class="number">0</span>,<span class="number">1</span>,<span class="number">50</span>]])</span><br><span class="line">dst = cv.warpAffine(img,M,(cols,rows))</span><br><span class="line"></span><br><span class="line">cv.imshow(<span class="string">&#x27;img&#x27;</span>,dst)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>警告：</p>
+<p><code>cv.warpAffine()</code>函数的第三个参数是输出图像的大小，应该是<code>(width, height)</code>的形式。</p>
+</blockquote>
+<p>得到的平移结果：</p>
+<img src="https://github.com/Direct5dom/imageDB/blob/main/CV/warpAffine.png?raw=true" alt="warpAffine.png" style="zoom:50%;" />
+<h2 id="仿射旋转变换">仿射旋转变换</h2>
+<p>以θ角度旋转图片的仿射矩阵为：<br>
+$$<br>
+M=<br>
+\begin{bmatrix}<br>
+\cos \theta &amp; - \sin \theta \\<br>
+\sin \theta &amp; \cos \theta<br>
+\end{bmatrix}<br>
+$$<br>
+不过OpenCV提供了可变旋转中心的比例变换，这样可以在任易位置旋转图片，修改后的仿射矩阵为：<br>
+$$<br>
+M^{\prime} =<br>
+\begin{bmatrix}<br>
+\alpha &amp; \beta &amp; (1- \alpha ) \cdot center.x - \beta \cdot center.y \\<br>
+-\beta &amp; \alpha &amp; \beta \cdot center.x + (1- \alpha) \cdot center.y<br>
+\end{bmatrix}<br>
+$$<br>
+其中：<br>
+$$<br>
+\begin{array}{l}<br>
+\alpha =scale \cdot \cos \theta \\<br>
+\beta = scale \cdot \sin \theta<br>
+\end{array}<br>
+$$<br>
+而为了找到这个复杂的矩阵，OpenCV提供了一个函数：<code>cv.getRotationMatrix2D</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">retval = cv.getRotationMatrix2D( center, angle, scale )</span><br></pre></td></tr></table></figure>
+<p>我们可以将这个函数的传出结果作为<code>M</code>传给<code>cv.warpAffine()</code>。</p>
+<p>一个简单的案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;Alan_Turing_Aged_16.jpg&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">rows,cols = img.shape</span><br><span class="line"><span class="comment"># cols-1和row -1是坐标极限。</span></span><br><span class="line">M = cv.getRotationMatrix2D(((cols-<span class="number">1</span>)/<span class="number">2.0</span>,(rows-<span class="number">1</span>)/<span class="number">2.0</span>),<span class="number">90</span>,<span class="number">1</span>)</span><br><span class="line">dst = cv.warpAffine(img,M,(cols,rows))</span><br><span class="line"></span><br><span class="line">cv.imshow(<span class="string">&#x27;img&#x27;</span>,dst)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p>最终的结果：</p>
+<img src="http://github.com/Direct5dom/imageDB/blob/main/CV/warpAffine_Rotation.png?raw=true" alt="warpAffine_Rotation.png" style="zoom:50%;" />
+<h2 id="更多仿射变换">更多仿射变换</h2>
+<p>上面提到的平移和旋转其实都属于仿射变换，但是仿射变换不止这两项，还包括<strong>缩放</strong>（Scale、<strong>平移</strong>(transform)、<strong>旋转</strong>(rotate)、<strong>反射</strong>（reflection,对图形照镜子）、<strong>错切</strong>(shear mapping，感觉像是一个图形的倒影)。</p>
+<p>从定义上来讲，<strong>仿射变换</strong>（Affine Transformation）其实是另外两种简单变换的叠加：一个是<strong>线性变换</strong>，一个是<strong>平移变换</strong>。</p>
+<p>在仿射变换中，原始图像中的所有平行线在输出图像中仍然是平行的。为了找到变换矩阵，我们需要从输入图像中取三个点及其在输出图像中的对应位置。然后 <code>cv.getAffineTransform()</code>将创建一个$2 \times 3$ 矩阵，该矩阵将传递给<code>cv.warpAffine()</code>。</p>
+<p>一个简单的案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;Draw.png&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">rows,cols = img.shape</span><br><span class="line">pts1 = np.float32([[<span class="number">50</span>,<span class="number">50</span>],[<span class="number">200</span>,<span class="number">50</span>],[<span class="number">50</span>,<span class="number">200</span>]])</span><br><span class="line">pts2 = np.float32([[<span class="number">10</span>,<span class="number">100</span>],[<span class="number">200</span>,<span class="number">50</span>],[<span class="number">100</span>,<span class="number">250</span>]])</span><br><span class="line">M = cv.getAffineTransform(pts1,pts2)</span><br><span class="line">dst = cv.warpAffine(img,M,(cols,rows))</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(img),plt.title(<span class="string">&#x27;Input&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(dst),plt.title(<span class="string">&#x27;Output&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/Geometric_Transformations_3.jpg?raw=true" alt="Geometric_Transformations_3.jpg"></p>
+<h2 id="透视变换">透视变换</h2>
+<p>和仿射变换不同，对于透视变换，需要一个$3 \times 3$的矩阵。即使在转换之后，直线也将保持直线。</p>
+<p>要找到这个变换矩阵，需要输入图像上的4个点和输出图像上的相应点。</p>
+<p>这四个点中，任意三点不应该共线。然后通过<code>cv.getPerspectiveTransform</code>找到变换矩阵，有：<br>
+$$<br>
+\begin{bmatrix}<br>
+t_{i}x_{i}^{\prime} \\<br>
+t_{i}y_{i}^{\prime} \\<br>
+t_{i}<br>
+\end{bmatrix}<br>
+=map_matrix \cdot<br>
+\begin{bmatrix}<br>
+x_{i} \\<br>
+y_{i} \\<br>
+1<br>
+\end{bmatrix}<br>
+$$<br>
+其中：<br>
+$$<br>
+dst(i)=(x_{i}^{′},y_{i}^{′}),src(i)=(x_i,y_i),i=0,1,2,3<br>
+$$</p>
+<p>然后对这个 3x3 变换矩阵使用<code>cv.warpPerspective</code>，它会对我们的图像进行计算：<br>
+$$<br>
+dst(x,y)=src \left( \frac{M_{11}x+M_{12}y+M_{13}}{M_{31}x+M_{32}y+M_{33}}, \frac{M_{21}x+M_{22}y+M_{23}}{M_{31}x+M_{32}y+M_{33}} \right)<br>
+$$<br>
+最终得到结果。</p>
+<p>一个简单的案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;sudoku.png&#x27;</span>)</span><br><span class="line">rows,cols,ch = img.shape</span><br><span class="line">pts1 = np.float32([[<span class="number">56</span>,<span class="number">65</span>],[<span class="number">368</span>,<span class="number">52</span>],[<span class="number">28</span>,<span class="number">387</span>],[<span class="number">389</span>,<span class="number">390</span>]])</span><br><span class="line">pts2 = np.float32([[<span class="number">0</span>,<span class="number">0</span>],[<span class="number">300</span>,<span class="number">0</span>],[<span class="number">0</span>,<span class="number">300</span>],[<span class="number">300</span>,<span class="number">300</span>]])</span><br><span class="line">M = cv.getPerspectiveTransform(pts1,pts2)</span><br><span class="line">dst = cv.warpPerspective(img,M,(<span class="number">300</span>,<span class="number">300</span>))</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(img),plt.title(<span class="string">&#x27;Input&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(dst),plt.title(<span class="string">&#x27;Output&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/Geometric_Transformations_4.jpg?raw=true" alt="Geometric_Transformations_4.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Open-CV/" rel="tag"># Open CV</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/09/Boids%20%E7%AE%97%E6%B3%95%E7%AE%80%E8%BF%B0/" rel="prev" title="Boids 算法简述">
+      <i class="fa fa-chevron-left"></i> Boids 算法简述
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/12/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B005%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%98%88%E5%80%BC/" rel="next" title="Open CV (Python) 学习笔记05：图像阈值">
+      Open CV (Python) 学习笔记05：图像阈值 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">改变色彩空间</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E6%8D%AEHSV%E5%80%BC%E8%BF%9B%E8%A1%8C%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA"><span class="nav-number">1.1.</span> <span class="nav-text">依据HSV值进行目标追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%89%BE%E5%88%B0%E5%90%88%E9%80%82%E7%9A%84HSV%E5%80%BC"><span class="nav-number">1.2.</span> <span class="nav-text">如何找到合适的HSV值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">图像的几何变换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BF%E5%B0%84%E5%B9%B3%E7%A7%BB%E5%8F%98%E6%8D%A2"><span class="nav-number">2.1.</span> <span class="nav-text">仿射平移变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BF%E5%B0%84%E6%97%8B%E8%BD%AC%E5%8F%98%E6%8D%A2"><span class="nav-number">2.2.</span> <span class="nav-text">仿射旋转变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2"><span class="nav-number">2.3.</span> <span class="nav-text">更多仿射变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E8%A7%86%E5%8F%98%E6%8D%A2"><span class="nav-number">2.4.</span> <span class="nav-text">透视变换</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

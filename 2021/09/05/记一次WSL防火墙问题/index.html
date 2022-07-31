@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="给WSL装Docker，问题百出，略显蛋疼，遂记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次WSL防火墙问题">
+<meta property="og:url" content="https://direct5dom.github.io/2021/09/05/%E8%AE%B0%E4%B8%80%E6%AC%A1WSL%E9%98%B2%E7%81%AB%E5%A2%99%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="给WSL装Docker，问题百出，略显蛋疼，遂记录。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-09-05T15:35:19.000Z">
+<meta property="article:modified_time" content="2021-10-04T02:13:06.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="WSL">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/09/05/%E8%AE%B0%E4%B8%80%E6%AC%A1WSL%E9%98%B2%E7%81%AB%E5%A2%99%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>记一次WSL防火墙问题 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/09/05/%E8%AE%B0%E4%B8%80%E6%AC%A1WSL%E9%98%B2%E7%81%AB%E5%A2%99%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次WSL防火墙问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-05 23:35:19" itemprop="dateCreated datePublished" datetime="2021-09-05T23:35:19+08:00">2021-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-04 10:13:06" itemprop="dateModified" datetime="2021-10-04T10:13:06+08:00">2021-10-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WSL/" itemprop="url" rel="index"><span itemprop="name">WSL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>给WSL装Docker，问题百出，略显蛋疼，遂记录。</p>
+<span id="more"></span>
+<p>安装的方法是按照我博客之前的博文：<a href="https://direct5dom.github.io/2021/09/01/WSL2-Linux%E5%AE%89%E8%A3%85Docker/">WSL2 Linux安装Docker | Horizon (direct5dom.github.io)</a></p>
+<p>这个方法是自己验证成功的方法，只不过这次是在另一个机器上操作。</p>
+<p>因为是帮助别人远程弄，错误提示很难完全看到，这也许未后面长达四五天的埋头苦干埋下了伏笔。</p>
+<hr>
+<h2 id="安装等待40秒">安装等待40秒</h2>
+<p>在WSL上安装Docker的时候会提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WSL DETECTED: We recommend using Docker Desktop for Windows.</span><br><span class="line">Please get Docker Desktop from https://www.docker.com/products/docker-desktop</span><br></pre></td></tr></table></figure>
+<p>下面有一个<code>sleep(20)</code>，此时只需要等待20秒即可。但是却离谱的等待了40秒，这时候我并没有在意，只是以为程序哪里出了不重要的差错。</p>
+<p>接下来就是很普通的安装 -&gt; 启动服务 -&gt; 配置<code>yml</code> -&gt; 启动容器。</p>
+<p>一切看起来都很正常，直到最后一步：<code>docker-compose up -d</code>。我们彻底卡住了。</p>
+<h2 id="奇怪的报错">奇怪的报错</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Failed to Setup IP tables: Unable to enable NAT rule:  (iptables failed: iptables --wait -t nat -I POSTROUTING -s 172.23.0.0/16 ! -o br-f22845dc175b -j MASQUERADE: iptables: No chain/target/match by that name.</span><br><span class="line"> (exit status 1))</span><br></pre></td></tr></table></figure>
+<p>对于程序员来说看到<code>ERROR</code>的感觉简直就是 <strong>心 肺 停 止</strong>。但是其实也没有那么可怕。</p>
+<p>对付简单的<code>ERROR</code>，比如语法错误或者服务问题，一般都能很简单的去解决，即便像这次这种长报错，去搜索引擎上搜一下，Stack Overflow上总有解决办法与导致的原因。</p>
+<p>这次我也是很熟悉的打开搜索引擎搜索报错，第一个让我感到奇怪的是，这个错误似乎很少有人遇到。我们遇到的问题是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unable to enable NAT rule</span><br></pre></td></tr></table></figure>
+<p>但是网络上更多的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unable to enable SKIP DNAT rule</span><br></pre></td></tr></table></figure>
+<p>很显然这个是两个问题，对于后者的成因和解决办法也很简单。成因是关闭防火墙之后需要重启服务，解决办法就是重启服务。</p>
+<p>但是这个解决办法很显然不适用于我们遇到的问题，重启服务并不能解决我们的问题。</p>
+<p>全网唯一一个遇到相同问题的是<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/54380847/failed-to-setup-ip-tables-unable-to-enable-nat-rule">Stack Overflow</a>上的老哥。</p>
+<p>老哥在部署<code>Hyperledger Composer</code>的开发环境，他按部就班的去按照文档做，一切都显得十分正常，直到他start the hyperledger fabric with <code>./startFabric.sh</code>，遇到了如下报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">dany@DESKTOP-IQB2P0B:~/fabric-dev-servers$ ./startFabric.sh</span><br><span class="line">Development only script for Hyperledger Fabric control</span><br><span class="line">Running &#x27;startFabric.sh&#x27;</span><br><span class="line">FABRIC_VERSION is set to &#x27;hlfv12&#x27;</span><br><span class="line">FABRIC_START_TIMEOUT is unset, assuming 15 (seconds)</span><br><span class="line">Removing network composer_default</span><br><span class="line">WARNING: Network composer_default not found.</span><br><span class="line">Creating network &quot;composer_default&quot; with the default driver</span><br><span class="line">ERROR: Failed to Setup IP tables: Unable to enable NAT rule:  (iptables failed: iptables --wait -t nat -I POSTROUTING -s 172.22.0.0/16 ! -o br-b49f324730b7 -j MASQUERADE: iptables: No chain/target/match by that name.</span><br><span class="line"> (exit status 1))</span><br></pre></td></tr></table></figure>
+<p>此前他还遇到另外一个问题，不过在GitHub的<a href="github.com/docker/compose/issues/4181">Issues</a>里找到了解决办法。</p>
+<p>提出解决办法的人很少，有人在评论里告诉他有没有尝试<code>iptables -L</code>。下面唯一一个回答给的是：</p>
+<blockquote>
+<p>Try:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -t filter -N DOCKER</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+<p>Check this:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/16816#issuecomment-179717327">https://github.com/moby/moby/issues/16816#issuecomment-179717327</a></p>
+</blockquote>
+<p>这是在Linux的防火墙上加入Docker的规则，然后重启Docker服务。</p>
+<p>我们尝试了这个方法，除了第二条命令因为WSL的缘故改成了<code>service docker restart</code>，然后还是不行。</p>
+<h2 id="一步步寻找问题的源头">一步步寻找问题的源头</h2>
+<p>在找遍全网后都没遇到第二个问题相同的人后，我佛系了。</p>
+<p>有时候不能完全指望别人和你遇到相同的问题，并且已经有成熟的解决方案。</p>
+<p><em>这里舍去各种离谱的解决办法寻求路线</em></p>
+<p>这个报错的源头在于Docker无法启动NAT规则，问题和Linux下的防火墙相关，于是我们就从这里出发。</p>
+<p>首先是防火墙的操作，使用<code>iptables -L</code>列出所有的防火墙规则，得到结果与已配置成功的Linux对比，发现少了DOCKER的规则。然而我们之前已经尝试过添加Docker的规则（就是Stack Overflow上给出的办法），但并无效果。</p>
+<p>于是我们尝试清空已有规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -F</span><br></pre></td></tr></table></figure>
+<p>然后重建默认的访问规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -P INPUT DROP</span><br><span class="line">iptables -P FORWARD DROP</span><br><span class="line">iptables -P OUTPUT ACCEPT</span><br></pre></td></tr></table></figure>
+<p>然而还是无效。</p>
+<p>我们又找到一个类似的问题：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_38072683/article/details/112854073">(5条消息) Centos7安装Docker后无法启动:Failed to program NAT chain: INVALID_ZONE: docker_得未曾有 心净踊跃-CSDN博客</a></p>
+<p>里面是CentOS7上安装Docker后遇到报错：<code>Failed to program NAT chain: INVALID_ZONE: docker</code>。</p>
+<p>在里面提到：</p>
+<blockquote>
+<p>这是由于<code>firewalld</code>与<code>docker</code>冲突的问题，从本质上来说，应该是<code>firewalld</code>与<code>iptables</code>的冲突，</p>
+<p>来自Docker文档”</p>
+<blockquote>
+<p>On Linux, Docker manipulates iptables rules to provide network isolation.<br>
+While this is an implementation detail<br>
+and you should not modify the rules Docker inserts into your iptables policies,</p>
+</blockquote>
+</blockquote>
+<p>但是这对于WSL，至少是我们所配置的WSL是不可能存在的，因为我们所配置的WSL上<code>firewalld</code>与<code>docker</code>根本不是以后台服务的模式在跑（具体情况暂时也没搞清楚）。进一步的说也因此无法通过关闭防火墙来达到目的。</p>
+<h2 id="重装Docker，WARNING引起注意">重装Docker，WARNING引起注意</h2>
+<p>在万般无奈之下，我们选择了重装Docker这条路。</p>
+<p>情况和之前一样，多等了20秒，这次我注意到一行警告，其中提到了：<code>remote API</code>。显然这个警告和我们的问题不相关，但是<code>API</code>这三个字母还是引起了我的注意。</p>
+<p>WSL1基于Windows NT内核虚拟了Linux内核接口，并非真正的Linux。正如WINE不是Windows一样。</p>
+<blockquote>
+<p>当然WINE和WSL1又是完全两个实现，一个是上层API模拟，一个底层内核虚拟。</p>
+</blockquote>
+<p>简单来说这就导致了WSL1存在一系列问题，比如WSL1和Windows是共用防火墙，导致很多Linux下的防火墙规则问题。比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: problem running iptables: iptables v1.6.1: can&#x27;t initialize iptables table `filter&#x27;: Table does not exist (do you need to insmod?) Perhaps iptables or your kernel needs to be upgraded.</span><br></pre></td></tr></table></figure>
+<p>虽然我也说不清为什么<code>API</code>三个字母引起了我对WSL1原理的回忆，但是我确实注意到这个问题了，于是便检查WSL版本，发现版本确实停留在一代。</p>
+<p>再之后就是简单的升级了一下WSL版本，问题得以解决。</p>
+<h2 id="总结">总结</h2>
+<p>这个问题其实很看起来挺蠢的，WSL1因为问题太多我没有使用，等用上WSL的时候已经是WSL2了，因此我就认为现在的电脑上默认的WSL均是WSL2。这也就导致了在其他电脑上操作出现这种错误。</p>
+<p>但是有些时候就是这样，问题总发生在你意想不到的地方，因此与其一直和某个问题过不去，不如放下心来先去做点别的事情。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WSL/" rel="tag"># WSL</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/04/%E5%A6%82%E4%BD%95%E8%AE%A9hexo%E6%94%AF%E6%8C%81LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E6%B8%B2%E6%9F%93/" rel="prev" title="如何让hexo支持LaTeX数学公式渲染">
+      <i class="fa fa-chevron-left"></i> 如何让hexo支持LaTeX数学公式渲染
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/05/Windows-Subsystem-for-Linux-Overview-WSL%E6%A6%82%E8%BF%B0/" rel="next" title="Windows Subsystem for Linux Overview (WSL概述)">
+      Windows Subsystem for Linux Overview (WSL概述) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%AD%89%E5%BE%8540%E7%A7%92"><span class="nav-number">1.</span> <span class="nav-text">安装等待40秒</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%87%E6%80%AA%E7%9A%84%E6%8A%A5%E9%94%99"><span class="nav-number">2.</span> <span class="nav-text">奇怪的报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%AD%A5%E6%AD%A5%E5%AF%BB%E6%89%BE%E9%97%AE%E9%A2%98%E7%9A%84%E6%BA%90%E5%A4%B4"><span class="nav-number">3.</span> <span class="nav-text">一步步寻找问题的源头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A3%85Docker%EF%BC%8CWARNING%E5%BC%95%E8%B5%B7%E6%B3%A8%E6%84%8F"><span class="nav-number">4.</span> <span class="nav-text">重装Docker，WARNING引起注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

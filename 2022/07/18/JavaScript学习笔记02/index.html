@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript学习笔记02：JavaScript逻辑分支和类型转换">
+<meta property="og:url" content="https://direct5dom.github.io/2022/07/18/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAACzCAYAAAAgyDaKAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGv2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuZWRhMmIzZiwgMjAyMS8xMS8xNC0xMjozMDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjEgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0xMC0xMlQxODoyOToyOCswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OGNkMGRiZmEtZTNmMC04NTQxLWExNWQtODNhNDJlYzU1NmE4IiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6NTA4MDliYzAtN2QxYy1hYTQzLTgwY2MtNmFjMzVlZDk0ODc3IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MjNmYThkOGItMWI3OC1mNDQyLWIxOTctYjU0MDJlMzMxNzlkIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoyM2ZhOGQ4Yi0xYjc4LWY0NDItYjE5Ny1iNTQwMmUzMzE3OWQiIHN0RXZ0OndoZW49IjIwMjEtMTAtMTJUMTg6Mjk6MjgrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZjM2M0N2MtNjBmMS0xZDQwLWExMjYtMDUxOGU2NDAyZWMwIiBzdEV2dDp3aGVuPSIyMDIxLTEwLTEyVDE4OjMxOjUwKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjhjZDBkYmZhLWUzZjAtODU0MS1hMTVkLTgzYTQyZWM1NTZhOCIgc3RFdnQ6d2hlbj0iMjAyMi0wNy0xNFQxNzoyMjo1MSswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIzLjEgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvL9LZcAAB3TSURB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">
+<meta property="article:published_time" content="2022-07-18T06:25:44.000Z">
+<meta property="article:modified_time" content="2022-07-18T06:25:44.762Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAACzCAYAAAAgyDaKAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGv2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuZWRhMmIzZiwgMjAyMS8xMS8xNC0xMjozMDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjEgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0xMC0xMlQxODoyOToyOCswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OGNkMGRiZmEtZTNmMC04NTQxLWExNWQtODNhNDJlYzU1NmE4IiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6NTA4MDliYzAtN2QxYy1hYTQzLTgwY2MtNmFjMzVlZDk0ODc3IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MjNmYThkOGItMWI3OC1mNDQyLWIxOTctYjU0MDJlMzMxNzlkIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoyM2ZhOGQ4Yi0xYjc4LWY0NDItYjE5Ny1iNTQwMmUzMzE3OWQiIHN0RXZ0OndoZW49IjIwMjEtMTAtMTJUMTg6Mjk6MjgrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZjM2M0N2MtNjBmMS0xZDQwLWExMjYtMDUxOGU2NDAyZWMwIiBzdEV2dDp3aGVuPSIyMDIxLTEwLTEyVDE4OjMxOjUwKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjhjZDBkYmZhLWUzZjAtODU0MS1hMTVkLTgzYTQyZWM1NTZhOCIgc3RFdnQ6d2hlbj0iMjAyMi0wNy0xNFQxNzoyMjo1MSswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIzLjEgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvL9LZcAAB3TSURB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">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/07/18/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>JavaScript学习笔记02：JavaScript逻辑分支和类型转换 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/07/18/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript学习笔记02：JavaScript逻辑分支和类型转换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-18 14:25:44" itemprop="dateCreated datePublished" datetime="2022-07-18T14:25:44+08:00">2022-07-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JavaScript学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAACzCAYAAAAgyDaKAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGv2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuZWRhMmIzZiwgMjAyMS8xMS8xNC0xMjozMDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjEgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0xMC0xMlQxODoyOToyOCswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OGNkMGRiZmEtZTNmMC04NTQxLWExNWQtODNhNDJlYzU1NmE4IiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6NTA4MDliYzAtN2QxYy1hYTQzLTgwY2MtNmFjMzVlZDk0ODc3IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MjNmYThkOGItMWI3OC1mNDQyLWIxOTctYjU0MDJlMzMxNzlkIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoyM2ZhOGQ4Yi0xYjc4LWY0NDItYjE5Ny1iNTQwMmUzMzE3OWQiIHN0RXZ0OndoZW49IjIwMjEtMTAtMTJUMTg6Mjk6MjgrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZjM2M0N2MtNjBmMS0xZDQwLWExMjYtMDUxOGU2NDAyZWMwIiBzdEV2dDp3aGVuPSIyMDIxLTEwLTEyVDE4OjMxOjUwKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjhjZDBkYmZhLWUzZjAtODU0MS1hMTVkLTgzYTQyZWM1NTZhOCIgc3RFdnQ6d2hlbj0iMjAyMi0wNy0xNFQxNzoyMjo1MSswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIzLjEgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvL9LZcAAB3TSURB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" alt="javascript.png"></p>
+<span id="more"></span>
+<h2 id="JavaScript条件语句">JavaScript条件语句</h2>
+<ul>
+<li><strong><code>if</code> 语句</strong> - 只有当指定条件为<code>true</code>时，使用该语句来执行代码</li>
+<li><strong><code>if...else</code> 语句</strong> - 当条件为<code>true</code>时执行代码，当条件为<code>false</code>时执行其他代码</li>
+<li><strong><code>if...else if....else</code> 语句</strong>- 使用该语句来选择多个代码块之一来执行</li>
+<li><strong><code>switch</code> 语句</strong> - 使用该语句来选择多个代码块之一来执行</li>
+</ul>
+<h3 id="if"><code>if</code></h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (condition)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//当条件为 true 时执行的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="if……else"><code>if……else</code></h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (condition)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//当条件为 true 时执行的代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//当条件不为 true 时执行的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="if……else-if……else"><code>if……else if……else</code></h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (condition1)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//当条件 1 为 true 时执行的代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (condition2)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//当条件 2 为 true 时执行的代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//当条件 1 和 条件 2 都不为 true 时执行的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="switch语句"><code>switch</code>语句</h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(n)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="comment">//执行代码块 1</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">        <span class="comment">//执行代码块 2</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="comment">//与 case 1 和 case 2 不同时执行的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先设置表达式<code>n</code>（通常是一个变量）。随后表达式的值会与结构中的每个<code>case</code>的值做比较。</p>
+<p>如果存在匹配，则与该<code>case</code>关联的代码块会被执行。</p>
+<p>使用<code>break</code>来阻止代码自动地向下一个<code>case</code>运行。</p>
+<p>使用<code>default</code>关键词来规定匹配不存在时做的事情。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实例</span></span><br><span class="line"><span class="keyword">var</span> d=<span class="keyword">new</span> <span class="built_in">Date</span>().getDay(); </span><br><span class="line"><span class="keyword">switch</span> (d) </span><br><span class="line">&#123; </span><br><span class="line">  <span class="keyword">case</span> <span class="number">0</span>:x=<span class="string">&quot;今天是星期日&quot;</span>; </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>:x=<span class="string">&quot;今天是星期一&quot;</span>; </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span>:x=<span class="string">&quot;今天是星期二&quot;</span>; </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line">  <span class="keyword">case</span> <span class="number">3</span>:x=<span class="string">&quot;今天是星期三&quot;</span>; </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line">  <span class="keyword">case</span> <span class="number">4</span>:x=<span class="string">&quot;今天是星期四&quot;</span>; </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line">  <span class="keyword">case</span> <span class="number">5</span>:x=<span class="string">&quot;今天是星期五&quot;</span>; </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line">  <span class="keyword">case</span> <span class="number">6</span>:x=<span class="string">&quot;今天是星期六&quot;</span>; </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript循环语句">JavaScript循环语句</h2>
+<ul>
+<li><strong><code>for</code></strong> - 循环代码块一定的次数</li>
+<li><strong><code>for/in</code></strong> - 循环遍历对象的属性</li>
+<li><strong><code>while</code></strong> - 当指定的条件为<code>true</code>时循环指定的代码块</li>
+<li><strong><code>do/while</code></strong> - 同样当指定的条件为<code>true</code>时循环指定的代码块</li>
+</ul>
+<h3 id="for"><code>for</code></h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (语句 <span class="number">1</span>; 语句 <span class="number">2</span>; 语句 <span class="number">3</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//被执行的代码块</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>语句 1</strong> （代码块）开始前执行</p>
+</li>
+<li>
+<p><strong>语句 2</strong> 定义运行循环（代码块）的条件</p>
+</li>
+<li>
+<p><strong>语句 3</strong> 在循环（代码块）已被执行之后执行</p>
+</li>
+</ul>
+<h3 id="for-in"><code>for/in</code></h3>
+<p><code>for/in</code>语句循环遍历对象的属性：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person=&#123;<span class="attr">fname</span>:<span class="string">&quot;Bill&quot;</span>,<span class="attr">lname</span>:<span class="string">&quot;Gates&quot;</span>,<span class="attr">age</span>:<span class="number">56</span>&#125;; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> (x <span class="keyword">in</span> person)  <span class="comment">// x 为属性名</span></span><br><span class="line">&#123;</span><br><span class="line">    txt=txt + person[x];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="while"><code>while</code></h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (条件)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//需要执行的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="do-while"><code>do/while</code></h3>
+<p><code>do/while</code>循环是<code>while</code>循环的变体。该循环会在检查条件是否为真之前执行一次代码块，然后如果条件为真的话，就会重复这个循环。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//需要执行的代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">while</span> (条件);</span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript-break和continue语句">JavaScript <code>break</code>和<code>continue</code>语句</h2>
+<ul>
+<li><code>break</code>用于跳出循环。</li>
+<li><code>continue</code>用于跳过循环中的一个迭代。</li>
+</ul>
+<h3 id="break语句"><code>break</code>语句</h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (i==<span class="number">3</span>) <span class="keyword">break</span>;</span><br><span class="line">    x=x + <span class="string">&quot;The number is &quot;</span> + i + <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="continue语句"><code>continue</code>语句</h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;=<span class="number">10</span>;i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (i==<span class="number">3</span>) <span class="keyword">continue</span>;</span><br><span class="line">    x=x + <span class="string">&quot;The number is &quot;</span> + i + <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript标签">JavaScript标签</h2>
+<p>JavaScript可以对语句进行标记：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">label: statements</span><br></pre></td></tr></table></figure>
+<p><code>break</code>和<code>continue</code>语句仅仅是能够跳出代码块的语句。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">break</span> labelname; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">continue</span> labelname;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><code>continue</code>语句（带有或不带标签引用）只能用在循环中。</p>
+</li>
+<li>
+<p><code>break</code>语句（不带标签引用），只能用在循环或 switch 中。</p>
+</li>
+<li>
+<p>通过标签引用，<code>break</code>语句可用于跳出任何JavaScript代码块：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cars=[<span class="string">&quot;BMW&quot;</span>,<span class="string">&quot;Volvo&quot;</span>,<span class="string">&quot;Saab&quot;</span>,<span class="string">&quot;Ford&quot;</span>];</span><br><span class="line">list: </span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">document</span>.write(cars[<span class="number">0</span>] + <span class="string">&quot;&lt;br&gt;&quot;</span>); </span><br><span class="line">    <span class="built_in">document</span>.write(cars[<span class="number">1</span>] + <span class="string">&quot;&lt;br&gt;&quot;</span>); </span><br><span class="line">    <span class="built_in">document</span>.write(cars[<span class="number">2</span>] + <span class="string">&quot;&lt;br&gt;&quot;</span>); </span><br><span class="line">    <span class="keyword">break</span> list;</span><br><span class="line">    <span class="built_in">document</span>.write(cars[<span class="number">3</span>] + <span class="string">&quot;&lt;br&gt;&quot;</span>); </span><br><span class="line">    <span class="built_in">document</span>.write(cars[<span class="number">4</span>] + <span class="string">&quot;&lt;br&gt;&quot;</span>); </span><br><span class="line">    <span class="built_in">document</span>.write(cars[<span class="number">5</span>] + <span class="string">&quot;&lt;br&gt;&quot;</span>); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="JavaScript-typeof-操作符">JavaScript <code>typeof</code> 操作符</h2>
+<p><code>typeof</code>操作符用来检测变量的数据类型。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typeof</span> <span class="string">&quot;John&quot;</span>                <span class="comment">// 返回 string</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="number">3.14</span>                  <span class="comment">// 返回 number</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="literal">false</span>                 <span class="comment">// 返回 boolean</span></span><br><span class="line"><span class="keyword">typeof</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]             <span class="comment">// 返回 object</span></span><br><span class="line"><span class="keyword">typeof</span> &#123;<span class="attr">name</span>:<span class="string">&#x27;John&#x27;</span>, <span class="attr">age</span>:<span class="number">34</span>&#125; <span class="comment">// 返回 object</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="literal">NaN</span>                    <span class="comment">// 返回 number</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="keyword">new</span> <span class="built_in">Date</span>()             <span class="comment">// 返回 object</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;         <span class="comment">// 返回 function</span></span><br><span class="line"><span class="keyword">typeof</span> myCar                  <span class="comment">// 返回 undefined (如果 myCar 没有声明)</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="literal">null</span>                   <span class="comment">// 返回 object</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>NaN</code>的数据类型是<code>number</code></li>
+<li>数组(Array)的数据类型是<code>object</code></li>
+<li>日期(Date)的数据类型为<code>object</code></li>
+<li>null 的数据类型是<code>object</code></li>
+<li>未定义变量的数据类型为<code>undefined</code></li>
+<li>如果对象是JavaScript Array或JavaScript Date，我们就无法通过<code>typeof</code>来判断他们的类型，因为都是返回<code>object</code>。</li>
+</ul>
+<h2 id="JavaScript-null和-undefined">JavaScript <code>null</code>和 <code>undefined</code></h2>
+<h3 id="null"><code>null</code></h3>
+<p>在JavaScript中<code>null</code>表示 “什么都没有”。</p>
+<p><code>null</code>是一个只有一个值的特殊类型。表示一个空对象引用。</p>
+<blockquote>
+<p>用<code>typeof</code>检测<code>null</code>返回是<code>object</code>。</p>
+</blockquote>
+<p>可以设置为<code>null</code>来清空对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = <span class="literal">null</span>;           <span class="comment">// 值为 null(空), 但类型为对象</span></span><br></pre></td></tr></table></figure>
+<h3 id="undefined"><code>undefined</code></h3>
+<p>在JavaScript中，<code>undefined</code>是一个没有设置值的变量。</p>
+<p><code>typeof</code>一个没有值的变量会返回<code>undefined</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person;                  <span class="comment">// 值为 undefined(空), 类型是undefined</span></span><br></pre></td></tr></table></figure>
+<p>任何变量都可以通过设置值为<code>undefined</code>来清空。 类型为<code>undefined</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = <span class="literal">undefined</span>;     <span class="comment">// 值为 undefined, 类型为 undefined</span></span><br></pre></td></tr></table></figure>
+<h3 id="undefined和null的区别"><code>undefined</code>和<code>null</code>的区别</h3>
+<p><code>null</code>和<code>undefined</code>的值相等，但类型不等：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typeof</span> <span class="literal">undefined</span>             <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="literal">null</span>                  <span class="comment">// object</span></span><br><span class="line"><span class="literal">null</span> === <span class="literal">undefined</span>           <span class="comment">// false</span></span><br><span class="line"><span class="literal">null</span> == <span class="literal">undefined</span>            <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<h2 id="constructor属性"><code>constructor</code>属性</h2>
+<p><code>constructor</code>属性返回所有JavaScript变量的构造函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;John&quot;</span>.constructor                 <span class="comment">// 返回函数 String()  &#123; [native code] &#125;</span></span><br><span class="line">(<span class="number">3.14</span>).constructor                 <span class="comment">// 返回函数 Number()  &#123; [native code] &#125;</span></span><br><span class="line"><span class="literal">false</span>.constructor                  <span class="comment">// 返回函数 Boolean() &#123; [native code] &#125;</span></span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>].constructor              <span class="comment">// 返回函数 Array()   &#123; [native code] &#125;</span></span><br><span class="line">&#123;<span class="attr">name</span>:<span class="string">&#x27;John&#x27;</span>, <span class="attr">age</span>:<span class="number">34</span>&#125;.constructor  <span class="comment">// 返回函数 Object()  &#123; [native code] &#125;</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>().constructor             <span class="comment">// 返回函数 Date()    &#123; [native code] &#125;</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;.constructor         <span class="comment">// 返回函数 Function()&#123; [native code] &#125;</span></span><br></pre></td></tr></table></figure>
+<p>之前提到，如果对象是JavaScript Array或JavaScript Date，我们就无法通过<code>typeof</code>来判断他们的类型，因为都是返回<code>object</code>。但是可以通过<code>constructor</code>属性来进行分辨。</p>
+<p>你可以使用 constructor 属性来查看对象是否为数组 (包含字符串 “Array”)：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isArray</span>(<span class="params">myArray</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> myArray.constructor.toString().indexOf(<span class="string">&quot;Array&quot;</span>) &gt; -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你可以使用 constructor 属性来查看对象是否为日期 (包含字符串 “Date”)：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isDate</span>(<span class="params">myDate</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> myDate.constructor.toString().indexOf(<span class="string">&quot;Date&quot;</span>) &gt; -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript类型转换">JavaScript类型转换</h2>
+<p>JavaScript变量可以转换为新变量或其他数据类型：</p>
+<ul>
+<li>通过使用JavaScript函数</li>
+<li>通过JavaScript自身自动转换</li>
+</ul>
+<h3 id="将数字转换为字符串">将数字转换为字符串</h3>
+<p>全局方法<code>String()</code>可以将数字转换为字符串。</p>
+<p>该方法可用于任何类型的数字，字母，变量，表达式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>(x)         <span class="comment">// 将变量 x 转换为字符串并返回</span></span><br><span class="line"><span class="built_in">String</span>(<span class="number">123</span>)       <span class="comment">// 将数字 123 转换为字符串并返回</span></span><br><span class="line"><span class="built_in">String</span>(<span class="number">100</span> + <span class="number">23</span>)  <span class="comment">// 将数字表达式转换为字符串并返回</span></span><br></pre></td></tr></table></figure>
+<p>Number方法<code>toString()</code>也是有同样的效果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x.toString()</span><br><span class="line">(<span class="number">123</span>).toString()</span><br><span class="line">(<span class="number">100</span> + <span class="number">23</span>).toString()</span><br></pre></td></tr></table></figure>
+<p>更多数字转换为字符串的方法：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>toExponential()</code></td>
+<td style="text-align:left">把对象的值转换为指数计数法。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>toFixed()</code></td>
+<td style="text-align:left">把数字转换为字符串，结果的小数点后有指定位数的数字。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>toPrecision()</code></td>
+<td style="text-align:left">把数字格式化为指定的长度。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="将布尔值转换为字符串">将布尔值转换为字符串</h3>
+<p>全局方法<code>String()</code>可以将布尔值转换为字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>(<span class="literal">false</span>)        <span class="comment">// 返回 &quot;false&quot;</span></span><br><span class="line"><span class="built_in">String</span>(<span class="literal">true</span>)         <span class="comment">// 返回 &quot;true&quot;</span></span><br></pre></td></tr></table></figure>
+<p>Boolean 方法<code>toString()</code>也有相同的效果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">false</span>.toString()     <span class="comment">// 返回 &quot;false&quot;</span></span><br><span class="line"><span class="literal">true</span>.toString()      <span class="comment">// 返回 &quot;true&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="将日期转换为字符串">将日期转换为字符串</h3>
+<p><code>Date()</code>返回字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Date</span>()      <span class="comment">// 返回 Thu Jul 17 2014 15:38:19 GMT+0200 (W. Europe Daylight Time)</span></span><br></pre></td></tr></table></figure>
+<p>全局方法<code>String()</code>可以将日期对象转换为字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>(<span class="keyword">new</span> <span class="built_in">Date</span>())      <span class="comment">// 返回 Thu Jul 17 2014 15:38:19 GMT+0200 (W. Europe Daylight Time)</span></span><br></pre></td></tr></table></figure>
+<p>Date 方法<code>toString()</code>也有相同的效果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">obj = <span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">obj.toString()   <span class="comment">// 返回 Thu Jul 17 2014 15:38:19 GMT+0200 (W. Europe Daylight Time)</span></span><br></pre></td></tr></table></figure>
+<p>更多关于日期转换为字符串的函数：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>getDate()</code></td>
+<td style="text-align:left">从 Date 对象返回一个月中的某一天 (1 ~ 31)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getDay()</code></td>
+<td style="text-align:left">从 Date 对象返回一周中的某一天 (0 ~ 6)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getFullYear()</code></td>
+<td style="text-align:left">从 Date 对象以四位数字返回年份。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getHours()</code></td>
+<td style="text-align:left">返回 Date 对象的小时 (0 ~ 23)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getMilliseconds()</code></td>
+<td style="text-align:left">返回 Date 对象的毫秒(0 ~ 999)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getMinutes()</code></td>
+<td style="text-align:left">返回 Date 对象的分钟 (0 ~ 59)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getMonth()</code></td>
+<td style="text-align:left">从 Date 对象返回月份 (0 ~ 11)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getSeconds()</code></td>
+<td style="text-align:left">返回 Date 对象的秒数 (0 ~ 59)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>getTime()</code></td>
+<td style="text-align:left">返回 1970 年 1 月 1 日至今的毫秒数。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="将字符串转换为数字">将字符串转换为数字</h3>
+<p>全局方法<code>Number()</code>可以将字符串转换为数字。</p>
+<p>字符串包含数字(如<code>&quot;3.14&quot;</code>) 转换为数字 (如<code>3.14</code>)。</p>
+<p>空字符串转换为<code>0</code>。</p>
+<p>其他的字符串会转换为<code>NaN</code> (不是个数字)。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>(<span class="string">&quot;3.14&quot;</span>)    <span class="comment">// 返回 3.14</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">&quot; &quot;</span>)       <span class="comment">// 返回 0</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">&quot;&quot;</span>)        <span class="comment">// 返回 0</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">&quot;99 88&quot;</span>)   <span class="comment">// 返回 NaN</span></span><br></pre></td></tr></table></figure>
+<p>更多关于字符串转为数字的方法：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>parseFloat()</code></td>
+<td style="text-align:left">解析一个字符串，并返回一个浮点数。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>parseInt()</code></td>
+<td style="text-align:left">解析一个字符串，并返回一个整数。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="一元运算符">一元运算符<code>+</code></h3>
+<p><code>Operator +</code>可用于将变量转换为数字：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> y = <span class="string">&quot;5&quot;</span>;      <span class="comment">// y 是一个字符串</span></span><br><span class="line"><span class="keyword">var</span> x = + y;      <span class="comment">// x 是一个数字</span></span><br><span class="line"><span class="keyword">var</span> y = <span class="string">&quot;John&quot;</span>;   <span class="comment">// y 是一个字符串</span></span><br><span class="line"><span class="keyword">var</span> x = + y;      <span class="comment">// x 是一个数字 (NaN)</span></span><br></pre></td></tr></table></figure>
+<h3 id="将布尔值转换为数字">将布尔值转换为数字</h3>
+<p>全局方法<code>Number()</code>可将布尔值转换为数字。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>(<span class="literal">false</span>)     <span class="comment">// 返回 0</span></span><br><span class="line"><span class="built_in">Number</span>(<span class="literal">true</span>)      <span class="comment">// 返回 1</span></span><br></pre></td></tr></table></figure>
+<h3 id="将日期转换为数字">将日期转换为数字</h3>
+<p>全局方法<code>Number()</code>可将日期转换为数字。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">Number</span>(d)          <span class="comment">// 返回 1404568027739</span></span><br></pre></td></tr></table></figure>
+<p>日期方法<code>getTime()</code>也有相同的效果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">d.getTime()        <span class="comment">// 返回 1404568027739</span></span><br></pre></td></tr></table></figure>
+<h3 id="自动转换类型">自动转换类型</h3>
+<p>当JavaScript尝试操作一个 “错误” 的数据类型时，会自动转换为 “正确” 的数据类型。</p>
+<p>以下输出结果不是你所期望的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5</span> + <span class="literal">null</span>    <span class="comment">// 返回 5         null 转换为 0</span></span><br><span class="line"><span class="string">&quot;5&quot;</span> + <span class="literal">null</span>  <span class="comment">// 返回&quot;5null&quot;   null 转换为 &quot;null&quot;</span></span><br><span class="line"><span class="string">&quot;5&quot;</span> + <span class="number">1</span>     <span class="comment">// 返回 &quot;51&quot;      1 转换为 &quot;1&quot; </span></span><br><span class="line"><span class="string">&quot;5&quot;</span> - <span class="number">1</span>     <span class="comment">// 返回 4         &quot;5&quot; 转换为 5</span></span><br></pre></td></tr></table></figure>
+<h3 id="自动转换为字符串">自动转换为字符串</h3>
+<p>当你尝试输出一个对象或一个变量时JavaScript会自动调用变量的<code>toString()</code>方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>).innerHTML = myVar;</span><br><span class="line"></span><br><span class="line">myVar = &#123;<span class="attr">name</span>:<span class="string">&quot;Fjohn&quot;</span>&#125;  <span class="comment">// toString 转换为 &quot;[object Object]&quot;</span></span><br><span class="line">myVar = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]       <span class="comment">// toString 转换为 &quot;1,2,3,4&quot;</span></span><br><span class="line">myVar = <span class="keyword">new</span> <span class="built_in">Date</span>()      <span class="comment">// toString 转换为 &quot;Fri Jul 18 2014 09:08:55 GMT+0200&quot;</span></span><br></pre></td></tr></table></figure>
+<p>数字和布尔值也经常相互转换：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">myVar = <span class="number">123</span>             <span class="comment">// toString 转换为 &quot;123&quot;</span></span><br><span class="line">myVar = <span class="literal">true</span>            <span class="comment">// toString 转换为 &quot;true&quot;</span></span><br><span class="line">myVar = <span class="literal">false</span>           <span class="comment">// toString 转换为 &quot;false&quot;</span></span><br></pre></td></tr></table></figure>
+<p>下表展示了使用不同的数值转换为数字(Number), 字符串(String), 布尔值(Boolean):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">原始值</th>
+<th style="text-align:left">转换为数字</th>
+<th style="text-align:left">转换为字符串</th>
+<th style="text-align:left">转换为布尔值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">false</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">“false”</td>
+<td style="text-align:left">false</td>
+</tr>
+<tr>
+<td style="text-align:left">true</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">“true”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">“0”</td>
+<td style="text-align:left">false</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">“1”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">“0”</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">“0”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">“000”</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">“000”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">“1”</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">“1”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“NaN”</td>
+<td style="text-align:left">false</td>
+</tr>
+<tr>
+<td style="text-align:left">Infinity</td>
+<td style="text-align:left">Infinity</td>
+<td style="text-align:left">“Infinity”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">-Infinity</td>
+<td style="text-align:left">-Infinity</td>
+<td style="text-align:left">“-Infinity”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">“”</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">“”</td>
+<td style="text-align:left">false</td>
+</tr>
+<tr>
+<td style="text-align:left">“20”</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left">“20”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">“Runoob”</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“Runoob”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">[ ]</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">“”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">[20]</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left">“20”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">[10,20]</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“10,20”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">[“Runoob”]</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“Runoob”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">[“Runoob”,“Google”]</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“Runoob,Google”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">function(){}</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“function(){}”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">{ }</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“[object Object]”</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">null</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">“null”</td>
+<td style="text-align:left">false</td>
+</tr>
+<tr>
+<td style="text-align:left">undefined</td>
+<td style="text-align:left">NaN</td>
+<td style="text-align:left">“undefined”</td>
+<td style="text-align:left">false</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/16/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/" rel="prev" title="JavaScript学习笔记01：JavaScript基础">
+      <i class="fa fa-chevron-left"></i> JavaScript学习笔记01：JavaScript基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/20/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/" rel="next" title="JavaScript学习笔记03：JavaScript正则表达式、错误调试、声明提升、this、let与const">
+      JavaScript学习笔记03：JavaScript正则表达式、错误调试、声明提升、this、let与const <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.</span> <span class="nav-text">JavaScript条件语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if"><span class="nav-number">1.1.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if%E2%80%A6%E2%80%A6else"><span class="nav-number">1.2.</span> <span class="nav-text">if……else</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if%E2%80%A6%E2%80%A6else-if%E2%80%A6%E2%80%A6else"><span class="nav-number">1.3.</span> <span class="nav-text">if……else if……else</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#switch%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.</span> <span class="nav-text">switch语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.</span> <span class="nav-text">JavaScript循环语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for"><span class="nav-number">2.1.</span> <span class="nav-text">for</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-in"><span class="nav-number">2.2.</span> <span class="nav-text">for&#x2F;in</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while"><span class="nav-number">2.3.</span> <span class="nav-text">while</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#do-while"><span class="nav-number">2.4.</span> <span class="nav-text">do&#x2F;while</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-break%E5%92%8Ccontinue%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.</span> <span class="nav-text">JavaScript break和continue语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#break%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.1.</span> <span class="nav-text">break语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#continue%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.2.</span> <span class="nav-text">continue语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E6%A0%87%E7%AD%BE"><span class="nav-number">4.</span> <span class="nav-text">JavaScript标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-typeof-%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">5.</span> <span class="nav-text">JavaScript typeof 操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-null%E5%92%8C-undefined"><span class="nav-number">6.</span> <span class="nav-text">JavaScript null和 undefined</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">6.1.</span> <span class="nav-text">null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.2.</span> <span class="nav-text">undefined</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined%E5%92%8Cnull%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.3.</span> <span class="nav-text">undefined和null的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#constructor%E5%B1%9E%E6%80%A7"><span class="nav-number">7.</span> <span class="nav-text">constructor属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">8.</span> <span class="nav-text">JavaScript类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%95%B0%E5%AD%97%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">8.1.</span> <span class="nav-text">将数字转换为字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%B8%83%E5%B0%94%E5%80%BC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">8.2.</span> <span class="nav-text">将布尔值转换为字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%97%A5%E6%9C%9F%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">8.3.</span> <span class="nav-text">将日期转换为字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%95%B0%E5%AD%97"><span class="nav-number">8.4.</span> <span class="nav-text">将字符串转换为数字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">8.5.</span> <span class="nav-text">一元运算符+</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%B8%83%E5%B0%94%E5%80%BC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%95%B0%E5%AD%97"><span class="nav-number">8.6.</span> <span class="nav-text">将布尔值转换为数字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%97%A5%E6%9C%9F%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%95%B0%E5%AD%97"><span class="nav-number">8.7.</span> <span class="nav-text">将日期转换为数字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%BD%AC%E6%8D%A2%E7%B1%BB%E5%9E%8B"><span class="nav-number">8.8.</span> <span class="nav-text">自动转换类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">8.9.</span> <span class="nav-text">自动转换为字符串</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="图：Alan Mathison Turing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Open CV (Python) 学习笔记02：图像绘制与滑轨">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002%EF%BC%9A%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6%E4%B8%8E%E6%BB%91%E8%BD%A8/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="图：Alan Mathison Turing">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/Parameters%20of%20Elliptic%20Arc.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/OpenCV.png?raw=true">
+<meta property="article:published_time" content="2021-10-07T02:51:59.000Z">
+<meta property="article:modified_time" content="2022-05-25T15:00:40.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Open CV">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002%EF%BC%9A%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6%E4%B8%8E%E6%BB%91%E8%BD%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Open CV (Python) 学习笔记02：图像绘制与滑轨 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002%EF%BC%9A%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6%E4%B8%8E%E6%BB%91%E8%BD%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Open CV (Python) 学习笔记02：图像绘制与滑轨
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-07 10:51:59" itemprop="dateCreated datePublished" datetime="2021-10-07T10:51:59+08:00">2021-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-25 23:00:40" itemprop="dateModified" datetime="2022-05-25T23:00:40+08:00">2022-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Open-CV-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Open CV 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true" alt="Alan_Turing_Aged_16_16_9.png"></p>
+<blockquote>
+<p>图：Alan Mathison Turing</p>
+</blockquote>
+<span id="more"></span>
+<h1>绘图功能</h1>
+<p>OpenCV提供了一些绘图函数，如：<strong><code>cv.line()</code></strong>、<strong><code>cv.circle()</code></strong>、<strong><code>cv.rectangle()</code></strong>、<strong><code>cv.ellipse()</code></strong>、**<code>cv.putText()</code>**等。</p>
+<p>在上面这些函数，能看到一些相同的参数：</p>
+<ul>
+<li>
+<p><code>img</code>：你想画的图片</p>
+</li>
+<li>
+<p><code>color</code>：形状的颜色，如 BGR，它是一个元组，例如：蓝色(255,0,0)。对于灰度图，只需传一个标量值。</p>
+</li>
+<li>
+<p><code>thickness</code>： 线或圆等的厚度。如果传 -1 就是像圆的闭合图形，它将填充形状。_ 默认 <code>thickness = 1_</code></p>
+</li>
+<li>
+<p><code>lineType</code>：线条类型：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Enumerator</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">FILLED Python: cv.FILLED</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">LINE_4 Python: cv.LINE_4</td>
+<td>4-connected line</td>
+</tr>
+<tr>
+<td style="text-align:left">LINE_8 Python: cv.LINE_8</td>
+<td>8-connected line</td>
+</tr>
+<tr>
+<td style="text-align:left">LINE_AA Python: cv.LINE_AA</td>
+<td>antialiased line</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>在绘制前或许需要一个背景，可以由下方代码生成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = np.zeros((<span class="number">512</span>,<span class="number">512</span>,<span class="number">3</span>), np.uint8)</span><br></pre></td></tr></table></figure>
+<h2 id="绘制线（cv-line-）">绘制线（<code>cv.line()</code>）</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">img = cv.line( img, pt1, pt2, color[, thickness[, lineType[, shift]]] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其中<code>pt1</code>和<code>pt2</code>是线的坐标起点与终点。</p>
+</blockquote>
+<h2 id="绘制一组线（cv-polylines-）">绘制一组线（<code>cv.polylines()</code>）</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">img = cv.polylines( img, pts, isClosed, color[, thickness[, lineType[, shift]]] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>能画很多线条。只需创建你想绘制所有线条的列表，然后将其传给这个函数。所有线条都将单独绘制。绘制一组线条比调用<code>cv.line()</code>好很多，快很多。</p>
+</blockquote>
+<h2 id="绘制矩形（cv-rectangle-）">绘制矩形（<code>cv.rectangle()</code>）</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">img	= cv.rectangle( img, pt1, pt2, color[, thickness[, lineType[, shift]]] )</span><br><span class="line">img	= cv.rectangle( img, rec, color[, thickness[, lineType[, shift]]] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>你需要给函数一个矩形的对角点坐标（左上、右下）</p>
+</blockquote>
+<h2 id="绘制圆（cv-circle-）">绘制圆（<code>cv.circle()</code>）</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">img = cv.circle( img, center, radius, color[, thickness[, lineType[, shift]]] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>你需要给函数一个圆心坐标和半径。</p>
+</blockquote>
+<h2 id="绘制椭圆（cv-ellipse-）">绘制椭圆（<code>cv.ellipse()</code>）</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">img = cv.ellipse( img, center, axes, angle, startAngle, endAngle, color[, thickness[, lineType[, shift]]] )</span><br><span class="line">img = cv.ellipse( img, box, color[, thickness[, lineType]] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>画椭圆需要的参数要更多一点。</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/Parameters%20of%20Elliptic%20Arc.png?raw=true" alt="Parameters of Elliptic Arc.png"></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>img</code></td>
+<td>图像</td>
+</tr>
+<tr>
+<td><code>center</code></td>
+<td>椭圆的中心</td>
+</tr>
+<tr>
+<td><code>axes</code></td>
+<td>椭圆主轴大小的一半</td>
+</tr>
+<tr>
+<td><code>angle</code></td>
+<td>椭圆旋转角度（以度为单位）</td>
+</tr>
+<tr>
+<td><code>startAngle</code></td>
+<td>椭圆弧的起始角度，以度为单位</td>
+</tr>
+<tr>
+<td><code>endAngle</code></td>
+<td>椭圆弧的结束角度（以度为单位）</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>椭圆颜色</td>
+</tr>
+<tr>
+<td><code>thickness</code></td>
+<td>椭圆弧轮廓的厚度，如果是正的。否则这表示将绘制一个填充的椭圆扇区</td>
+</tr>
+<tr>
+<td><code>lineType</code></td>
+<td>椭圆边界的类型（参见：下表<a target="_blank" rel="noopener" href="https://docs.opencv.org/4.0.0/d6/d6e/group__imgproc__draw.html#gaf076ef45de481ac96e0ab3dc2c29a777">OpenCV: LineTypes</a>）</td>
+</tr>
+<tr>
+<td><code>shift</code></td>
+<td>中心坐标和轴值中的小数位数</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Enumerator</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>FILLED Python: cv.FILLED</code></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>LINE_4 Python: cv.LINE_4</code></td>
+<td>4-connected line</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>LINE_8 Python: cv.LINE_8</code></td>
+<td>8-connected line</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>LINE_AA Python: cv.LINE_AA</code></td>
+<td>antialiased line</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="绘制文字（cv-putText-）">绘制文字（<code>cv.putText()</code>）</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">img = cv.putText( img, text, org, fontFace, fontScale, color[, thickness[, lineType[, bottomLeftOrigin]]] )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>
+<p><code>text</code>：文字内容</p>
+</li>
+<li>
+<p><code>org</code>：坐标位置</p>
+</li>
+<li>
+<p><code>fontFace</code>：字体</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Enumerator</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_SIMPLEX Python: cv.FONT_HERSHEY_SIMPLEX</td>
+<td>normal size sans-serif font</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_PLAIN Python: cv.FONT_HERSHEY_PLAIN</td>
+<td>small size sans-serif font</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_DUPLEX Python: cv.FONT_HERSHEY_DUPLEX</td>
+<td>normal size sans-serif font (more complex than FONT_HERSHEY_SIMPLEX)</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_COMPLEX Python: cv.FONT_HERSHEY_COMPLEX</td>
+<td>normal size serif font</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_TRIPLEX Python: cv.FONT_HERSHEY_TRIPLEX</td>
+<td>normal size serif font (more complex than FONT_HERSHEY_COMPLEX)</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_COMPLEX_SMALL Python: cv.FONT_HERSHEY_COMPLEX_SMALL</td>
+<td>smaller version of FONT_HERSHEY_COMPLEX</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_SCRIPT_SIMPLEX Python: cv.FONT_HERSHEY_SCRIPT_SIMPLEX</td>
+<td>hand-writing style font</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_HERSHEY_SCRIPT_COMPLEX Python: cv.FONT_HERSHEY_SCRIPT_COMPLEX</td>
+<td>more complex variant of FONT_HERSHEY_SCRIPT_SIMPLEX</td>
+</tr>
+<tr>
+<td style="text-align:left">FONT_ITALIC Python: cv.FONT_ITALIC</td>
+<td>flag for italic font</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><code>fontScale</code>：字号</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line">img = np.zeros((<span class="number">512</span>,<span class="number">512</span>,<span class="number">3</span>), np.uint8)</span><br><span class="line">cv.line(img,(<span class="number">0</span>,<span class="number">0</span>),(<span class="number">511</span>,<span class="number">511</span>),(<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>),<span class="number">5</span>)</span><br><span class="line">cv.rectangle(img,(<span class="number">384</span>,<span class="number">0</span>),(<span class="number">510</span>,<span class="number">128</span>),(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>),<span class="number">3</span>)</span><br><span class="line">cv.circle(img,(<span class="number">447</span>,<span class="number">63</span>), <span class="number">63</span>, (<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>), -<span class="number">1</span>)</span><br><span class="line">cv.ellipse(img,(<span class="number">256</span>,<span class="number">256</span>),(<span class="number">100</span>,<span class="number">50</span>),<span class="number">0</span>,<span class="number">0</span>,<span class="number">180</span>,<span class="number">255</span>,-<span class="number">1</span>)</span><br><span class="line">pts = np.array([[<span class="number">10</span>,<span class="number">5</span>],[<span class="number">20</span>,<span class="number">30</span>],[<span class="number">70</span>,<span class="number">20</span>],[<span class="number">50</span>,<span class="number">10</span>]], np.int32)</span><br><span class="line">pts = pts.reshape((-<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line">cv.polylines(img,[pts],<span class="literal">True</span>,(<span class="number">0</span>,<span class="number">255</span>,<span class="number">255</span>))</span><br><span class="line">font = cv.FONT_HERSHEY_SIMPLEX</span><br><span class="line">cv.putText(img,<span class="string">&#x27;OpenCV&#x27;</span>,(<span class="number">10</span>,<span class="number">500</span>), font, <span class="number">4</span>,(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>),<span class="number">2</span>,cv.LINE_AA)</span><br><span class="line">cv.imshow(<span class="string">&#x27;image&#x27;</span>,img)	<span class="comment"># 显示图片</span></span><br><span class="line"></span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p>绘制的结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/OpenCV.png?raw=true" alt="OpenCV.png"></p>
+<p><strong>说明</strong>：</p>
+<ol>
+<li>椭圆函数中使用的角度不是我们的圆角。获取更多信息，参考 <strong><a target="_blank" rel="noopener" href="http://answers.opencv.org/question/14541/angles-in-ellipse-function/">this discussion</a></strong>。</li>
+</ol>
+<h1>鼠标作为画笔</h1>
+<p>OpenCV提供了一个十分简单的函数：**<code>cv.setMouseCallback()</code>**来实现我们想要的功能。</p>
+<h2 id="简单例子">简单例子</h2>
+<p>一个简单的程序：<strong>在图像的任何位置双击在上面画一个圆</strong>。</p>
+<p>首先我们创建一个鼠标回调函数，该函数在鼠标事件发生时执行。</p>
+<blockquote>
+<p>鼠标事件可以是与鼠标有关的任何内容，比如鼠标左键按下，左键弹起，左键双击等等。所有鼠标事件都给我们提供坐标 (x,y)。通过这个事件和位置，我们能做任何我们喜欢的事情。</p>
+</blockquote>
+<p>要列出所有可用事件，在 Python 终端执行以下代码得到列表：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>events = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">dir</span>(cv) <span class="keyword">if</span> <span class="string">&#x27;EVENT&#x27;</span> <span class="keyword">in</span> i]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( events )</span><br><span class="line">[<span class="string">&#x27;EVENT_FLAG_ALTKEY&#x27;</span>, <span class="string">&#x27;EVENT_FLAG_CTRLKEY&#x27;</span>, <span class="string">&#x27;EVENT_FLAG_LBUTTON&#x27;</span>, <span class="string">&#x27;EVENT_FLAG_MBUTTON&#x27;</span>, <span class="string">&#x27;EVENT_FLAG_RBUTTON&#x27;</span>, <span class="string">&#x27;EVENT_FLAG_SHIFTKEY&#x27;</span>, <span class="string">&#x27;EVENT_LBUTTONDBLCLK&#x27;</span>, <span class="string">&#x27;EVENT_LBUTTONDOWN&#x27;</span>, <span class="string">&#x27;EVENT_LBUTTONUP&#x27;</span>, <span class="string">&#x27;EVENT_MBUTTONDBLCLK&#x27;</span>, <span class="string">&#x27;EVENT_MBUTTONDOWN&#x27;</span>, <span class="string">&#x27;EVENT_MBUTTONUP&#x27;</span>, <span class="string">&#x27;EVENT_MOUSEHWHEEL&#x27;</span>, <span class="string">&#x27;EVENT_MOUSEMOVE&#x27;</span>, <span class="string">&#x27;EVENT_MOUSEWHEEL&#x27;</span>, <span class="string">&#x27;EVENT_RBUTTONDBLCLK&#x27;</span>, <span class="string">&#x27;EVENT_RBUTTONDOWN&#x27;</span>, <span class="string">&#x27;EVENT_RBUTTONUP&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>鼠标回调是一个特定的函数，在哪里反应都相同，唯一的区别在于鼠标所处的坐标。</p>
+<p>因此有代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 鼠标回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_circle</span>(<span class="params">event,x,y,flags,param</span>):</span></span><br><span class="line">    <span class="keyword">if</span> event == cv.EVENT_LBUTTONDBLCLK:</span><br><span class="line">        cv.circle(img,(x,y),<span class="number">100</span>,(<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>),-<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 创建一个黑色图像</span></span><br><span class="line">img = np.zeros((<span class="number">512</span>,<span class="number">512</span>,<span class="number">3</span>), np.uint8)</span><br><span class="line"><span class="comment"># 创建一个窗口</span></span><br><span class="line">cv.namedWindow(<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line"><span class="comment"># 和回调绑定</span></span><br><span class="line">cv.setMouseCallback(<span class="string">&#x27;image&#x27;</span>,draw_circle)</span><br><span class="line"><span class="comment"># 循环刷新页面</span></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">    cv.imshow(<span class="string">&#x27;image&#x27;</span>,img)</span><br><span class="line">    <span class="keyword">if</span> cv.waitKey(<span class="number">20</span>) &amp; <span class="number">0xFF</span> == <span class="number">27</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h2 id="更多高级例子">更多高级例子</h2>
+<p>如果我们追求更好实现，比如用OpenCV实现一个类似画图程序的功能，我们的鼠标回调函数有两个，一个画矩形一个画圆形。</p>
+<p>我们通过在循环刷新中定义一个按键捕获来实现按下<code>m</code>切换绘制。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line">drawing = <span class="literal">False</span> <span class="comment"># 如果 True 是鼠标按下</span></span><br><span class="line">mode = <span class="literal">True</span> <span class="comment"># 如果 True，画矩形，按下‘m’切换到曲线</span></span><br><span class="line">ix,iy = -<span class="number">1</span>,-<span class="number">1</span></span><br><span class="line"><span class="comment"># 鼠标回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_circle</span>(<span class="params">event,x,y,flags,param</span>):</span></span><br><span class="line">    <span class="keyword">global</span> ix,iy,drawing,mode</span><br><span class="line">    <span class="keyword">if</span> event == cv.EVENT_LBUTTONDOWN:</span><br><span class="line">        drawing = <span class="literal">True</span></span><br><span class="line">        ix,iy = x,y</span><br><span class="line">    <span class="keyword">elif</span> event == cv.EVENT_MOUSEMOVE:</span><br><span class="line">        <span class="keyword">if</span> drawing == <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">if</span> mode == <span class="literal">True</span>:</span><br><span class="line">                cv.rectangle(img,(ix,iy),(x,y),(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>),-<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cv.circle(img,(x,y),<span class="number">5</span>,(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>),-<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">elif</span> event == cv.EVENT_LBUTTONUP:</span><br><span class="line">        drawing = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> mode == <span class="literal">True</span>:</span><br><span class="line">            cv.rectangle(img,(ix,iy),(x,y),(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>),-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            cv.circle(img,(x,y),<span class="number">5</span>,(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>),-<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 创建一个黑色图像   </span></span><br><span class="line">img = np.zeros((<span class="number">512</span>,<span class="number">512</span>,<span class="number">3</span>), np.uint8)</span><br><span class="line"><span class="comment"># 创建一个窗口</span></span><br><span class="line">cv.namedWindow(<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line"><span class="comment"># 和回调绑定</span></span><br><span class="line">cv.setMouseCallback(<span class="string">&#x27;image&#x27;</span>,draw_circle)</span><br><span class="line"><span class="comment"># 循环刷新页面</span></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">    <span class="comment"># 帧刷新</span></span><br><span class="line">    cv.imshow(<span class="string">&#x27;image&#x27;</span>,img)</span><br><span class="line">    <span class="comment"># 按键捕获</span></span><br><span class="line">    k = cv.waitKey(<span class="number">1</span>) &amp; <span class="number">0xFF</span></span><br><span class="line">    <span class="keyword">if</span> k == <span class="built_in">ord</span>(<span class="string">&#x27;m&#x27;</span>):	<span class="comment"># 如果按下m</span></span><br><span class="line">        mode = <span class="keyword">not</span> mode</span><br><span class="line">    <span class="keyword">elif</span> k == <span class="number">27</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h1>滑轨（<code>cv.getTrackbarPos()</code>, <code>cv.createTrackbar()</code>）</h1>
+<p>我们将会用到函数：<strong><code>cv.getTrackbarPos()</code></strong>、<strong><code>cv.createTrackbar()</code></strong> 等等。</p>
+<p>这里我们简单的创建一个程序，会显示一个窗口，其中有三个滑轨，用来决定RGB色彩。该色彩与</p>
+<p>这里，我们将创建简单的程序，显示你指定颜色。 你有一个显示颜色的窗口和四个轨迹栏，用来指定 B，G，R 颜色和是否显示颜色。</p>
+<blockquote>
+<p>官方文档这里解释了一下函数定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">cv::createTrackbar</span> <span class="params">( <span class="keyword">const</span> String &amp; 	trackbarname,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="keyword">const</span> String &amp; 	winname,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="keyword">int</span> * 	value,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="keyword">int</span> 	count,</span></span></span><br><span class="line"><span class="params"><span class="function">                            TrackbarCallback 	onChange = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="keyword">void</span> * 	userdata = <span class="number">0</span> </span></span></span><br><span class="line"><span class="params"><span class="function">                         	)</span>	</span></span><br></pre></td></tr></table></figure>
+<p>For <code>cv.createTrackbar()</code> function, first argument is the trackbar name, second one is the window name to which it is attached, third argument is the default value, fourth one is the maximum value and fifth one is the callback function which is executed every time trackbar value changes. The callback function always has a default argument which is the trackbar position. In our case, function does nothing, so we simply pass.</p>
+<p>对于<code>cv.createTrackbar()</code>函数，第一个参数是轨迹栏名称，第二个参数是它所附加的窗口名称，第三个参数是默认值，第四个参数是最大值，第五个参数是执行的回调函数 每次轨迹栏值更改时。 回调函数总是有一个默认参数，即轨迹栏位置。 在我们的例子中，函数什么都不做，所以我们只是通过。</p>
+</blockquote>
+<p>滑轨除了实现它本来的作用，还可以当作按钮或者开关。OpenCV在默认情况下是没有按钮功能的。因此只能用滑轨做一些这样的功能。</p>
+<p><strong>完整程序</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nothing</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个黑色图像，一个窗口</span></span><br><span class="line">img = np.zeros((<span class="number">300</span>,<span class="number">512</span>,<span class="number">3</span>), np.uint8)</span><br><span class="line">cv.namedWindow(<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line"><span class="comment"># 创建一个改变颜色的轨迹栏</span></span><br><span class="line">cv.createTrackbar(<span class="string">&#x27;R&#x27;</span>,<span class="string">&#x27;image&#x27;</span>,<span class="number">0</span>,<span class="number">255</span>,nothing)</span><br><span class="line">cv.createTrackbar(<span class="string">&#x27;G&#x27;</span>,<span class="string">&#x27;image&#x27;</span>,<span class="number">0</span>,<span class="number">255</span>,nothing)</span><br><span class="line">cv.createTrackbar(<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;image&#x27;</span>,<span class="number">0</span>,<span class="number">255</span>,nothing)</span><br><span class="line"><span class="comment"># 创建一个开关用来启用和关闭功能的</span></span><br><span class="line">switch = <span class="string">&#x27;0 : OFF \n1 : ON&#x27;</span></span><br><span class="line">cv.createTrackbar(switch, <span class="string">&#x27;image&#x27;</span>,<span class="number">0</span>,<span class="number">1</span>,nothing)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">    cv.imshow(<span class="string">&#x27;image&#x27;</span>,img)</span><br><span class="line">    k = cv.waitKey(<span class="number">1</span>) &amp; <span class="number">0xFF</span></span><br><span class="line">    <span class="keyword">if</span> k == <span class="number">27</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment"># get current positions of four trackbars</span></span><br><span class="line">    r = cv.getTrackbarPos(<span class="string">&#x27;R&#x27;</span>,<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line">    g = cv.getTrackbarPos(<span class="string">&#x27;G&#x27;</span>,<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line">    b = cv.getTrackbarPos(<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line">    s = cv.getTrackbarPos(switch,<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> s == <span class="number">0</span>:</span><br><span class="line">        img[:] = <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        img[:] = [b,g,r]</span><br><span class="line">        </span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Open-CV/" rel="tag"># Open CV</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001%EF%BC%9A%E5%9B%BE%E5%83%8F%E4%B8%8E%E8%A7%86%E9%A2%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="prev" title="Open CV (Python) 学习笔记01：图像与视频的基本操作">
+      <i class="fa fa-chevron-left"></i> Open CV (Python) 学习笔记01：图像与视频的基本操作
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/07/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%9B%BD%E4%BA%A7%E8%8A%AF%E7%89%87%E7%9A%84%E7%9C%9F%E5%AE%9E%E6%B0%B4%E5%B9%B3%E5%A6%82%E4%BD%95%EF%BC%9F/" rel="next" title="【转载】国产芯片的真实水平如何？">
+      【转载】国产芯片的真实水平如何？ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">绘图功能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E7%BA%BF%EF%BC%88cv-line-%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">绘制线（cv.line()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E4%B8%80%E7%BB%84%E7%BA%BF%EF%BC%88cv-polylines-%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">绘制一组线（cv.polylines()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E7%9F%A9%E5%BD%A2%EF%BC%88cv-rectangle-%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">绘制矩形（cv.rectangle()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E5%9C%86%EF%BC%88cv-circle-%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">绘制圆（cv.circle()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%A4%AD%E5%9C%86%EF%BC%88cv-ellipse-%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">绘制椭圆（cv.ellipse()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%96%87%E5%AD%97%EF%BC%88cv-putText-%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">绘制文字（cv.putText()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">鼠标作为画笔</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90"><span class="nav-number">2.1.</span> <span class="nav-text">简单例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E9%AB%98%E7%BA%A7%E4%BE%8B%E5%AD%90"><span class="nav-number">2.2.</span> <span class="nav-text">更多高级例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">滑轨（cv.getTrackbarPos(), cv.createTrackbar()）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

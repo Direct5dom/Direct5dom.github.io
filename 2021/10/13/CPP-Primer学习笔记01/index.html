@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ Primer学习笔记01：伊始">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+<meta property="article:published_time" content="2021-10-13T09:13:51.000Z">
+<meta property="article:modified_time" content="2022-03-12T18:40:56.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="CPP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>C++ Primer学习笔记01：伊始 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Primer学习笔记01：伊始
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-13 17:13:51" itemprop="dateCreated datePublished" datetime="2021-10-13T17:13:51+08:00">2021-10-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-13 02:40:56" itemprop="dateModified" datetime="2022-03-13T02:40:56+08:00">2022-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CPP Primer学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true" alt="CPP.png"></p>
+<span id="more"></span>
+<h1>一个简单的<code>main</code>函数</h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一个函数的定义包括四部分：</p>
+<ul>
+<li><strong>返回类型（return type）</strong></li>
+<li><strong>函数名（function name）</strong></li>
+<li>一个括号包围的<strong>形参列表（parameter list</strong>，允许为空 <strong>）</strong></li>
+<li><strong>函数体（function body）</strong></li>
+</ul>
+<p>上面的例子里，<code>main</code>的形参列表是空的（<code>()</code>中什么都没有）。</p>
+<p><code>main</code>函数的返回类型必须为<code>int</code>。<code>int</code>是一种<strong>内置类型（built-in type）</strong> ，即语言自身定义的类型。</p>
+<p>函数定义的最后一部分是函数体，它是一个以左<strong>花括号（curly brace）</strong> 开始，以右花括号结束的<strong>语句块（block of statements）</strong> ，即：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个语句块中唯一的一条语句是<code>return</code>，它结束函数的运行。在本例中，<code>return</code>还会向调用者返回一个值。当<code>return</code>语句包括一个值时，此返回值的类型必须与函数的返回类型相容。在本例中，<code>main</code>的返回类型是<code>int</code>，而返回值<code>0</code>的确是一个<code>int</code>类型的值。</p>
+<blockquote>
+<p>在大多数系统中，<code>main</code>的返回值被用来指示状态。</p>
+<ul>
+<li><code>0</code> - 表明成功</li>
+<li>非<code>0</code> - 由系统定义，通常用来指出错误类型。</li>
+</ul>
+</blockquote>
+<h1>初识输入输出</h1>
+<p>C++语言并未定义任何输入输出（IO）的语句，取而代之的是一个全面的<strong>标准库（standard library）</strong> 来提供IO机制（以及很多其他设施）。</p>
+<p>这里所要了解的是<code>iostream</code>库，其包含两个基础类型<code>istream</code>和<code>ostream</code>，分别标识输入和输出流。</p>
+<blockquote>
+<p>一个流就是一个字符序列，是从IO设备读出或写入IO设备的。术语“流”（stream）想要表达的是，随着时间的推移，字符是顺序生成或消耗的。</p>
+</blockquote>
+<h2 id="标准输入输出对象">标准输入输出对象</h2>
+<p>标准库定义了四个IO对象：</p>
+<ul>
+<li><strong><code>cin</code></strong> - <strong>标准输入（standard input）</strong> ，处理输入（发音：see-in）</li>
+<li><strong><code>cout</code></strong> - <strong>标准输出（standard output）</strong> ，处理输出（发音：see-out)</li>
+<li><strong><code>cerr</code></strong> - <strong>标准错误（standard error）</strong> ，输出警告信息（发音：see-err）</li>
+<li><strong><code>clog</code></strong> - 输出程序运行时的一般信息（发音：see-log）</li>
+</ul>
+<blockquote>
+<p>系统通常将程序所运行的窗口与这些对象关联起来。因此当我们读取<code>cin</code>，数据将从正在运行的窗口读入，当我们向<code>cout</code>、<code>cerr</code>和<code>clog</code>写入数据时，将会写到同一个窗口。</p>
+</blockquote>
+<h2 id="一个使用IO库的程序">一个使用IO库的程序</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Enter two numbers:&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">int</span> v1 = <span class="number">0</span>, v2 = <span class="number">0</span>;</span><br><span class="line">    std::cin &gt;&gt; v1 &gt;&gt; v2;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The sum of &quot;</span> &lt;&lt; v1 &lt;&lt; <span class="string">&quot; and &quot;</span> &lt;&lt; v2 &lt;&lt; <span class="string">&quot; is &quot;</span> &lt;&lt; v1 + v2 &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个简单的求和函数，用户通过键盘键入两个数，然后它会给出输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Enter two numbers:</span><br><span class="line">3 7</span><br><span class="line">The sum of 3 and 7 is 10</span><br></pre></td></tr></table></figure>
+<p>程序的第一行：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>这是在告诉编译器我们要使用<code>iostream</code>库，其中尖括号指出的名字是一个<strong>头文件（header）</strong> 。</p>
+<p>一般情况下使用<code>&lt;&gt;</code>的是标准库，而使用<code>&quot;&quot;</code>的则是自定义的头文件。</p>
+<h2 id="向流写入数据">向流写入数据</h2>
+<p><code>main</code>的函数体的第一条语句执行了一个<strong>表达式（expression）</strong> 。</p>
+<blockquote>
+<p>在C++中，一个表达式产生一个计算结果，它由一个或多个运算对象和（通常是）一个运算符组成。</p>
+</blockquote>
+<p>这条语句使用了<strong>输出运算符（<code>&lt;&lt;</code>）</strong> 在标准输出上打印消息：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&quot;Enter two numbers:&quot;</span> &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<p><code>&lt;&lt;</code>运算符接受两个运算对象：左侧的运算对象必须是一个<code>ostream</code>对象，右侧则是要打印的值。</p>
+<p>此运算符将给定的值写道给行的<code>ostream</code>对象中。输出运算符的计算结果就是其左侧的运算对象。即：计算结果就是我们写入给定值的那个<code>ostream</code>对象。</p>
+<p>可以看到这个输出语句用了两次<code>&lt;&lt;</code>运算符。因为此运算符返回其左侧的运算对象，因此第一个运算符的结果成为了第二个运算符左侧运算对象。这样我们就可以将输出请求来接起来，因此上述语句等同于：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(std::cout &lt;&lt; <span class="string">&quot;Enter two numbers:&quot;</span>) &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<p>而链中每个运算符的左侧运算对象都是相同的，因此也可以用两条语句生成相同的输出：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&quot;Enter two numbers:&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>第一个输出运算符给用户打印一条消息。这个消息是一个<strong>字符串字面值常量（string literal）</strong> ，是用一对双引号包围的字符序列。在双引号之间的文本被打印到标准输出。</p>
+</li>
+<li>
+<p>第二个运算符打印<code>endl</code>，这是一个被称为<strong>操纵符（manipulator）</strong> 的特殊值。写入<code>endl</code>的效果是解除当前行，并将与设备关联的缓冲区（buffer）中的内容刷到设备中。缓冲刷新操作可以保证目前位置程序所产生的所有输出都真正写入输出流中，而不是仅停留在内存中等待写入流。</p>
+</li>
+</ul>
+<h2 id="使用标准库中的名字">使用标准库中的名字</h2>
+<p>在调用<code>cout</code>和<code>endl</code>时，我们使用的是<code>std::cout</code>和<code>std::endl</code>。前缀<code>std::</code>指出了名字<code>cout</code>和<code>endl</code>是定义在<code>std</code>的<strong>命名空间（namespace）</strong> 中的。命名空间可以帮助我们避免不经意的名字定义冲突，以及使用库中相同名字导致的冲突。标准库定义的所有名字都在命名空间<code>std</code>中。</p>
+<blockquote>
+<p>命名空间有一个副作用：当使用标准库中的一个名字时，必须显式说明我们想使用来自命名空间<code>std</code>中的名字。例如：需要写出<code>std::cout</code>，通过使用<strong>作用域运算符（<code>::</code>）</strong> 来指出我们想使用定义在命名空间<code>std</code>中的名字<code>cout</code>。其实有一个简单的方法访问标准库中的名字，之后会学到。</p>
+</blockquote>
+<h2 id="从流中读取数据">从流中读取数据</h2>
+<p>在提示用户输入数据后，接下来需要做的是读入用户输入的数据。</p>
+<h3 id="定义变量">定义变量</h3>
+<p>首先我们需要定义两个<strong>变量（variable）</strong> 用于保存用户的输入：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> v1 = <span class="number">0</span>, v2 = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>这是C++中定义变量的标准格式。我们把<code>v1</code>和<code>v2</code>定义成<code>int</code>型，并<strong>初始化（initialize）</strong> 为<code>0</code>。</p>
+<blockquote>
+<p>初始化一个变量，就是在创建变量的同时赋予它一个值。</p>
+</blockquote>
+<h3 id="读入输入数据">读入输入数据</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::cin &gt;&gt; v1 &gt;&gt; v2;</span><br></pre></td></tr></table></figure>
+<p>它读入输入数据。<strong>输入运算符（<code>&gt;&gt;</code>）</strong> 与输出运算符类似，它接受一个<code>istream</code>作为其左侧运算对象，接受一个对象作为其右侧运算对象。它从给定的<code>istream</code>读入数据，并存入给定对象中。与输出运算符类似，输入运算符返回其左侧运算对象作为其计算结果。因此，此表达式等价于：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(std::cin &gt;&gt; v1) &gt;&gt; v2;</span><br></pre></td></tr></table></figure>
+<p>由于此运算符返回其左侧运算对象，因此我们可以将一系列输入合并到一个语句中。不过我们也可以将其拆分开，其等价于：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::cin &gt;&gt; v1;</span><br><span class="line">std::cin &gt;&gt; v2;</span><br></pre></td></tr></table></figure>
+<h2 id="完成程序">完成程序</h2>
+<p>剩下的就是打印计算结果了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&quot;The sum of &quot;</span> &lt;&lt; v1 &lt;&lt; <span class="string">&quot; and &quot;</span> &lt;&lt; v2 &lt;&lt; <span class="string">&quot; is &quot;</span> &lt;&lt; v1 + v2 &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<p>这条语句虽然最长，但是原理和上面的相同，只是简单的将每个对象都都打印在<code>std::cout</code>上。也就相当于：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&quot;The sum of &quot;</span>;</span><br><span class="line">std::cout &lt;&lt; v1;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot; and &quot;</span>;</span><br><span class="line">std::cout &lt;&lt; v2;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot; is &quot;</span>;</span><br><span class="line">std::cout &lt;&lt; v1 + v2;</span><br><span class="line">std::cout &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<p>本例最有意思的地方在于，这些对象的类型并不相同，有<code>int</code>值、算术表达式结果、字符串。</p>
+<blockquote>
+<p>标准库定义了不同版本的输入输出运算符，来处理这些不同类型的运算对象。</p>
+</blockquote>
+<h1>注释简介</h1>
+<h2 id="单行注释">单行注释</h2>
+<p>单行注释以双斜线（<code>//</code>）开始，以换行符结束。当前行双斜线右侧的所有内容都会被编译器忽略，这种注释可以包含任何文本，包括额外的双斜线。</p>
+<p>例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&quot;The sum of &quot;</span>;	<span class="comment">// 这</span></span><br><span class="line">std::cout &lt;&lt; v1;			<span class="comment">// 他</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot; and &quot;</span>;		<span class="comment">// 妈</span></span><br><span class="line">std::cout &lt;&lt; v2;			<span class="comment">// 叫</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot; is &quot;</span>;		<span class="comment">// 单</span></span><br><span class="line">std::cout &lt;&lt; v1 + v2;		<span class="comment">// 行</span></span><br><span class="line">std::cout &lt;&lt; std::endl;		<span class="comment">// 注释</span></span><br></pre></td></tr></table></figure>
+<h2 id="界定符对注释">界定符对注释</h2>
+<p>继承自C语言的注释方式，由两个界定符（<code>/*</code>和<code>*/</code>），以<code>/*</code>开始，以<code>*/</code>结束。编译器会忽略<code>/*</code>和<code>*/</code>之间的全部内容。</p>
+<p>注释界定符可以放置于任何允许防止制表符、空格符或换行符的地方。注释界定符可以跨越程序中的多行，但这并不是必须的。</p>
+<p>当注释界定符跨越多行时，最好能显式指出其内部的程序行都属于多行注释的一部分。C++ Primer所采用的风格是，注释内的每行都以一个星号开头，从而指出整个范围都是多行注释的一部分。</p>
+<p>例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">/* 这是一个非常简单的主函数，</span></span><br><span class="line"><span class="comment"> * 没有任何内容，</span></span><br><span class="line"><span class="comment"> * 只返回 0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注释界定符不能嵌套</strong>，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 注释对/* */</span>不能嵌套。</span><br><span class="line"><span class="comment">/* “不能嵌套”四个字将会被认为源码被编译到程序中，</span></span><br><span class="line"><span class="comment"> * 进而出现Error。</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p><strong>单行注释可以嵌套界定符</strong>，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /* 注释对/* */不能嵌套。</span></span><br><span class="line"><span class="comment">// /* 此时，“不能嵌套”四个字将不会被认为是源码。</span></span><br><span class="line"><span class="comment">//  */</span></span><br></pre></td></tr></table></figure>
+<h1>控制流</h1>
+<h2 id="while语句"><code>while</code>语句</h2>
+<p><strong><code>while</code>语句</strong>反复执行一段代码，直至给定条件为假位置。</p>
+<p>如果把<code>while</code>语句抽象出来就是：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (condition)</span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
+<p><code>while</code>语句的执行过程就是交替执行：</p>
+<ul>
+<li>检测<code>condition</code>条件</li>
+<li>执行<code>statement</code>语句</li>
+</ul>
+<p>直到<code>condition</code>为假，则跳出循环。</p>
+<p>我们可以用<code>while</code>语句编写一段程序，求1到10这10个数之和：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>, val = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 只要val的值小于等于10，while循环就会持续执行</span></span><br><span class="line">    <span class="keyword">while</span> (val &lt;= <span class="number">10</span>) &#123;</span><br><span class="line">        sum += val;	<span class="comment">// 将sum+val赋予sum</span></span><br><span class="line">        ++val;		<span class="comment">// 将val加1</span></span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Sum of 1 to 10 inclusive is &quot;</span> &lt;&lt; sum &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行代码，得到输出：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sum of 1 to 10 inclusive is 55</span><br></pre></td></tr></table></figure>
+<h2 id="for语句"><code>for</code>语句</h2>
+<p><strong><code>for</code>语句</strong>可以说算是对一部分<code>while</code>语句的简化。也就是对一个递增变量作为计数器的循环的简化。</p>
+<p>我们可以将<code>for</code>语句抽象出来：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (init-statment; condition; expression)</span><br><span class="line">    statment</span><br></pre></td></tr></table></figure>
+<p><code>for</code>语句的结构：</p>
+<ul>
+<li>循环头
+<ul>
+<li>初始化语句（init-statment）</li>
+<li>循环条件（condition）</li>
+<li>表达式（expression）</li>
+</ul>
+</li>
+<li>循环体</li>
+</ul>
+<p>同样是我们的递加程序：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 从1加到10</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> val = <span class="number">1</span>; val &lt;= <span class="number">10</span>; ++val)</span><br><span class="line">        sum += val;	<span class="comment">// 等价于sum=sum+val</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Sum of 1 to 10 inclusive is &quot;</span> &lt;&lt; sum &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行代码，得到输出：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sum of 1 to 10 inclusive is 55</span><br></pre></td></tr></table></figure>
+<h2 id="读取数量不定的输入数据">读取数量不定的输入数据</h2>
+<p>通过控制流，我们可以扩展求和算法，从一开始的两个数相加变为不定数量数字相加。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>, value = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 读取数据直到遇到文件尾，计算所有读入的值的和</span></span><br><span class="line">    <span class="keyword">while</span> (std::cin &gt;&gt; value)</span><br><span class="line">        sum += value;	<span class="comment">// 等价于 sum = sum +value</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Sum is: &quot;</span> &lt;&lt; sum &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 4 5 6</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sum is 18</span><br></pre></td></tr></table></figure>
+<p>这当中的循环条件是一个表达式，该表达式返回<code>std::cin</code>，因此实际上我们是在检测<code>std::cin</code>。</p>
+<p>在这里我们使用了一个<code>istream</code>对象作为条件，其效果是检测流的状态。如果流是有效的，那么检测成功；当流遇到文件结尾符（end-of-file），或一个无效的输入（例如这里<code>value</code>定义成<code>int</code>型，那么所有非<code>int</code>型输入都是无效的），<code>istream</code>对象的状态会变为无效。处于无效状态的<code>istream</code>会使条件变为假。</p>
+<blockquote>
+<p>在不同系统上文件尾的定义可能不同，但无伤大雅。</p>
+</blockquote>
+<p>因此上面代码的主要思想就是一直循环执行，直到遇到文件结尾符（或输入错误）。每次循环都会将输入的内容累加到变量<code>sum</code>上。</p>
+<h2 id="if语句"><code>if</code>语句</h2>
+<p>C++同样提供<code>if</code>语句来支持条件执行，一个简单的统计程序，它会统计输入中的每个值出现的次数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// currVal 是我们正在统计的数；我们将读入的新值存入 val</span></span><br><span class="line">    <span class="keyword">int</span> currVal = <span class="number">0</span>, val = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 读取第一个数，并确保确实有数据可以处理</span></span><br><span class="line">    <span class="keyword">if</span> (std::cin &gt;&gt; currVal) &#123;</span><br><span class="line">        <span class="keyword">int</span> cnt = <span class="number">1</span>;				<span class="comment">// 保存我们正在处理的当前值个数</span></span><br><span class="line">        <span class="keyword">while</span> (std::cin &gt;&gt; val) &#123;	<span class="comment">// 读取剩余的数</span></span><br><span class="line">            <span class="keyword">if</span> (val == currVal)		<span class="comment">// 如果值相同</span></span><br><span class="line">                ++cnt;				<span class="comment">// 将 cnt 加 1</span></span><br><span class="line">            <span class="keyword">else</span> &#123;					<span class="comment">// 否则，打印前一个值的个数</span></span><br><span class="line">                std::cout &lt;&lt; currVal &lt;&lt; <span class="string">&quot; occurs &quot;</span> &lt;&lt; cnt &lt;&lt; <span class="string">&quot; times&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">                currVal = val;		<span class="comment">// 记住新值</span></span><br><span class="line">                cnt = <span class="number">1</span>;			<span class="comment">// 重置计数器</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="comment">// while 循环在这里结束</span></span><br><span class="line">        <span class="comment">// 记住打印文件中最后一个值的个数</span></span><br><span class="line">        std::cout &lt;&lt; currVal &lt;&lt; <span class="string">&quot; occurs &quot;</span> &lt;&lt; cnt &lt;&lt; <span class="string">&quot; times&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125; <span class="comment">// 最外层的 if 语句在这里结束</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">42 42 42 42 42 55 55 62 100 100 100</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">42 occurs 5 times</span><br><span class="line">55 occurs 2 times</span><br><span class="line">62 occurs 1 times</span><br><span class="line">100 occurs 3 times</span><br></pre></td></tr></table></figure>
+<h1>类简介</h1>
+<p>“类”是C++的一个特性，用于定义自己的数据结构。</p>
+<p>一个类定义了一个类型，以及预期关联的一组操作。</p>
+<blockquote>
+<p>类机制是C++最重要的特性之一。实际上C++最初的一个设计焦点就是能定义使用上像内置类型一样自然的<strong>类类型（class type）</strong> 。</p>
+</blockquote>
+<p>以《C++ Primer》中的书店程序为例，它定义了一个名为<code>Sales_item</code>的类，在头文件<code>Sales_item.h</code>中已经定义好了这个类。</p>
+<blockquote>
+<p><code>Sales_item.h</code>是一个需要自己从资源站下载的文件，本博文最后有附。</p>
+</blockquote>
+<h2 id="Sales-item类"><code>Sales-item</code>类</h2>
+<p><code>Sales_Item</code>类的作用是表示一本书的总销售额、售出册数和平均售价。</p>
+<blockquote>
+<p>我们现在不需要关注这些数据如何存储、如何计算。为了使用一个类，我们不必关心它是如何实现的，只需要在hi到类对象可以执行什么操作。</p>
+</blockquote>
+<p>正如上面所说，每个类都定义了一个新的类型，其类型名就是类名，因此我们的<code>Sales-item</code>类定义了一个名为<code>Sales-item</code>的类型。</p>
+<p>与内置类型相同，我们可以使用如下语句定义一个对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sales-item item;</span><br></pre></td></tr></table></figure>
+<p>这就定义了一个<code>Sales-item</code>类型的对象<code>item</code>。</p>
+<p>除了可以定义<code>Sales-item</code>类型的变量之外，我们还可以：</p>
+<ul>
+<li>调用一个名为<code>isbn</code>的函数，从一个<code>Sales-item</code>对象中提取ISBN书号。</li>
+<li>用输入运算符（<code>&gt;&gt;</code>）和输出运算符（<code>&lt;&lt;</code>）读、写<code>Sales-item</code>类型的对象。</li>
+<li>用赋值预算夫（<code>=</code>）将一个<code>Sales-item</code>对象的值赋予另一个<code>Sales-item</code>对象。</li>
+<li>用加法运算符（<code>+</code>）将两个<code>Sales-item</code>对象相加。两个对象必须标识同一本书（相同的ISBN）。加法的结果是一个新的<code>Sales-item</code>对象，其ISBN与两个运算对象相同，其总销售额和售出册数则是两个运算对象的对应值之和。</li>
+<li>使用复合赋值运算符（<code>+=</code>）将一个<code>Sales-item</code>对象加到另一个对象上。</li>
+</ul>
+<h3 id="读写Sales-item">读写<code>Sales-item</code></h3>
+<p>下面的示例代码可以将数据从标准输入读入，并存入一个<code>Sales-item</code>对象中，然后再将<code>Sales-item</code>对象的内容打印到标准输出。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;Sales_item.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Sales_item book;</span><br><span class="line">    <span class="comment">// 读入 ISBN 号、售出册数以及销售价格</span></span><br><span class="line">    std::cin &gt;&gt; book;</span><br><span class="line">    <span class="comment">// 写入 ISBN、售出的册数、总销售额和平均价格</span></span><br><span class="line">    std::cout &lt;&lt; book &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0-201-70353-X 4 24.99</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0-201-70353-X   4       99.96   24.99</span><br></pre></td></tr></table></figure>
+<h3 id="Sales-item对象的加法"><code>Sales-item</code>对象的加法</h3>
+<p>下面的实例将两个<code>Sales-item</code>对象相加：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;Sales_item.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Sales_item item1, item2;</span><br><span class="line">    std::cin &gt;&gt; item1 &gt;&gt; item2;					<span class="comment">// 读取一对交易记录</span></span><br><span class="line">    std::cout &lt;&lt; item1 + item2 &lt;&lt; std::endl;	<span class="comment">// 打印它们的和</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0-201-78345-X 3 20.00</span><br><span class="line">0-201-78345-X 2 25.00</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0-201-78345-X   5       110     22</span><br></pre></td></tr></table></figure>
+<h2 id="初识成员函数">初识成员函数</h2>
+<p>将两个<code>Sales-item</code>对象相加的程序首先应该检查两个对象是否具有相同的ISBN。方法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;Sales_item.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Sales_item item1, item2;</span><br><span class="line">    std::cin &gt;&gt; item1 &gt;&gt; item2;</span><br><span class="line">    <span class="comment">// 首先检查 item1 和 item2 是否表示相同的书</span></span><br><span class="line">    <span class="keyword">if</span> (item1.isbn == item2.isbn) &#123;</span><br><span class="line">        std::cout &lt;&lt; item1 + item2 &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;	<span class="comment">// 表示成功</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;Data must refer to same ISBN&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;	<span class="comment">// 表示失败</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在书中，<code>if</code>语句所在行是这么写的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (item1.<span class="built_in">isbn</span>() == item2.<span class="built_in">isbn</span>()) &#123;</span><br></pre></td></tr></table></figure>
+<p>这样可能会报错，提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">test.cpp: In function ‘int main()’:</span><br><span class="line">test.cpp:8:20: error: no match for call to ‘(std::string &#123;aka std::__cxx11::basic_string&lt;char&gt;&#125;) ()’</span><br><span class="line">    8 |     if (item1.isbn() == item2.isbn()) &#123;</span><br><span class="line">      |                    ^</span><br><span class="line">test.cpp:8:36: error: no match for call to ‘(std::string &#123;aka std::__cxx11::basic_string&lt;char&gt;&#125;) ()’</span><br><span class="line">    8 |     if (item1.isbn() == item2.isbn()) &#123;</span><br><span class="line">      |</span><br></pre></td></tr></table></figure>
+<p>其实只要把括号去了就好了。</p>
+</blockquote>
+<h3 id="成员函数-方法">成员函数/方法</h3>
+<p>其中<code>if</code>的检测条件：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">item1.isbn == item2.isbn</span><br></pre></td></tr></table></figure>
+<p>调用了名为<code>isbn</code>的<strong>成员函数（member function）</strong> 。</p>
+<p>成员函数是定义为类的一部分函数，有时也被成为<strong>方法（method）</strong> 。</p>
+<p>通过使用<strong>点运算符（<code>.</code>）</strong> 来表达我们需要”名为<code>item1</code>的对象的<code>isbn</code>成员“。点运算符只能用于类类型的对象。其左侧运算对象必须是一个类类型对象，右侧运算对象比u下是该类型的一个成员名，运算结果为右侧运算对象指定的成员。</p>
+<p>而被我们去掉的括号则是<strong>调用运算符（<code>()</code>）</strong> ，括号内放置实参列表（可能为空）。</p>
+<h1>书店程序</h1>
+<p>现在我们已经准备好完成书店程序了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;Sales_item.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Sales_item total;	<span class="comment">// 保存下一条交易记录的变量</span></span><br><span class="line">    <span class="comment">// 读入第一条交易记录，并确保有数据可以处理</span></span><br><span class="line">    <span class="keyword">if</span> (std::cin &gt;&gt; total) &#123;</span><br><span class="line">        Sales_item trans;	<span class="comment">// 保存和的变量</span></span><br><span class="line">        <span class="comment">// 读入并处理剩余交易记录</span></span><br><span class="line">        <span class="keyword">while</span> (std::cin &gt;&gt; trans) &#123;</span><br><span class="line">            <span class="comment">// 如果我们仍在处理相同的书</span></span><br><span class="line">            <span class="keyword">if</span> (total.isbn == trans.isbn)</span><br><span class="line">                total += trans;	<span class="comment">//更新总销售额</span></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 打印前一本书的结果</span></span><br><span class="line">                std::cout &lt;&lt; total &lt;&lt; std::endl;</span><br><span class="line">                total = trans;	<span class="comment">// total现在标识下一本书的销售额</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; total &lt;&lt; std::endl;	<span class="comment">// 打印最后一本书的结果</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 没有输入！警告读者</span></span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;No data?!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;	<span class="comment">// 表示失败</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>附件</h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sales_item.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> SALESITEM_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SALESITEM_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sales_item</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Sales_item</span>(<span class="keyword">const</span> std::string &amp;book):<span class="built_in">isbn</span>(book),<span class="built_in">units_sold</span>(<span class="number">0</span>),<span class="built_in">revenue</span>(<span class="number">0.0</span>)&#123;&#125;</span><br><span class="line">    <span class="built_in">Sales_item</span>(std::istream &amp;is)&#123; is &gt;&gt; *<span class="keyword">this</span>;&#125;</span><br><span class="line">    <span class="keyword">friend</span> std::istream&amp; <span class="keyword">operator</span>&gt;&gt;(std::istream &amp;,Sales_item &amp;);</span><br><span class="line">    <span class="keyword">friend</span> std::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(std::ostream &amp;,<span class="keyword">const</span> Sales_item &amp;);</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Sales_item &amp; <span class="keyword">operator</span>+=(<span class="keyword">const</span> Sales_item&amp;);</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">avg_price</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">same_isbn</span><span class="params">(<span class="keyword">const</span> Sales_item &amp;rhs)</span><span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> isbn == rhs.isbn;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Sales_item</span>():<span class="built_in">units_sold</span>(<span class="number">0</span>),<span class="built_in">revenue</span>(<span class="number">0.0</span>)&#123;&#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    std::string isbn;</span><br><span class="line">    <span class="keyword">unsigned</span> units_sold;</span><br><span class="line">    <span class="keyword">double</span> revenue;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> std::istream;</span><br><span class="line"><span class="keyword">using</span> std::ostream;</span><br><span class="line">Sales_item <span class="keyword">operator</span>+(<span class="keyword">const</span> Sales_item &amp;,<span class="keyword">const</span> Sales_item &amp;);</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>==(<span class="keyword">const</span> Sales_item &amp;lhs,<span class="keyword">const</span> Sales_item &amp;rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> lhs.units_sold == rhs.units_sold &amp;&amp; lhs.revenue == rhs.revenue &amp;&amp; lhs.<span class="built_in">same_isbn</span>(rhs);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>!=(<span class="keyword">const</span> Sales_item &amp;lhs,<span class="keyword">const</span> Sales_item &amp;rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> !(lhs == rhs);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">inline</span> Sales_item &amp; Sales_item::<span class="keyword">operator</span> +=(<span class="keyword">const</span> Sales_item &amp;rhs)</span><br><span class="line">&#123;</span><br><span class="line">    units_sold += rhs.units_sold;</span><br><span class="line">    revenue += rhs.revenue;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">inline</span> Sales_item <span class="keyword">operator</span>+(<span class="keyword">const</span> Sales_item &amp;lhs,<span class="keyword">const</span> Sales_item &amp;rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">Sales_item <span class="title">ret</span><span class="params">(lhs)</span></span>;</span><br><span class="line">    ret += rhs;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">inline</span> istream&amp; <span class="keyword">operator</span>&gt;&gt;(istream &amp;in,Sales_item &amp;s)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">double</span> price;</span><br><span class="line">    in &gt;&gt; s.isbn &gt;&gt; s.units_sold &gt;&gt; price;</span><br><span class="line">    <span class="keyword">if</span>(in)</span><br><span class="line">        s.revenue = s.units_sold * price;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        s = <span class="built_in">Sales_item</span>();</span><br><span class="line">    <span class="keyword">return</span> in;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">inline</span> ostream&amp; <span class="keyword">operator</span>&lt;&lt;(ostream &amp;out,<span class="keyword">const</span> Sales_item &amp;s)</span><br><span class="line">&#123;</span><br><span class="line">    out &lt;&lt; s.isbn &lt;&lt; <span class="string">&quot;\t&quot;</span> &lt;&lt;s.units_sold &lt;&lt; <span class="string">&quot;\t&quot;</span> &lt;&lt; s.revenue &lt;&lt; <span class="string">&quot;\t&quot;</span> &lt;&lt; s.<span class="built_in">avg_price</span>();</span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">Sales_item::avg_price</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(units_sold)</span><br><span class="line">        <span class="keyword">return</span> revenue/units_sold;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CPP/" rel="tag"># CPP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/12/Linux%E9%85%8D%E7%BD%AEC-CPP%E7%8E%AF%E5%A2%83/" rel="prev" title="Linux配置C/C++环境">
+      <i class="fa fa-chevron-left"></i> Linux配置C/C++环境
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/13/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B006%EF%BC%9A%E5%B9%B3%E6%BB%91%E5%9B%BE%E5%83%8F/" rel="next" title="OpenCV (Python) 学习笔记06：平滑图像">
+      OpenCV (Python) 学习笔记06：平滑图像 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">一个简单的main函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">初识输入输出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.1.</span> <span class="nav-text">标准输入输出对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E4%BD%BF%E7%94%A8IO%E5%BA%93%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.2.</span> <span class="nav-text">一个使用IO库的程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E6%B5%81%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">2.3.</span> <span class="nav-text">向流写入数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%AD%E7%9A%84%E5%90%8D%E5%AD%97"><span class="nav-number">2.4.</span> <span class="nav-text">使用标准库中的名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E6%B5%81%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="nav-number">2.5.</span> <span class="nav-text">从流中读取数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="nav-number">2.5.1.</span> <span class="nav-text">定义变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%85%A5%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">2.5.2.</span> <span class="nav-text">读入输入数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.6.</span> <span class="nav-text">完成程序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">注释简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="nav-number">3.1.</span> <span class="nav-text">单行注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%95%8C%E5%AE%9A%E7%AC%A6%E5%AF%B9%E6%B3%A8%E9%87%8A"><span class="nav-number">3.2.</span> <span class="nav-text">界定符对注释</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">控制流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#while%E8%AF%AD%E5%8F%A5"><span class="nav-number">4.1.</span> <span class="nav-text">while语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for%E8%AF%AD%E5%8F%A5"><span class="nav-number">4.2.</span> <span class="nav-text">for语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E6%95%B0%E9%87%8F%E4%B8%8D%E5%AE%9A%E7%9A%84%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">4.3.</span> <span class="nav-text">读取数量不定的输入数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if%E8%AF%AD%E5%8F%A5"><span class="nav-number">4.4.</span> <span class="nav-text">if语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">类简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sales-item%E7%B1%BB"><span class="nav-number">5.1.</span> <span class="nav-text">Sales-item类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99Sales-item"><span class="nav-number">5.1.1.</span> <span class="nav-text">读写Sales-item</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sales-item%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8A%A0%E6%B3%95"><span class="nav-number">5.1.2.</span> <span class="nav-text">Sales-item对象的加法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E8%AF%86%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-number">5.2.</span> <span class="nav-text">初识成员函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0-%E6%96%B9%E6%B3%95"><span class="nav-number">5.2.1.</span> <span class="nav-text">成员函数&#x2F;方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">书店程序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">附件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

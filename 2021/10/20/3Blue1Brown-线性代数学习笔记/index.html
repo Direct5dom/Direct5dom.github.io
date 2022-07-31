@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="课程：Essence of linear algebra - YouTube">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3Blue1Brown 《线性代数的本质》学习笔记01：序言、向量、线性组合、张成的空间、基向量">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/20/3Blue1Brown-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="课程：Essence of linear algebra - YouTube">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/3b1b/%E5%90%91%E9%87%8F%E8%90%BD%E5%9C%A8%E5%9D%90%E6%A0%87%E8%BD%B4%E4%B8%8A.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/3b1b/%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E6%80%A7.png?raw=true">
+<meta property="article:published_time" content="2021-10-19T19:21:40.000Z">
+<meta property="article:modified_time" content="2021-10-19T19:27:12.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="3Blue1Brown">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/3b1b/%E5%90%91%E9%87%8F%E8%90%BD%E5%9C%A8%E5%9D%90%E6%A0%87%E8%BD%B4%E4%B8%8A.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/20/3Blue1Brown-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>3Blue1Brown 《线性代数的本质》学习笔记01：序言、向量、线性组合、张成的空间、基向量 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/20/3Blue1Brown-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3Blue1Brown 《线性代数的本质》学习笔记01：序言、向量、线性组合、张成的空间、基向量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-20 03:21:40 / Modified: 03:27:12" itemprop="dateCreated datePublished" datetime="2021-10-20T03:21:40+08:00">2021-10-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/3Blue1Brown-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">3Blue1Brown 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/fNk_zzaMoSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<blockquote>
+<p>课程：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=fNk_zzaMoSs&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">Essence of linear algebra - YouTube</a></p>
+</blockquote>
+<span id="more"></span>
+<h1>序言</h1>
+<blockquote>
+<p>There is hardly any theory which is more elementary than <strong>linear algebra</strong>, in spite of the fact that generations of professors and textbook writers have obscured its simplicity by preposterous calculations with matrices.		- Jean Dieudonné</p>
+<p>尽管一批教授和教科书编者用关于矩阵的荒唐至极的计算内容掩盖了<strong>线性代数</strong>的简明性，但是鲜有与之相较更为初等的理论。		—— 让 · 迪厄多内</p>
+</blockquote>
+<p>线性代数基本上是任何技术学科都必须要掌握的科目之一，包括但不限于：</p>
+<ul>
+<li>计算机科学</li>
+<li>物理学</li>
+<li>电子工程学</li>
+<li>机械工程学</li>
+<li>材料科学</li>
+<li>统计学</li>
+<li>……</li>
+</ul>
+<p>我们在课上所学到的往往是如何“计算”，但并不会去学线代“为什么要这样做”。同样我们也学不到不直观的<strong>数值运算</strong>背后存在的更加易懂的<strong>几何直观</strong>。</p>
+<p>总的来说，几何水平上的理解有主意判断出解决特定问题需要什么样的工具，感受到它们为什么有用，以及如何解读最终的结果；而数值水平上的则能使得顺利引用这些工具，即从一个抽象的问题转变为实打实的数值计算。</p>
+<h1>向量究竟是什么？</h1>
+<blockquote>
+<p>The introduction of numbers as <strong>coordinates</strong> in an act of violence.		- Hermann Weyl</p>
+<p>（参照一维连续统的特定划分模式）引入一些数作为<strong>坐标</strong>是一种鲁莽的行为。		—— 赫尔曼 · 外尔</p>
+</blockquote>
+<p>向量是线性代数中最基础最根源的组成部分。向量有三种表达方式：有向线段（物理学常用）、$\vec{v}$（数学常用）、$\begin{bmatrix} 1 \\ 2 \end{bmatrix}$（计算机科学常用）。</p>
+<p>在线性代数中，为了<strong>方便理解</strong>我们将<strong>向量</strong>“定义为”<strong>一个落在坐标轴上，并且从原点出发的一个有向线段</strong>（不能自由移动）。</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/3b1b/%E5%90%91%E9%87%8F%E8%90%BD%E5%9C%A8%E5%9D%90%E6%A0%87%E8%BD%B4%E4%B8%8A.png?raw=true" alt="向量落在坐标轴上"></p>
+<p>当我们这样定义了向量，那么向量的有序列表（即$\begin{bmatrix} 1 \\ 2 \end{bmatrix}$样式）就很好理解了，它是<strong>有向线段终点的坐标</strong>（即$\begin{bmatrix} x \\ y \end{bmatrix}$）。</p>
+<p>在三维中也是同样的道理，向量从原点出发，用有序列表表示为$\begin{bmatrix} x \\ y \\ z \end{bmatrix}$。</p>
+<h2 id="向量加法和向量数乘">向量加法和向量数乘</h2>
+<p>向量的加法和数乘是向量的两种最基本的运算，基本上所有的线代内容都围绕着这两个运算。</p>
+<h3 id="向量加法">向量加法</h3>
+<p>设两个向量 $\vec{v}$ 和 $\vec{w}$ ，将其画作直角坐标系上的有向线段，然后平移其中一个向量（$\vec{w}$），使其起点与另一个向量（$\vec{v}$）重点对齐，最后经 $\vec{v}$ 起点（原点）指向 $\vec{w}$ 终点的有向线段即 $\vec{v} + \vec{w}$ 。</p>
+<blockquote>
+<p>对于线性代数来说，这基本上是唯一允许向量离开原点的情况。</p>
+</blockquote>
+<p>作为补充，数值计算的定义也不难，即：$\begin{bmatrix} x_1 \\ y_1 \end{bmatrix} + \begin{bmatrix} x_2 \\ y_2 \end{bmatrix} = \begin{bmatrix} x_1 + x_2 \\ y_1 + y_2 \end{bmatrix}$</p>
+<h3 id="向量数乘">向量数乘</h3>
+<p>设一个向量 $\vec{v}$ ，数乘可看做对这个向量进行一定程度的“缩放”。具体行为取决于 $n \cdot \vec{v}$ 中的标量 $n$：</p>
+<ul>
+<li>$n&gt;1$ ：放大</li>
+<li>$0&lt;n&lt;1$：缩小</li>
+<li>$n&lt;0$：反向放大（缩小）</li>
+</ul>
+<p>从数值的角度来看，即：$n \cdot \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} n  x \\ n  y \end{bmatrix}$</p>
+<h1>线性组合、张成的空间与基</h1>
+<blockquote>
+<p>Mathematics requires a small dose, not of genius, bug of an <strong>imaginative freedom</strong> which, in a larger does, would be insanity.		- Angus K. Rodgers</p>
+<p>数学需要的不是天赋，而是少量的<strong>自由想象</strong>，但想象太过自由又会陷入疯狂。		—— 安古斯 · 罗杰斯</p>
+</blockquote>
+<p>对于一个有序列表$\begin{bmatrix} x \\ y \end{bmatrix}$，其实更好的选择是将 $x$ 和 $y$ 看作<strong>标量</strong>。</p>
+<p>我们定义两个<strong>基向量</strong>：沿 $x$ 方向单位坐标的向量 $\hat{\imath}$ ，以及沿 $y$ 方向范围坐标的向量 $\hat{\jmath}$ 。这样我们的有序列表$\begin{bmatrix} x \\ y \end{bmatrix}$就代表了 $(x) \hat{\imath} + (y) \hat{\jmath}$ 。</p>
+<p>因此，<strong>每当我们用数字描述向量时，它都依赖于我们正在使用的基。</strong></p>
+<p>当然，基向量的选择并不是固定的，我们可以选择任何两个平面上的向量作为基向量（除了共线、存在零向量的情况）。</p>
+<p>而<strong>两个数乘的向量和</strong>（$a \vec{v} + b \vec{w}$），被称作这两个向量（$\vec{v}$ 和 $\vec{w}$）的<strong>线性组合</strong>。</p>
+<blockquote>
+<p>但是为什么称作“线性”？以及这和直线又有什么关系呢？</p>
+<p>（虽然不是这个词的根源）一个好的理解角度就是，如果你固定了其中一个向量，让另一个向量自由变化，那么终点的移动轨迹将会画出一条直线。</p>
+<img src="https://github.com/Direct5dom/imageDB/blob/main/3b1b/%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E6%80%A7.png?raw=true" alt="什么是线性" style="zoom:50%;" />
+</blockquote>
+<p>所有可以表示为给定向量线性组合的向量的集合，被称为<strong>给定向量张成的空间（Span）</strong>。</p>
+<blockquote>
+<p>The “Span” of $\vec{v}$ and $\vec{w}$ is the set of all their <strong>linear combinations</strong>.</p>
+<p>$\vec{v}$ 与 $\vec{w}$ 全部<strong>线性组合</strong>构成的向量集合称作“张成的空间”<br>
+$$<br>
+a \vec{v} + b \vec{w}<br>
+$$</p>
+<ul>
+<li>Let $a$ and $b$ vary over all real numbers.</li>
+<li>$a$ 与 $b$ 在实数范围内变动。</li>
+</ul>
+</blockquote>
+<p>因此，<strong>对于大部分二维向量来说，它们张成的空间是所有二维向量的集合。对于共线的两个二维向量来说，它们张成的空间是重点落在同一条直线上向量的集合。</strong></p>
+<blockquote>
+<p>这里包括之后都不再考虑零向量的情况。</p>
+</blockquote>
+<p>而另一个角度，之所以说向量的加法和数乘是线性代数最基本的运算，原因就在于可以仅通过这两种运算得到空间中所有向量的集合。</p>
+<h2 id="向量与点">向量与点</h2>
+<p>我们此前定义了线代中的向量，由于起点固定在原点，其实我们可以将向量从有向线段简化成一个点，即终点。</p>
+<p>而这样做之后，刚才所说的落在同一条直线上向量的集合，其实就是在说直线本身。而所有二位空间的向量集合，实际上就是二维平面本身。</p>
+<p>因此：</p>
+<ul>
+<li><strong>两个不共线的二维向量所张成的空间是一个平面；</strong></li>
+<li><strong>两个共线的向量所张成的空间是一条直线。</strong></li>
+</ul>
+<p>我们可以进而把这个结论推广到三维，即：</p>
+<ul>
+<li><strong>两个不共线三维向量所张成的空间是一个三维平面；</strong></li>
+<li><strong>三个不共线三维向量所张成的空间是一个三维空间；</strong></li>
+<li><strong>存在一对共线的三个三维向量所张成的空间是一个三维平面；</strong></li>
+<li><strong>三个共线的三维向量所张成的空间是一个三维直线。</strong></li>
+</ul>
+<p>很容易发现一个问题，就是假如有线段共线的话，那么共线的线段中就会存在“多余”的向量，其对张成的空间没有任何贡献。而这种情况，我们就称其为是“线性相关”的。</p>
+<p>即：一组向量中，任意去除其中某个向量并不会影响其张成的空间，这一组向量就被称为是“<strong>线性相关</strong>”的。</p>
+<p>或反过来说：其中一个向量可以表示为其他向量的<strong>线性组合</strong>，因为这个向量已经落在其他向量张成的空间之中。</p>
+<p>而从另一个角度来说，如果所有的向量都给张成的空间添加了新的维度，那么就说这些向量是<strong>线性无关</strong>的。</p>
+<p>因此我们就有了严格的空间的一组基的定义：</p>
+<p><strong><center>向量空间的一组基是张成该空间的一个线性无关向量集</center></strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/3Blue1Brown/" rel="tag"># 3Blue1Brown</a>
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/17/OpenCV-Python-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B007%EF%BC%9A%E5%BD%A2%E6%80%81%E5%8F%98%E6%8D%A2/" rel="prev" title="OpenCV (Python) 学习笔记07：形态变换">
+      <i class="fa fa-chevron-left"></i> OpenCV (Python) 学习笔记07：形态变换
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/24/Manim-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003-%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9D%97-Mobject-%E5%8A%A8%E7%94%BB%E5%8C%96-%E5%9C%BA%E6%99%AF/" rel="next" title="Manim 学习笔记03：构建模块（Mobject、动画化、场景）">
+      Manim 学习笔记03：构建模块（Mobject、动画化、场景） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">向量究竟是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8A%A0%E6%B3%95%E5%92%8C%E5%90%91%E9%87%8F%E6%95%B0%E4%B9%98"><span class="nav-number">2.1.</span> <span class="nav-text">向量加法和向量数乘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8A%A0%E6%B3%95"><span class="nav-number">2.1.1.</span> <span class="nav-text">向量加法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E6%95%B0%E4%B9%98"><span class="nav-number">2.1.2.</span> <span class="nav-text">向量数乘</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">线性组合、张成的空间与基</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E4%B8%8E%E7%82%B9"><span class="nav-number">3.1.</span> <span class="nav-text">向量与点</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ Primer学习笔记03：变量">
+<meta property="og:url" content="https://direct5dom.github.io/2022/03/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+<meta property="article:published_time" content="2022-03-12T18:27:50.000Z">
+<meta property="article:modified_time" content="2022-03-12T18:41:36.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="CPP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/03/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>C++ Primer学习笔记03：变量 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/03/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Primer学习笔记03：变量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-03-13 02:27:50 / Modified: 02:41:36" itemprop="dateCreated datePublished" datetime="2022-03-13T02:27:50+08:00">2022-03-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CPP Primer学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true" alt="CPP.png"></p>
+<span id="more"></span>
+<p>变量提供一个具名的、可提供程序操作的存储空间。</p>
+<p>对C++程序员来说，“<strong>变量（variable）</strong> ”和“<strong>对象（object）</strong> ”一般可以互换使用。</p>
+<blockquote>
+<p>通常情况下，C++中的对象指的是一块能存储数据并具有某种类型的内存空间。</p>
+</blockquote>
+<h1>变量定义</h1>
+<p>基本形式为：类型说明符（type specifier）后紧跟一个或多个变量名组成的列表，其中变量名以逗号分隔，最后以分号结束。</p>
+<p>列表中每个变量名的类型都由类型说明符指定，定义时还可以为一个或多个变量赋初值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>, value,		<span class="comment">// sum、value 和 units_sold 都是 int</span></span><br><span class="line">    units_sold = <span class="number">0</span>;		<span class="comment">// sum 和 units_sold 初值为 0</span></span><br><span class="line">Sales_item item;		<span class="comment">// item 的类型是 Sales_item</span></span><br><span class="line"><span class="comment">// string 是一种库类型，表示一个可变长的字符序列</span></span><br><span class="line"><span class="function">std::string <span class="title">book</span><span class="params">(<span class="string">&quot;0-201-78345-X&quot;</span>)</span></span>;	<span class="comment">// book 通过一个 string 字面值初始化</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>book</code>的定义用到了库类型<code>std::string</code>，像<code>iostream</code>一样，<code>string</code>也是在命名空间<code>std</code>中定义的，是一种表示可变长字符序列的数据类型，在这里被初始化为<code>0-201-78345-X</code>。</p>
+</blockquote>
+<h2 id="初始值">初始值</h2>
+<p>对象在创建的时候获得了一个特定的值，我们就说这个对象被<strong>初始化（initialized）</strong> 了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>;	<span class="comment">// sum 的初值为 0</span></span><br></pre></td></tr></table></figure>
+<p>被定义的对象名字也可以被使用，先定义的变量值可以用于初始化后定义的其他变量。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 正确：price 先被定义并赋值，随后用于初始化 discount</span></span><br><span class="line"><span class="keyword">double</span> price = <span class="number">109.99</span>, discount = price * <span class="number">0.16</span>;</span><br><span class="line"><span class="comment">// 正确：调用函数 applyDiscount，然后用函数的返回值初始化 salePrice</span></span><br><span class="line"><span class="keyword">double</span> salePrice = <span class="built_in">applyDiscount</span>(price, discount);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong>：虽然初始化和赋值的操作很接近，但是在C++中二者是<strong>完全不同</strong>的两个操作，不能被混为一谈。</p>
+<p><strong>初始化的含义是创建变量时赋予其一个初始值，而赋值是把对象当前值擦除，而以一个新值来替代。</strong></p>
+</blockquote>
+<h2 id="列表初始化">列表初始化</h2>
+<p>C++定义了初始化的好几种形式，这也是初始化问题复杂性的一个体现。例如想要定义一个名为<code>units_sold</code>的<code>int</code>变量并初始化为<code>0</code>，以下4条语句都可以做到：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> units_sold = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> units_sold = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> units_sold&#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">units_sold</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>C++11新标准中，用花括号<code>&#123;&#125;</code>来初始化变量得到了全面应用，此前这种方法仅能在某些受限场合下使用。</p>
+</blockquote>
+<p>使用花括号<code>&#123;&#125;</code>初始化的形式被称为<strong>列表初始化（list initialization）</strong> 。无论是初始化对象还是为对象赋新值，都可以使用花括号<code>&#123;&#125;</code>。</p>
+<p>当用于内置类型的变量时，这种初始化形式有一个重要特点：<strong>如果我们使用列表初始化且初始值存在丢失信息的风向，则编译器将报错：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> <span class="keyword">double</span> ld = <span class="number">3.1415926536</span>;</span><br><span class="line"><span class="keyword">int</span> a&#123;ld&#125;, b = &#123;ld&#125;;		<span class="comment">// 错误：转换未执行，因为存在丢失信息的危险</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">c</span><span class="params">(ld)</span>, d </span>= ld;		<span class="comment">// 正确：转换执行，且确实丢失了部分值</span></span><br></pre></td></tr></table></figure>
+<p>使用<code>long double</code>的值初始化<code>int</code>变量时可能丢失数据，所以编译器拒绝了<code>a</code>和<code>b</code>的初始化请求（至少小数部分会丢掉，且<code>int</code>不一定能存下<code>ld</code>的整数部分）。虽然我们不会故意这么去做，但是可能无意间发生这种错误。</p>
+<h2 id="默认初始化">默认初始化</h2>
+<p>如果定义变量时没有指定初值，则变量被<strong>默认初始化（default initialized）</strong> ，此时变量被赋予了”默认值“。默认值到底是什么由变量类型决定，同时定义变量的位置也会对此有影响。</p>
+<p>如果是内置类型的变量未被显式初始化，它的值由定义的位置决定。</p>
+<p>定义于任何函数体之外的变量被初始化为<code>0</code>，一种例外的情况是，定义在函数体内部的内置类型变量将<strong>不被初始化（uninitialized）</strong> 。一个未被初始化的内置类型变量的值是未定义的，如果试图拷贝或以其他形式方位此类值将引发错误。</p>
+<p>每个类各自决定初始化的方式。而且，是否允许不经初始化就定义对象也由类自己决定。如果类允许这种行为，它将决定对象的初始值到底是什么。</p>
+<p>绝大多数类都支持无需显式初始化而定义对象，这样的类提供了一个合适的默认值。例如，刚才的<code>string</code>类规定如果没有指定初值则生成一个空串：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::string empty;		<span class="comment">// empty 非显式的初始化为一个空串</span></span><br><span class="line">Sales_item item;		<span class="comment">// 被默认初始化的 Sales_item 对象</span></span><br></pre></td></tr></table></figure>
+<p>一些类要求每个对象都是显式初始化，此时如果创建了一个该类的对象而未对其做明确的初始化操作，将引发错误。</p>
+<h1>变量声明和定义的关系</h1>
+<p>C++支持<strong>分离式编译（separate compilation）</strong> 机制，允许程序将程序分割为若干文件，每个文件可被独立编译，这可以允许程序员把程序拆成多个逻辑部分来编写。</p>
+<p>程序被拆分为多个文件时，需要有在文件间共享代码的方法。例如，一个文件的代码可能需要使用另一个文件中定义的变量。比如<code>std::cout</code>和<code>std::cin</code>，它们定义于标准库，却能被我们写的程序使用。</p>
+<p>为了支持分离式编译，C++语言将声明和定义区分开来。<strong>声明（declaration）</strong> 使得名字为程序所知，一个文件如果想使用别处定义的名字则必须包含对那个名字的声明。而<strong>定义（definition）</strong> 负责创建于名字关联的实体。</p>
+<p>变量声明规定了变量的类型和名字，这与定义相同。但定义除此之外还申请存储空间，也可能为变量赋一个初始值。</p>
+<p>如果想声明一个变量而非定义它，就在变量名踢前添加关键字<code>extern</code>，而且不要显式的初始化变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i;	<span class="comment">// 声明 i 而非定义 i</span></span><br><span class="line"><span class="keyword">int</span> j;			<span class="comment">// 声明并定义 j</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>任何包含了显式初始化的声明即成为定义。</p>
+<p>我们可以给<code>extern</code>标记的变量赋初值，但是这样做也就抵消了<code>extern</code>的作用。<strong><code>extern</code>语句如果包含初始值就不再是声明，而是定义。</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">double</span> pi = <span class="number">3.1416</span>;	<span class="comment">// 	定义</span></span><br></pre></td></tr></table></figure>
+<p>在函数体内部，如果试图初始化一个由<code>extern</code>关键字标记的变量，将引发错误。</p>
+</blockquote>
+<blockquote>
+<p>如果在多个文件中使用同一个变量，就必须将声明和定义分离。<strong>变量能且只能被定义一次，但是可以被多次声明。</strong></p>
+</blockquote>
+<blockquote>
+<p>C++是一个<strong>静态类型（statically type）</strong> 语言，其含义是在编译阶段检查类型。其中，检查类型的过程称为类型检查（type checking）。</p>
+</blockquote>
+<h1>标识符</h1>
+<p>C++的<strong>标识符（identifier）</strong> 由字母、数字和下划线组成，其中必须以字母或下划线开头。标识符的长度没有限制，但是大小写敏感。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义四个不同的 int 变量</span></span><br><span class="line"><span class="keyword">int</span> somename, someName, SomeName, SOMENAME;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>C++保留了一些名字提供语言本身使用，即关键字。关键字不能被用作标识符。</p>
+<p>C++也为标准库保留了一些名字。用户自定义的标识符中不能连续出现两个下划线，也不能以下划线紧连大写字母开头。</p>
+<p>定义在函数体外的标识符不能以下划线开头。</p>
+</blockquote>
+<h2 id="变量命名规范">变量命名规范</h2>
+<p>变量命名有许多约定俗成的规范，下面这些规范能有效提高代码的可读性：</p>
+<ul>
+<li>标识符要能体现实际含义。</li>
+<li>变量名一般用小写字母，如<code>index</code>，不要使用<code>Index</code>或<code>INDEX</code>。</li>
+<li>用户自定义的类名一般以大写字母开头，如<code>Sales_item</code>。</li>
+<li>如果标识符由多个单词组成，则单词间应有明显区分，如<code>student_loan</code>或<code>studentLoan</code>，不要使用<code>studentloan</code>。</li>
+</ul>
+<h1>名字的作用域</h1>
+<p>C++中使用到的每个名字都指向一个特定的实体：变量、函数、类型等。然而在不同的<strong>作用域（scope）</strong> 中可能指向不同的实体。</p>
+<p>一个典型案例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> val = <span class="number">1</span>; val &lt;= <span class="number">10</span>; ++val)</span><br><span class="line">        sum += val;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Sum of 1 to 10 inclusive is &quot;</span></span><br><span class="line">              &lt;&lt; sum &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段程序定义了三个名字：<code>main</code>、<code>sum</code>和<code>val</code>，同时使用了命名空间名字<code>std</code>，该空间提供了两个名字<code>cout</code>和<code>cin</code>供程序使用。</p>
+<p>定义于所有花括号之外（如<code>main</code>）的名字拥有<strong>全局作用域（global scope）</strong> ，可以在整个程序范围内使用。</p>
+<p>定义于一部分花括号内（如<code>sum</code>，在<code>main</code>函数的花括号内）的名字拥有<strong>块作用域（block scope）</strong> ，只能在定义开始到花括号结束<code>&#125;</code>中使用，程序的其他部分无法访问。</p>
+<blockquote>
+<p>建议：第一次使用变量时再去定义。</p>
+</blockquote>
+<h2 id="嵌套的作用域">嵌套的作用域</h2>
+<p>被包含（被嵌套）的作用域称为<strong>内层作用域（inner scope）</strong> ；</p>
+<p>包含着别的作用域的作用域称为<strong>外层作用域（outer scope）</strong> 。</p>
+<p>作用域中声明的名字，它所嵌套的作用域都能访问改名字。同时，允许内层作用域中重新定义外层作用域已有的名字：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="comment">// 该程序仅用于说明：函数内部不宜定义与全局变量同名的新变量</span></span><br><span class="line"><span class="keyword">int</span> reused = <span class="number">42</span>;	<span class="comment">// reused 拥有全局作用域</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> unique = <span class="number">0</span>;	<span class="comment">// unique 拥有块作用域</span></span><br><span class="line">    <span class="comment">// 输出#1：使用全局变量 reused；输出 42 0</span></span><br><span class="line">    std::cout &lt;&lt; reused &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; unique &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">int</span> reused = <span class="number">0</span>;	<span class="comment">// 新建局部变量 reused，覆盖了全局变量 reused</span></span><br><span class="line">    <span class="comment">// 输出#2：使用局部变量 reused；输出 0 0</span></span><br><span class="line">    std::cout &lt;&lt; reused &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; unique &lt;&lt; std::endl;</span><br><span class="line">    <span class="comment">// 输出#3：显式的访问全局变量 reused；输出 42 0</span></span><br><span class="line">    std::cout &lt;&lt; ::reused &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; unique &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出#2 发生在局部变量<code>reused</code>定义之后，此时局部变量<code>reused</code><strong>正在作用域内（in scope）</strong> 。</p>
+</blockquote>
+<blockquote>
+<p>如果函数有可能用到某全局变量，则不宜再定义一个同名的局部变量。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CPP/" rel="tag"># CPP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/10/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/" rel="prev" title="C++ Primer学习笔记02：基本内置类型">
+      <i class="fa fa-chevron-left"></i> C++ Primer学习笔记02：基本内置类型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/29/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004/" rel="next" title="C++ Primer学习笔记04：复合类型">
+      C++ Primer学习笔记04：复合类型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">变量定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%80%BC"><span class="nav-number">1.1.</span> <span class="nav-text">初始值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">列表初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.3.</span> <span class="nav-text">默认初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">变量声明和定义的关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">标识符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-number">3.1.</span> <span class="nav-text">变量命名规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">名字的作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B5%8C%E5%A5%97%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">4.1.</span> <span class="nav-text">嵌套的作用域</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

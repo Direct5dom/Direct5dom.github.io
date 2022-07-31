@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Linux常用命令全拼 pwd: print work directory 打印当前目录 显示出当前工作目录的绝对路径 ps: process status(进程状态，类似于windows的任务管理器) 常用参数：－auxf ps -auxf 显示进程状态 df: disk free 其功能是显示磁盘可用空间数目信息及空间结点信息。换句话说，就是报告在任何安装的设备或目录中，还剩多少自由的空间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux命令全拼对照目录">
+<meta property="og:url" content="https://direct5dom.github.io/2021/08/30/Linux%E5%91%BD%E4%BB%A4%E5%85%A8%E6%8B%BC%E5%AF%B9%E7%85%A7%E7%9B%AE%E5%BD%95/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="Linux常用命令全拼 pwd: print work directory 打印当前目录 显示出当前工作目录的绝对路径 ps: process status(进程状态，类似于windows的任务管理器) 常用参数：－auxf ps -auxf 显示进程状态 df: disk free 其功能是显示磁盘可用空间数目信息及空间结点信息。换句话说，就是报告在任何安装的设备或目录中，还剩多少自由的空间。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-08-30T14:00:08.000Z">
+<meta property="article:modified_time" content="2021-09-04T07:35:00.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/08/30/Linux%E5%91%BD%E4%BB%A4%E5%85%A8%E6%8B%BC%E5%AF%B9%E7%85%A7%E7%9B%AE%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Linux命令全拼对照目录 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/08/30/Linux%E5%91%BD%E4%BB%A4%E5%85%A8%E6%8B%BC%E5%AF%B9%E7%85%A7%E7%9B%AE%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux命令全拼对照目录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-08-30 22:00:08" itemprop="dateCreated datePublished" datetime="2021-08-30T22:00:08+08:00">2021-08-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-04 15:35:00" itemprop="dateModified" datetime="2021-09-04T15:35:00+08:00">2021-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Linux常用命令全拼">Linux常用命令全拼</h2>
+<p>pwd: print work directory 打印当前目录 显示出当前工作目录的绝对路径</p>
+<p>ps: process status(进程状态，类似于windows的任务管理器)</p>
+<p>常用参数：－auxf</p>
+<p>ps -auxf 显示进程状态</p>
+<p>df: disk free 其功能是显示磁盘可用空间数目信息及空间结点信息。换句话说，就是报告在任何安装的设备或目录中，还剩多少自由的空间。</p>
+<p>du: Disk usage</p>
+<span id="more"></span>
+<p>rpm：即RedHat Package Management，是RedHat的发明之一</p>
+<p>rmdir：Remove Directory（删除目录）</p>
+<p>rm：Remove（删除目录或文件）</p>
+<p>cat: concatenate 连锁</p>
+<p>cat file1file2&gt;&gt;file3 把文件1和文件2的内容联合起来放到file3中</p>
+<p>insmod: install module,载入模块</p>
+<p>ln -s : link -soft 创建一个软链接，相当于创建一个快捷方式</p>
+<p>mkdir：Make Directory(创建目录)</p>
+<p>touch: touch</p>
+<p>man: Manual</p>
+<p>su：Swith user(切换用户)</p>
+<p>cd：Change directory</p>
+<p>ls：List files</p>
+<p>ps：Process Status</p>
+<p>mkdir：Make directory</p>
+<p>rmdir：Remove directory</p>
+<p>mkfs: Make file system</p>
+<p>fsck：File system check</p>
+<p>uname: Unix name</p>
+<p>lsmod: List modules</p>
+<p>mv: Move file</p>
+<p>rm: Remove file</p>
+<p>cp: Copy file</p>
+<p>ln: Link files</p>
+<p>fg: Foreground</p>
+<p>bg: Background</p>
+<p>chown: Change owner</p>
+<p>chgrp: Change group</p>
+<p>chmod: Change mode</p>
+<p>umount: Unmount</p>
+<p>dd: 本来应根据其功能描述&quot;Convert an copy&quot;命名为&quot;cc&quot;，但&quot;cc&quot;已经被用以代表&quot;CComplier&quot;，所以命名为&quot;dd&quot;</p>
+<p>tar：Tape archive （磁带档案）</p>
+<p>ldd：List dynamic dependencies</p>
+<p>insmod：Install module</p>
+<p>rmmod：Remove module</p>
+<p>lsmod：List module</p>
+<p>文件结尾的&quot;rc&quot;（如.bashrc、.xinitrc等）：Resource configuration</p>
+<p>Knnxxx /Snnxxx（位于rcx.d目录下）：K（Kill）；S(Service)；nn（执行顺序号）；xxx（服务标识）</p>
+<p>.a（扩展名a）：Archive，static library</p>
+<p>.so（扩展名so）：Shared object，dynamically linked library</p>
+<p>.o（扩展名o）：Object file，complied result of C/C++ source file</p>
+<p>RPM：Red hat package manager</p>
+<p>dpkg：Debian package manager</p>
+<p>apt：Advanced package tool（Debian或基于Debian的发行版中提供）</p>
+<h2 id="其他Linux命令缩写">其他Linux命令缩写</h2>
+<p>bin = Binaries (二进制文件)</p>
+<p>/dev = Devices (设备)</p>
+<p>/etc = Etcetera (等等)</p>
+<p>/lib = LIBrary</p>
+<p>/proc = Processes</p>
+<p>/sbin = Superuser Binaries (超级用户的二进制文件)</p>
+<p>/tmp = Temporary (临时)</p>
+<p>/usr = Unix Shared Resources</p>
+<p>/var = Variable (变量)</p>
+<p>FIFO = First In, First Out</p>
+<p>GRUB = GRand Unified Bootloader</p>
+<p>IFS= Internal Field Seperators</p>
+<p>LILO = LInux LOader</p>
+<p>MySQL = My 是最初作者女儿的名字，</p>
+<p>SQL = Structured QueryLanguage</p>
+<p>PHP = Personal Home Page Tools = PHP HypertextPreprocessor</p>
+<p>PS = Prompt String</p>
+<p>Perl = “Pratical Extraction and Report Language”(实际的抽取和报告语言) =”Pathologically Eclectic Rubbish Lister”</p>
+<p>Python 得名于电视剧Monty Python’s Flying Circus</p>
+<p>Tcl = Tool Command Language</p>
+<p>Tk = ToolKit</p>
+<p>VT = Video Terminal</p>
+<p>YaST = Yet Another Setup Tool</p>
+<p>apache = “a patchy” server</p>
+<p>apt = Advanced Packaging Tool</p>
+<p>ar = archiver</p>
+<p>as = assembler</p>
+<p>awk = “Aho Weiberger and Kernighan”三个作者的姓的第一个字母</p>
+<p>bash = Bourne Again SHell</p>
+<p>bc = Basic (Better) Calculator</p>
+<p>bg = BackGround</p>
+<p>biff = 作者HeidiStettner在U.C.Berkely养的一条狗,喜欢对邮递员汪汪叫。</p>
+<p>cal = Calendar (日历)</p>
+<p>cat = Catenate (链接)</p>
+<p>cd = Change Directory</p>
+<p>chgrp = Change Group</p>
+<p>chmod = Change Mode</p>
+<p>chown = Change Owner</p>
+<p>chsh = Change Shell</p>
+<p>cmp = compare</p>
+<p>cobra = Common Object Request BrokerArchitecture</p>
+<p>comm = common</p>
+<p>cp = Copy</p>
+<p>cpio = CoPy In and Out</p>
+<p>cpp = C Pre Processor</p>
+<p>cron = Chronos 希腊文时间</p>
+<p>cups = Common Unix Printing System</p>
+<p>cvs = Current Version System</p>
+<p>daemon = Disk And Execution MONitor</p>
+<p>dc = Desk Calculator</p>
+<p>dd = Disk Dump (磁盘转储)</p>
+<p>df = Disk Free</p>
+<p>diff = Difference</p>
+<p>dmesg = diagnostic message</p>
+<p>du = Disk Usage</p>
+<p>ed = editor</p>
+<p>egrep = Extended GREP</p>
+<p>elf = Extensible Linking Format</p>
+<p>elm = ELectronic Mail</p>
+<p>emacs = Editor MACroS</p>
+<p>eval = EVALuate</p>
+<p>ex = EXtended</p>
+<p>exec = EXECute (执行)</p>
+<p>fd = file descriptors</p>
+<p>fg = ForeGround</p>
+<p>fgrep = Fixed GREP</p>
+<p>fmt = format</p>
+<p>fsck = File System ChecK</p>
+<p>fstab = FileSystem TABle</p>
+<p>fvwm = F*** Virtual Window Manager</p>
+<p>gawk = GNU AWK</p>
+<p>gpg = GNU Privacy Guard</p>
+<p>groff = GNU troff</p>
+<p>hal = Hardware Abstraction Layer</p>
+<p>joe = Joe’s Own Editor</p>
+<p>ksh = Korn SHell</p>
+<p>lame = Lame Ain’t an MP3 Encoder</p>
+<p>lex = LEXical analyser</p>
+<p>lisp = LISt Processing = Lots of IrritatingSuperfluous Parentheses</p>
+<p>ln = Link</p>
+<p>lpr = Line PRint</p>
+<p>ls = list</p>
+<p>lsof = LiSt Open Files</p>
+<p>m4 = Macro processor Version 4</p>
+<p>man = MANual pages</p>
+<p>mawk = Mike Brennan’s AWK</p>
+<p>mc = Midnight Commander</p>
+<p>mkfs = MaKe FileSystem</p>
+<p>mknod = Make Node</p>
+<p>motd = Message of The Day</p>
+<p>mozilla = MOsaic GodZILLa</p>
+<p>mtab = Mount TABle</p>
+<p>mv = Move</p>
+<p>nano = Nano’s ANOther editor</p>
+<p>nawk = New AWK</p>
+<p>nl = Number of Lines</p>
+<p>nm = names</p>
+<p>nohup = No HangUP</p>
+<p>nroff = New ROFF</p>
+<p>od = Octal Dump</p>
+<p>passwd = Passwd</p>
+<p>pg = pager</p>
+<p>pico = PIne’s message COmposition editor</p>
+<p>pine = “Program for Internet News &amp;Email” = “Pine is not Elm”</p>
+<p>ping = 拟声 又 = Packet Internet Grouper</p>
+<p>pirntcap = PRINTer CAPability</p>
+<p>popd = POP Directory</p>
+<p>pr = pre</p>
+<p>printf = Print Formatted</p>
+<p>ps = Processes Status</p>
+<p>pty = pseudo tty</p>
+<p>pushd = PUSH Directory</p>
+<p>pwd = Print Working Directory</p>
+<p>rc = runcom = run command, rc还是plan9的shell</p>
+<p>rev = REVerse</p>
+<p>rm = ReMove</p>
+<p>rn = Read News</p>
+<p>roff = RunOFF</p>
+<p>rpm = RPM Package Manager = RedHat PackageManager</p>
+<p>rsh, rlogin, rvim中的</p>
+<p>r = Remote</p>
+<p>rxvt = ouR XVT</p>
+<p>seamoneky = 我</p>
+<p>sed = Stream Editor</p>
+<p>seq = SEQuence</p>
+<p>shar = Shell ARchive</p>
+<p>slrn = S-Lang rn</p>
+<p>ssh = Secure Shell</p>
+<p>ssl = Secure Sockets Layer</p>
+<p>stty = Set TTY</p>
+<p>su = Substitute User</p>
+<p>svn = SubVersion</p>
+<p>tar = Tape ARchive</p>
+<p>tcsh = TENEX C shell</p>
+<p>tee = T (T形水管接口)</p>
+<p>telnet = TEminaL over Network</p>
+<p>termcap = terminal capability</p>
+<p>terminfo = terminal information</p>
+<p>tex = τέχνη的缩写，希腊文art</p>
+<p>tr = traslate</p>
+<p>troff = Typesetter new ROFF</p>
+<p>tsort = Topological SORT</p>
+<p>tty = TeleTypewriter</p>
+<p>twm = Tom’s Window Manager</p>
+<p>tz = TimeZone</p>
+<p>udev = Userspace DEV</p>
+<p>ulimit = User’s LIMIT</p>
+<p>umask = User’s MASK</p>
+<p>uniq = UNIQue</p>
+<p>i = VIsual = Very Inconvenient</p>
+<p>vim = Vi IMproved</p>
+<p>wall = write all</p>
+<p>wc = Word Count</p>
+<p>wine = WINE Is Not an Emulator</p>
+<p>xargs = eXtended ARGuments</p>
+<p>xdm = X Display Manager</p>
+<p>xlfd = X Logical Font Description</p>
+<p>xmms = X Multimedia System</p>
+<p>xrdb = X Resources DataBase</p>
+<p>xwd = X Window Dump</p>
+<p>yacc = yet another compiler compiler</p>
+<p>Fish = the Friendly Interactive SHell</p>
+<p>su = Switch User</p>
+<p>MIME = Multipurpose Internet Mail Extensions</p>
+<p>ECMA = European Computer ManufacturersAssociation</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/30/%E5%9F%BA%E4%BA%8EC%E8%AF%AD%E8%A8%80%E7%9A%84Funcode%E6%B8%B8%E6%88%8FDEMO/" rel="prev" title="基于C语言的Funcode游戏DEMO">
+      <i class="fa fa-chevron-left"></i> 基于C语言的Funcode游戏DEMO
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/01/SysVinit%E5%92%8CSystemd%E5%AF%B9%E6%AF%94/" rel="next" title="SysVinit和Systemd对比">
+      SysVinit和Systemd对比 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%85%A8%E6%8B%BC"><span class="nav-number">1.</span> <span class="nav-text">Linux常用命令全拼</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96Linux%E5%91%BD%E4%BB%A4%E7%BC%A9%E5%86%99"><span class="nav-number">2.</span> <span class="nav-text">其他Linux命令缩写</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

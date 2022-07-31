@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="图：Alan Mathison Turing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Open CV (Python) 学习笔记05：图像阈值">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/12/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B005%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%98%88%E5%80%BC/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="图：Alan Mathison Turing">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/threshold.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/Simple_Thresholding.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/Ticket.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/noisy.png?raw=true">
+<meta property="article:published_time" content="2021-10-12T06:21:59.000Z">
+<meta property="article:modified_time" content="2022-05-25T15:01:00.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Open CV">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/12/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B005%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%98%88%E5%80%BC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Open CV (Python) 学习笔记05：图像阈值 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/12/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B005%EF%BC%9A%E5%9B%BE%E5%83%8F%E9%98%88%E5%80%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Open CV (Python) 学习笔记05：图像阈值
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-12 14:21:59" itemprop="dateCreated datePublished" datetime="2021-10-12T14:21:59+08:00">2021-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-25 23:01:00" itemprop="dateModified" datetime="2022-05-25T23:01:00+08:00">2022-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Open-CV-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Open CV 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true" alt="Alan_Turing_Aged_16_16_9.png"></p>
+<blockquote>
+<p>图：Alan Mathison Turing</p>
+</blockquote>
+<span id="more"></span>
+<h1>图像阈值</h1>
+<p>阈值是一种简单的图像分割方法，一幅图像包括目标物体（前景）、背景还有噪声，要想从数字图像中直接提取出目标物体，可以设定一个像素值即阈值，然后用图像的每一个像素点和阈值做比较，给出判定结果。</p>
+<h2 id="简单阈值">简单阈值</h2>
+<p>这是最直截了当的方法，如果像素大于阈值，则被赋予一个值（如白色），否则为另一个值（如黑色）。</p>
+<p>使用的函数是<code>cv.threshold()</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">cv.threshold( src, thresh, maxval, <span class="built_in">type</span>[, dst] ) -&gt; retval, dst</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li><code>src</code> - 输入图像（矩阵）</li>
+<li><code>tresh</code> - 阈值，用于图像分割</li>
+<li><code>maxval</code> - 像素值大于（有时小于）阈值时给定的值</li>
+<li><code>type</code> - OpenCV提供了不同类型的阈值，由<code>type</code>参数决定</li>
+<li><code>retval</code> - 返回阈值，在Otsu中有详细介绍。</li>
+<li><code>dst</code> - 输出图像（矩阵），与src具有相同大小及类型以及相同通道数</li>
+</ul>
+<p>其中<code>type</code>：</p>
+<blockquote>
+<p>具体看文档：<a target="_blank" rel="noopener" href="https://docs.opencv.org/4.5.4/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576">ThresholdTypes</a></p>
+</blockquote>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/threshold.png?raw=true" alt="threshold.png"></p>
+<ul>
+<li><code>cv.THRESH_BINARY</code></li>
+</ul>
+<p>$$<br>
+dst(x,y)=<br>
+\begin{cases}<br>
+maxval &amp; if~src(x,y)&gt;thresh \\<br>
+0 &amp; otherwise<br>
+\end{cases}<br>
+$$</p>
+<ul>
+<li><code>cv.THRESH_BINARY_INV</code></li>
+</ul>
+<p>$$<br>
+dst(x,y)=<br>
+\begin{cases}<br>
+0 &amp; if~src(x,y)&gt;thresh \\<br>
+maxval &amp; otherwise<br>
+\end{cases}<br>
+$$</p>
+<ul>
+<li><code>cv.THRESH_TRUNC</code></li>
+</ul>
+<p>$$<br>
+dst(x,y)=<br>
+\begin{cases}<br>
+threshold &amp; if~src(x,y)&gt;thresh \\<br>
+src(x,y) &amp; otherwise<br>
+\end{cases}<br>
+$$</p>
+<ul>
+<li><code>cv.THRESH_TOZERO</code></li>
+</ul>
+<p>$$<br>
+dst(x,y)=<br>
+\begin{cases}<br>
+src(x,y) &amp; if~src(x,y)&gt;thresh \\<br>
+0 &amp; otherwise<br>
+\end{cases}<br>
+$$</p>
+<ul>
+<li><code>cv.THRESH_TOZERO_INV</code></li>
+</ul>
+<p>$$<br>
+dst(x,y)=<br>
+\begin{cases}<br>
+0 &amp; if~src(x,y)&gt;thresh \\<br>
+src(x,y) &amp; otherwise<br>
+\end{cases}<br>
+$$</p>
+<ul>
+<li><code>cv.THRESH_MASK</code></li>
+<li><code>cv.THRESH_OTSU</code>
+<ul>
+<li>flag，使用Otsu算法选择最优阈值</li>
+</ul>
+</li>
+<li><code>cv.THRESH_TRIANGLE</code>
+<ul>
+<li>flag，使用三角算法选择最优阈值</li>
+</ul>
+</li>
+</ul>
+<p>我们可以通过一个简单的例子来对比前五个<code>type</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;gradient.png&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">ret,thresh1 = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY)</span><br><span class="line">ret,thresh2 = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY_INV)</span><br><span class="line">ret,thresh3 = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TRUNC)</span><br><span class="line">ret,thresh4 = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO)</span><br><span class="line">ret,thresh5 = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO_INV)</span><br><span class="line"></span><br><span class="line">titles = [<span class="string">&#x27;Original Image&#x27;</span>,<span class="string">&#x27;BINARY&#x27;</span>,<span class="string">&#x27;BINARY_INV&#x27;</span>,<span class="string">&#x27;TRUNC&#x27;</span>,<span class="string">&#x27;TOZERO&#x27;</span>,<span class="string">&#x27;TOZERO_INV&#x27;</span>]</span><br><span class="line">images = [img, thresh1, thresh2, thresh3, thresh4, thresh5]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">6</span>):</span><br><span class="line">    plt.subplot(<span class="number">2</span>,<span class="number">3</span>,i+<span class="number">1</span>),plt.imshow(images[i],<span class="string">&#x27;gray&#x27;</span>,vmin=<span class="number">0</span>,vmax=<span class="number">255</span>)</span><br><span class="line">    plt.title(titles[i])</span><br><span class="line">    plt.xticks([]),plt.yticks([])</span><br><span class="line">    </span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>查看结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/Simple_Thresholding.png?raw=true" alt="Simple_Thresholding.png"></p>
+<h2 id="自适应阈值">自适应阈值</h2>
+<p>简单阈值使用一个全局值作为阈值，但在绝大多数情况下这不是一个很好的选择。</p>
+<p>例如：如果图像在不同区域具有不同的照明条件，这种情况下自适应阈值处理会更有帮助。</p>
+<p>自适应阈值算法根据像素周围的小区域确定像素的阈值，因此我们可以为同一图像的不同区域设定不同的阈值，对于光照不同的图像可以提供很好的结果。最典型的例子就是用相机拍照得到的文档进行矫正。</p>
+<p>我们使用函数<code>cv.adaptiveThreshold()</code>来完成自适应阈值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python:</span></span><br><span class="line">cv.adaptiveThreshold( src, maxValue, adaptiveMethod, thresholdType, blockSize, C[, dst] ) -&gt; dst</span><br></pre></td></tr></table></figure>
+<p>该函数根据以下公式将灰度图像转换为二值图像：</p>
+<ul>
+<li><strong>THRESH_BINARY</strong></li>
+</ul>
+<p>$$<br>
+dst(x,y)=<br>
+\begin{cases}<br>
+maxValue &amp; if~src(x,y)&gt;T(x,y) \\<br>
+0 &amp; otherwise<br>
+\end{cases}<br>
+$$</p>
+<ul>
+<li><strong>THRESH_BINARY_INV</strong></li>
+</ul>
+<p>$$<br>
+dst(x,y)=<br>
+\begin{cases}<br>
+0 &amp; if~src(x,y)&gt;T(x,y) \\<br>
+maxValue &amp; otherwise<br>
+\end{cases}<br>
+$$</p>
+<p>其中$T(x,y)$是为每个像素单独计算的阈值，而参数<code>adaptiveMethod</code>决定它如何计算阈值：</p>
+<ul>
+<li><strong><code>cv.ADAPTIVE_THRESH_MEAN_C</code></strong>：阈值是邻域面积的平均值减去常数<strong>C</strong>。</li>
+<li><strong><code>cv.ADAPTIVE_THRESH_GAUSSIAN_C</code></strong>：阈值是邻域值减去常数<strong>C</strong>的高斯加权和。</li>
+</ul>
+<blockquote>
+<p><strong>C</strong>-它只是一个常数，会从平均值或加权平均值中减去该值。</p>
+</blockquote>
+<p>而<code>blockSize</code>决定了计算阈值的窗口区域的大小。</p>
+<p>一个简单的例子，比较了具有不同照明的图像的全局阈值和自适应阈值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;sudoku.png&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">img = cv.medianBlur(img,<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">ret,th1 = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY)</span><br><span class="line">th2 = cv.adaptiveThreshold(img,<span class="number">255</span>,cv.ADAPTIVE_THRESH_MEAN_C,\</span><br><span class="line">            cv.THRESH_BINARY,<span class="number">11</span>,<span class="number">2</span>)</span><br><span class="line">th3 = cv.adaptiveThreshold(img,<span class="number">255</span>,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\</span><br><span class="line">            cv.THRESH_BINARY,<span class="number">11</span>,<span class="number">2</span>)</span><br><span class="line">titles = [<span class="string">&#x27;Original Image&#x27;</span>, <span class="string">&#x27;Global Thresholding (v = 127)&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;Adaptive Mean Thresholding&#x27;</span>, <span class="string">&#x27;Adaptive Gaussian Thresholding&#x27;</span>]</span><br><span class="line">images = [img, th1, th2, th3]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    plt.subplot(<span class="number">2</span>,<span class="number">2</span>,i+<span class="number">1</span>),plt.imshow(images[i],<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">    plt.title(titles[i])</span><br><span class="line">    plt.xticks([]),plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>得到结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/Ticket.png?raw=true" alt="Ticket.png"></p>
+<blockquote>
+<p>其实这个算法非常适合手机拍照文档的颜色矫正，配合之前所学的透视变形，其实就是一个简单的文档校正功能。</p>
+</blockquote>
+<h2 id="Otsu-二值化">Otsu 二值化</h2>
+<p>在简单阈值中，我们选定了一个值作为阈值，但是这个值的选出靠的是试错。</p>
+<p>但对于一个双峰图像（一个直方图有两个峰值的图像），我们可以近似地取这些峰值中间的一个值作为阈值。这便是Otsu二值化所做的事情。</p>
+<p>我们仍然是使用<code>cv.threshold</code>函数，只不过在<code>type</code>上添加一个flag：</p>
+<ul>
+<li><code>cv.THRESH_OTSU</code>
+<ul>
+<li>flag，使用Otsu算法选择最优阈值</li>
+</ul>
+</li>
+</ul>
+<p>阈值可以任意选择，该算法找到一个最佳阈值然后作为输出参数<code>retval</code>返回，如果不使用Otsu则<code>retval</code>与一开始使用的阈值相同。</p>
+<p>一个简单的实例，输入图像是一个有噪声的图像，在第一种情况下使用简单阈值的方法，设定127的全局阈值；在第二种情况下直接应用Otsu阈值；在第三种情况下首先使用$5\times5$的高斯核过滤图像以去除噪声，让后应用Otsu阈值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;noisy.png&#x27;</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># global thresholding</span></span><br><span class="line">ret1,th1 = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Otsu&#x27;s thresholding</span></span><br><span class="line">ret2,th2 = cv.threshold(img,<span class="number">0</span>,<span class="number">255</span>,cv.THRESH_BINARY+cv.THRESH_OTSU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Otsu&#x27;s thresholding after Gaussian filtering</span></span><br><span class="line">blur = cv.GaussianBlur(img,(<span class="number">5</span>,<span class="number">5</span>),<span class="number">0</span>)</span><br><span class="line">ret3,th3 = cv.threshold(blur,<span class="number">0</span>,<span class="number">255</span>,cv.THRESH_BINARY+cv.THRESH_OTSU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># plot all the images and their histograms</span></span><br><span class="line">images = [img, <span class="number">0</span>, th1,</span><br><span class="line">          img, <span class="number">0</span>, th2,</span><br><span class="line">          blur, <span class="number">0</span>, th3]</span><br><span class="line">titles = [<span class="string">&#x27;Original Noisy Image&#x27;</span>,<span class="string">&#x27;Histogram&#x27;</span>,<span class="string">&#x27;Global Thresholding (v=127)&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;Original Noisy Image&#x27;</span>,<span class="string">&#x27;Histogram&#x27;</span>,<span class="string">&quot;Otsu&#x27;s Thresholding&quot;</span>,</span><br><span class="line">          <span class="string">&#x27;Gaussian filtered Image&#x27;</span>,<span class="string">&#x27;Histogram&#x27;</span>,<span class="string">&quot;Otsu&#x27;s Thresholding&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    plt.subplot(<span class="number">3</span>,<span class="number">3</span>,i*<span class="number">3</span>+<span class="number">1</span>),plt.imshow(images[i*<span class="number">3</span>],<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">    plt.title(titles[i*<span class="number">3</span>]), plt.xticks([]), plt.yticks([])</span><br><span class="line">    plt.subplot(<span class="number">3</span>,<span class="number">3</span>,i*<span class="number">3</span>+<span class="number">2</span>),plt.hist(images[i*<span class="number">3</span>].ravel(),<span class="number">256</span>)</span><br><span class="line">    plt.title(titles[i*<span class="number">3</span>+<span class="number">1</span>]), plt.xticks([]), plt.yticks([])</span><br><span class="line">    plt.subplot(<span class="number">3</span>,<span class="number">3</span>,i*<span class="number">3</span>+<span class="number">3</span>),plt.imshow(images[i*<span class="number">3</span>+<span class="number">2</span>],<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">    plt.title(titles[i*<span class="number">3</span>+<span class="number">2</span>]), plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/noisy.png?raw=true" alt="noisy.png"></p>
+<h2 id="Otsu-二值化原理">Otsu 二值化原理</h2>
+<p>我们使用的是双峰图像，因此Otsu的算法试图找到一个阈值$t$，该阈值将由下式计算得到的类内加权方差最小化：<br>
+$$<br>
+σ^2_w(t)=q_1(t)σ^2_1(t)+q_2(t)σ^2_2(t)<br>
+$$<br>
+其中：<br>
+$$<br>
+\begin{array}{ccc}<br>
+q_1(t)=\sum_{i=1}^{t}P(i) &amp; and &amp; q_2(t)=\sum^{I}<em>{i=t+1}P(i) \\<br>
+\mu_1(t)=\sum</em>{i=1}^{t} \frac{iP(i)} {q_1(t)} &amp; and &amp; \mu_2(t)=\sum_{i=t+1}^{I}\frac{iP(i)} {q_2{t}} \\<br>
+\sigma_1^2(t)=\sum_{i=1}^{t} [i-\mu_1(t)]^2 \frac{P(i)} {q_1(t)} &amp; and &amp; \sigma^2_2(t)=\sum^{I}_{i=t+1} [i-\mu_2(t)]^2 \frac{P(i)} {q_2(t)}<br>
+\end{array}<br>
+$$</p>
+<p>它实际上找到了一个位于两个峰值之间的$t$值，使得两个方差最小。它可以简单的在Python中实现，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">&#x27;noisy.png&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">blur = cv.GaussianBlur(img,(<span class="number">5</span>,<span class="number">5</span>),<span class="number">0</span>)</span><br><span class="line"><span class="comment"># find normalized_histogram, and its cumulative distribution function</span></span><br><span class="line">hist = cv.calcHist([blur],[<span class="number">0</span>],<span class="literal">None</span>,[<span class="number">256</span>],[<span class="number">0</span>,<span class="number">256</span>])</span><br><span class="line">hist_norm = hist.ravel()/hist.<span class="built_in">sum</span>()</span><br><span class="line">Q = hist_norm.cumsum()</span><br><span class="line"></span><br><span class="line">bins = np.arange(<span class="number">256</span>)</span><br><span class="line"></span><br><span class="line">fn_min = np.inf</span><br><span class="line">thresh = -<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">256</span>):</span><br><span class="line">    p1,p2 = np.hsplit(hist_norm,[i]) <span class="comment"># probabilities</span></span><br><span class="line">    q1,q2 = Q[i],Q[<span class="number">255</span>]-Q[i] <span class="comment"># cum sum of classes</span></span><br><span class="line">    <span class="keyword">if</span> q1 &lt; <span class="number">1.e-6</span> <span class="keyword">or</span> q2 &lt; <span class="number">1.e-6</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    b1,b2 = np.hsplit(bins,[i]) <span class="comment"># weights</span></span><br><span class="line">    <span class="comment"># finding means and variances</span></span><br><span class="line">    m1,m2 = np.<span class="built_in">sum</span>(p1*b1)/q1, np.<span class="built_in">sum</span>(p2*b2)/q2</span><br><span class="line">    v1,v2 = np.<span class="built_in">sum</span>(((b1-m1)**<span class="number">2</span>)*p1)/q1,np.<span class="built_in">sum</span>(((b2-m2)**<span class="number">2</span>)*p2)/q2</span><br><span class="line">    <span class="comment"># calculates the minimization function</span></span><br><span class="line">    fn = v1*q1 + v2*q2</span><br><span class="line">    <span class="keyword">if</span> fn &lt; fn_min:</span><br><span class="line">        fn_min = fn</span><br><span class="line">        thresh = i</span><br><span class="line">        </span><br><span class="line"><span class="comment"># find otsu&#x27;s threshold value with OpenCV function</span></span><br><span class="line">ret, otsu = cv.threshold(blur,<span class="number">0</span>,<span class="number">255</span>,cv.THRESH_BINARY+cv.THRESH_OTSU)</span><br><span class="line"><span class="built_in">print</span>( <span class="string">&quot;&#123;&#125; &#123;&#125;&quot;</span>.<span class="built_in">format</span>(thresh,ret) )</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">118</span> <span class="number">117.0</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Open-CV/" rel="tag"># Open CV</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/10/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004%EF%BC%9A%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%87%A0%E4%BD%95%E5%8F%98%E6%8D%A2/" rel="prev" title="Open CV (Python) 学习笔记04：色彩空间与几何变换">
+      <i class="fa fa-chevron-left"></i> Open CV (Python) 学习笔记04：色彩空间与几何变换
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/12/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8LaTeX%E7%BC%96%E5%86%99%E7%9F%A9%E9%98%B5/" rel="next" title="如何使用LaTeX编写矩阵">
+      如何使用LaTeX编写矩阵 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">图像阈值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E9%98%88%E5%80%BC"><span class="nav-number">1.1.</span> <span class="nav-text">简单阈值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E9%98%88%E5%80%BC"><span class="nav-number">1.2.</span> <span class="nav-text">自适应阈值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Otsu-%E4%BA%8C%E5%80%BC%E5%8C%96"><span class="nav-number">1.3.</span> <span class="nav-text">Otsu 二值化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Otsu-%E4%BA%8C%E5%80%BC%E5%8C%96%E5%8E%9F%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text">Otsu 二值化原理</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ Primer学习笔记02：基本内置类型">
+<meta property="og:url" content="https://direct5dom.github.io/2022/03/10/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+<meta property="article:published_time" content="2022-03-09T18:30:06.000Z">
+<meta property="article:modified_time" content="2022-03-12T18:41:23.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="CPP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/03/10/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>C++ Primer学习笔记02：基本内置类型 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/03/10/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Primer学习笔记02：基本内置类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-10 02:30:06" itemprop="dateCreated datePublished" datetime="2022-03-10T02:30:06+08:00">2022-03-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-13 02:41:23" itemprop="dateModified" datetime="2022-03-13T02:41:23+08:00">2022-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CPP Primer学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true" alt="CPP.png"></p>
+<span id="more"></span>
+<p>C++定义了一套包括<strong>算术类型（arithmetic type）</strong> 和<strong>空类型（void）</strong> 在内的基本数据类型。</p>
+<h1>算术类型</h1>
+<p>算术类型分为两类：</p>
+<ul>
+<li>整型（integral type，包括字符和布尔类型在内）</li>
+<li>浮点型</li>
+</ul>
+<blockquote>
+<p>算术类型的尺寸在不同机器上有所差别。下表中所列的是C++标准规定的尺寸最小值，同时允许编译器赋予这些类型更大的尺寸。某一类型所占的比特数不同，他所能表示的数据范围也不一样。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>最小尺寸</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bool</code></td>
+<td>布尔类型</td>
+<td>未定义</td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>字符</td>
+<td>8 bit = 1 Byte</td>
+</tr>
+<tr>
+<td><code>wchar_t</code></td>
+<td>宽字符</td>
+<td>16 bit = 2 Byte</td>
+</tr>
+<tr>
+<td><code>char16_t</code></td>
+<td>Unicode字符</td>
+<td>16 bit = 2 Byte</td>
+</tr>
+<tr>
+<td><code>char32_t</code></td>
+<td>Unicode字符</td>
+<td>32 bit = 4 Byte</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>短整型</td>
+<td>16 bit = 2 Byte</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>整型</td>
+<td>16 bit = 2 Byte</td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>长整型</td>
+<td>32 bit = 4 Byte</td>
+</tr>
+<tr>
+<td><code>long long</code></td>
+<td>长整型</td>
+<td>64 bit = 8 Byte</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>单精度浮点数</td>
+<td>6位有效数字</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>双精度浮点数</td>
+<td>10位有效数字</td>
+</tr>
+<tr>
+<td><code>long double</code></td>
+<td>扩展精度浮点数</td>
+<td>10位有效数字</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>布尔类型的取值是：<strong>真（<code>true</code>）</strong> 或者<strong>假（<code>false</code>）</strong> 。</p>
+</blockquote>
+<p>C++提供了多种字符类型，最基本的是<code>char</code>，其尺寸应确保可以存放机器基本字符集中任意字符对应的数字值。因此其尺寸的大小等于一个字节（Byte，1 Byte等于8 bit）。</p>
+<p>其他字符类型用于扩展字符集，如<code>wchar_t</code>、<code>char16_t</code>、<code>char32_t</code>。</p>
+<ul>
+<li><code>wchar_t</code>类型用于确保可以存放机器最大扩展字符集中的任意一个字符。</li>
+<li><code>char16_t</code>和<code>char32_t</code>则为Unicode字符集服务（Unicode是用于表示所有自然语言中字符的标准）。</li>
+</ul>
+<p>除了字符和布尔类型之外，其他整型用于表示（可能）不同尺寸的整数。</p>
+<p>C++规定：</p>
+<ul>
+<li>一个<code>int</code>至少和一个<code>short</code>一样大；</li>
+<li>一个<code>long</code>至少和一个<code>int</code>一样大；</li>
+<li>一个<code>long long</code>至少和一个<code>long</code>一样大。</li>
+</ul>
+<blockquote>
+<p>其中<code>long long</code>是C++11中新定义的。</p>
+</blockquote>
+<p>浮点型可表示单精度、双精度和扩展精度值。C++标准指定了一个浮点数有效位数的最小值，然而大多编译器都实现了更高精度。通常：</p>
+<ul>
+<li><code>float</code>以1个字（32 bit）来表示，有7个有效位；</li>
+<li><code>double</code>以2个字（64 bit）来表示，有16个有效位；</li>
+<li><code>long double</code>以3或4个字（96 bit或128 bit）来表示，常常用于特殊浮点需求的硬件，具体实现和精度不同。</li>
+</ul>
+<h2 id="带符号型和无符号型">带符号型和无符号型</h2>
+<p>除去布尔和扩展的字符型之外，其他整型可以划分为<strong>带符号的（signed）</strong> 和<strong>无符号的（unsigned）</strong> 两种。带符号类型可以表示正数、负数或者0，无符号类型则仅能表示大于等于0的值。</p>
+<p>类型<code>int</code>、<code>short</code>、<code>long</code>和<code>long long</code>都是带符号的，通过在这些类型名前面添加<code>unsigned</code>就可以得到无符号类型，例如：<code>unsigned long</code>。</p>
+<blockquote>
+<p>类型<code>unsigned int</code>可以缩写为<code>unsigned</code>。</p>
+</blockquote>
+<p>与其他整型不同，字符型被分为了三种：</p>
+<ul>
+<li><code>char</code></li>
+<li><code>signed char</code></li>
+<li><code>unsigned char</code></li>
+</ul>
+<blockquote>
+<p>特别注意：类型<code>char</code>和类型<code>signed char</code>并不一样。尽管字符型有三种，但是字符的表现形式却只有两种：带符号和无符号的。类型<code>char</code>实际上会表现为上述两种形式中的一种，具体是哪种由编译器决定。</p>
+</blockquote>
+<p>无符号类型中所有bit都用来存储值，例如8 bit的<code>unsigned char</code>可以表示0到255区间内的值。</p>
+<p>C++标准并没有规定带符号类型应如何表示，但是约定了在表示范围内正值和负值的量应该平衡。因此8 bit的<code>signed char</code>理论上应该可以表示-127到127区间内的值，大多数现代计算机将其实际的表示范围定为-128到127。</p>
+<h1>类型转换</h1>
+<p>对象的类型定义了对象能包含的数据和能参与的运算，其中一种运算被大多数类型支持，就是将对象从给定类型<strong>转换（convert）</strong> 为另一相关类型。</p>
+<p>当我们将某一类型的对象按另一种类型进行调用时，程序会自动进行类型转换。例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> b = <span class="number">42</span>;	<span class="comment">// b 为真</span></span><br><span class="line"><span class="keyword">int</span> i = b;		<span class="comment">// i 的值为 1</span></span><br><span class="line">i = <span class="number">3.14</span>;		<span class="comment">// i 的值为 3</span></span><br><span class="line"><span class="keyword">double</span> pi = i;	<span class="comment">// pi 的值为 3.0</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> c = <span class="number">-1</span>;	<span class="comment">// 假设 char 占 8 bit，c 的值为 255</span></span><br><span class="line"><span class="keyword">signed</span> <span class="keyword">char</span> c2 = <span class="number">256</span>;	<span class="comment">// 假设 char 占 8 bit，c2 的值是未定义的</span></span><br></pre></td></tr></table></figure>
+<p>类型所能表示的值的范围决定了转换的过程：</p>
+<ul>
+<li>
+<p>当我们把一个非布尔类型的算术值赋给布尔类型时，初始值为<code>0</code>则结果为<code>false</code>，否则为<code>true</code>。</p>
+</li>
+<li>
+<p>当我们把一个布尔值赋给非布尔类型时，初始值为<code>false</code>则结果为<code>0</code>，初始值为<code>true</code>则结果为<code>1</code>。</p>
+</li>
+<li>
+<p>当我们把一个浮点数赋给整数类型时，进行了近似处理。结果将仅保留浮点数中小数点之间的部分。</p>
+</li>
+<li>
+<p>当我们把一个整数值赋给浮点类型时，小数部分记为<code>0</code>。如果该整数所占的空间超过了浮点类型的容量，精度可能有损失。</p>
+</li>
+<li>
+<p>当我们赋给无符号类型一个超出它表示范围的值时，结果是初始值对无符号类型表示数值总数取模后的余数。例如8 bit大小的<code>unsigned char</code>可以表示0到255区间的值。如果我们赋予一个区间以外的值，则实际的结果是该值对256取模后的余数。因此把<code>-1</code>赋予给8 bit大小的<code>unsigned char</code>所得的结果是255。</p>
+<blockquote>
+<p>《文明》中甘地“甘核平”的BUG就来源于此。</p>
+</blockquote>
+</li>
+<li>
+<p>当我们赋给带符号类型一个超出它表示范围的值时，结果是<strong>未定义的（undefined）</strong> 。此时，程序可能继续工作、可能崩溃，也可能生成垃圾数据。</p>
+<blockquote>
+<p>因此在编写代码的时候<strong>禁止出现未定义行为！</strong></p>
+</blockquote>
+</li>
+</ul>
+<p>当程序的某处使用了一种算术类型的值而其实所需的是另一种类型的值时，编译同样会执行上述类型转换。例如我们将一个非布尔值作为条件，那么它会被自动转换成布尔值，这一做法和把非布尔值赋给布尔变量时的操作完全一样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">if</span> (i)			<span class="comment">// if 条件的值将为 true</span></span><br><span class="line">    i = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>如果<code>i</code>的值为<code>0</code>，则条件的值为<code>false</code>；<code>i</code>的所有其他取值（非<code>0</code>）都将使条件为<code>true</code>。</p>
+<blockquote>
+<p>如果我们把一个布尔值用在算术表达式里，则它的取值非<code>0</code>即<code>1</code>，所以一般不宜在算术表达式里使用布尔值。</p>
+</blockquote>
+<h2 id="含有无符号类型的表达式">含有无符号类型的表达式</h2>
+<p>尽管我们不会故意给无符号对象赋一个负值，却很可能（特别容易）写出这样的代码。</p>
+<p>例如：当一个算术表达式中既有无符号数又有<code>int</code>值时，那个<code>int</code>值就会转换成无符号数。把<code>int</code>转换成无符号数的过程和把<code>int</code>直接赋给无符号变量一样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> u = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> i = <span class="number">-42</span>;</span><br><span class="line">std::cout &lt;&lt; i + i &lt;&lt; std::endl;	<span class="comment">// 输出-84</span></span><br><span class="line">std::cout &lt;&lt; u + i &lt;&lt; std::endl;	<span class="comment">// 如果 int 占 32 位，输出 4294967264</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>unsigned</code> + <code>int</code> = <code>unsigned</code> + <code>(unsigned) int</code>。编译器会先将<code>int</code>变成<code>unsigned</code>再处理。把负数转换成无符号数类似于给无符号数赋一个负值，结果等于这个负数加上无符号的模。</p>
+</blockquote>
+<p>当从无符号数中减去一个值时，不管这个值是不是无符号数，我们都必须确保结果不能是一个负值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> u1 = <span class="number">42</span>, u2 = <span class="number">10</span>;</span><br><span class="line">std::cout &lt;&lt; u1 - u2 &lt;&lt; std::endl;	<span class="comment">// 正确：输出32</span></span><br><span class="line">std::cout &lt;&lt; u2 - u1 &lt;&lt; std::endl;	<span class="comment">// 正确：不过，结果是取模后的值</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>无符号数减法结果 &lt; 0 会自动进行取模运算</p>
+</blockquote>
+<p>无符号数不会小于0这一事实同样关系到循环的写法。例如通过控制变量递减的方式把从10到0的数字降序输出。这个循环可能类似于下面的形式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">10</span>; i &gt;= <span class="number">0</span>; --i)</span><br><span class="line">    std::cout &lt;&lt; i &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<p>可能你会觉得反正也不打算输出负数，可以用无符号数来重写这个循环。然而这个不经意的改变却意味着死循环：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误：变量 u 永远也不会小于 0，循环条件一直成立</span></span><br><span class="line"><span class="built_in">foe</span> (<span class="keyword">unsigned</span> u = <span class="number">10</span>; u &gt;= <span class="number">0</span>; --u)</span><br><span class="line">    std::cout &lt;&lt; u &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<p>当变量<code>u</code>已经等于<code>0</code>之后，继续执行<code>--u</code>，得到的结果<code>-1</code>并不在无符号数的要求范围内，因此会被自动转换成一个合法的无符号数。假设<code>int</code>类型占32 bit，则当<code>u</code>等于<code>0</code>时，<code>--u</code>的结果为：<code>4294967295</code>。</p>
+<p>一种解决办法是，用<code>while</code>语句来代替<code>for</code>语句，因为前者让我们能够再输出变量之前（而非之后）先减去1：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> u = <span class="number">11</span>;	<span class="comment">// 确定要输出的最大数，从比它大 1 的数开始</span></span><br><span class="line"><span class="keyword">while</span> (u &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    --u;			<span class="comment">// 先减 1，这样最后一次迭代时就会输出 0</span></span><br><span class="line">    std::cout &lt;&lt; u &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样做避免了在<code>u</code>等于<code>0</code>时执行<code>--u</code>的尴尬错误，而是在<code>u</code>等于<code>1</code>时输出<code>0</code>，在<code>u</code>等于<code>0</code>时终止循环。因为先执行<code>-1</code>再进行输出，所以我们初始化<code>u</code>等于<code>11</code>。</p>
+<blockquote>
+<p>注意：<strong>切勿混用带符号类型和无符号类型</strong>。因为编译器永远会先变成<code>unsigned</code>再进行计算，进而引发错误。</p>
+</blockquote>
+<h1>字面值常量</h1>
+<p>一个形如<code>42</code>的值被称作<strong>字面值常量（literal）</strong> ，这样的值一望而知。每个字面值常量都对应一种数据类型，字面值常量的形式和值决定了它的数据类型。</p>
+<h2 id="整型和浮点型字面值">整型和浮点型字面值</h2>
+<p><strong>整型字面值</strong>可以写作十进制数、八进制数和十六进制数的形式，例如：</p>
+<ul>
+<li><code>20</code> - 十进制。</li>
+<li><code>024</code> - 八进制，以<code>0</code>开头。</li>
+<li><code>0x14</code> - 十六进制，以<code>0x</code>开头</li>
+</ul>
+<p>整型字面值具体的数据类型由它的值和符号决定，默认情况下：</p>
+<ul>
+<li>十进制字面值是带符号数；</li>
+<li>八进制和十六进制字面值即可能是带符号的也可能是无符号的。</li>
+</ul>
+<p>十进制字面值的类型是<strong>能容纳当前值的前提</strong>下，<code>int</code>、<code>long</code>、<code>long long</code>中尺寸最小的那个。</p>
+<p>八进制和十六进制字面值的类型是<strong>能容纳当前值的前提</strong>下，<code>int</code>、<code>unsigned int</code>、<code>long</code>、<code>unsigned long</code>、<code>long long</code>、<code>unsigned long long</code>中尺寸最小的那个。</p>
+<blockquote>
+<p>如果一个字面值连与之关联的最大的数据类型都放不下，将产生错误。</p>
+</blockquote>
+<blockquote>
+<p>类型<code>short</code>没有对应的字面值。</p>
+</blockquote>
+<blockquote>
+<p>尽管字面值可以存储在带符号类型中，但严格来说，十进制字面值不会是负数。如果我们对使用了一个形如<code>-42</code>的负十进制字面值，那个负号并不在字面值之内，它的作用仅仅是对字面值取负值而已。</p>
+</blockquote>
+<p><strong>浮点型字面值</strong>表现为一个小数或以科学计数法表示的指数，其中指数部分用<code>E</code>或<code>e</code>标识：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3.14159    3.14159E0    0.    0e0    .001</span><br></pre></td></tr></table></figure>
+<h2 id="字符和字符串字面值">字符和字符串字面值</h2>
+<p><code>char</code>型字面值：单引号<code>''</code>括起来的一个字符。</p>
+<p>字符串型字面值：双引号<code>&quot;&quot;</code>括起来的零个或多个字符。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x27;a&#x27;</span><br><span class="line">&quot;Hello World!&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>字符串字面值的类型实际上是由常量字符构成的数组（array）。</p>
+<p>编译器在每个字符串的结尾处添加一个空字符（<code>\0</code>），因此，字符串字面值的实际长度要比它的内容多1。</p>
+</blockquote>
+<p>如果两个字符串字面值位置紧邻，且仅由空格、缩进和换行符分隔，则他们实际上是一个整体。例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 分多行书写的字符串字面值</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;a really, really long string literal &quot;</span></span><br><span class="line">    		 <span class="string">&quot;that spans two lines&quot;</span> &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<h2 id="转义序列">转义序列</h2>
+<p>有两类字符程序员不能直接使用：</p>
+<ul>
+<li><strong>不可打印（nonprintable）字符</strong>：退格或其他控制字符，因为没有可视的图符；</li>
+<li><strong>C++中有特殊含义的字符</strong>：单引号、双引号、问号、反斜线等。</li>
+</ul>
+<p>上述两种情况需要用到<strong>转义序列（escape sequence）</strong> ，以反斜线开始，C++的转义序列包括：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">换行符			 \n</span><br><span class="line">横向制表符		\t</span><br><span class="line">纵向制表符		\v</span><br><span class="line">报警（响铃）符	   \a</span><br><span class="line">退格符			 \b</span><br><span class="line">双引号			 \&quot;</span><br><span class="line">单引号			 \&#x27;</span><br><span class="line">反斜线			 \\</span><br><span class="line">问号			  \?</span><br><span class="line">回车符			 \r</span><br><span class="line">进纸符			 \f</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;		<span class="comment">// 转到新一行</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;\tHi!\n&quot;</span>;	<span class="comment">// 输出一个制表符，输出“Hi!”，转到新一行</span></span><br></pre></td></tr></table></figure>
+<p>还可以使用泛化的转义序列，形式是<code>\x</code>后紧跟一个或者多个十六进制的数字，或者<code>\</code>后紧跟一个、两个或三个八进制数字，其中数字部分表示的是字符对应的数值。假设使用的是<code>Latin-1</code>字符集，有例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">响铃		 \7</span><br><span class="line">换行符		\12</span><br><span class="line">空格		 \40</span><br><span class="line">空字符		\0</span><br><span class="line">字符M		 \115</span><br><span class="line">字符M		 \x4d</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&quot;Hi \x4dO\115!\n&quot;</span>;		<span class="comment">// 输出 Hi MOM!，转到新一行</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&#x27;\115&#x27;</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;		<span class="comment">// 输出 M，转到新一行</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果反斜杠<code>\</code>后面跟着的八进制数字超过三位，则只有前三个数字与反斜杠<code>\</code>构成转义序列。</p>
+<p>例如：<code>\1234</code>表示两个字符，即<code>\123</code>和<code>4</code>。</p>
+<p>与之相反，<code>\x</code>要用后面跟着的所有数字，例如：<code>\x1234</code>表示一个16位的字符，该字符由这四个十六进制数所对应的比特唯一确定。</p>
+<p>PS：因为大多数机器的<code>char</code>型占8位，所以上面这个例子可能会报错。一般来说，超过8位的十六进制字符都是与下表中某个前缀作为开头的扩展字符集一起使用的。</p>
+</blockquote>
+<h2 id="指定字面值的类型">指定字面值的类型</h2>
+<h3 id="字符和字符串字面值-2">字符和字符串字面值</h3>
+<table>
+<thead>
+<tr>
+<th>前缀</th>
+<th>含义</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>u</code></td>
+<td>Unicode 16 字符</td>
+<td><code>char16_t</code></td>
+</tr>
+<tr>
+<td><code>U</code></td>
+<td>Unicode 32 字符</td>
+<td><code>char32_t</code></td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>宽字符</td>
+<td><code>wchar_t</code></td>
+</tr>
+<tr>
+<td><code>u8</code></td>
+<td>UTF-8 (仅用于字符串字面常量)</td>
+<td><code>char</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="整型字面值">整型字面值</h3>
+<table>
+<thead>
+<tr>
+<th>后辍</th>
+<th>最小匹配类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>u</code> or <code>U</code></td>
+<td><code>unsigned</code></td>
+</tr>
+<tr>
+<td><code>l</code> or <code>L</code></td>
+<td><code>long</code></td>
+</tr>
+<tr>
+<td><code>ll</code> or <code>LL</code></td>
+<td><code>long long</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>对于一个整型字面值来说，我们能分别指定它是否带符号以及占用多少空间。</p>
+<p>如果后缀中有<code>U</code>，则该字面值属于无符号类型。即从<code>unsigned int</code>、<code>unsigned long</code>和<code>unsigned long long</code>中选择能匹配的空间最小的一个作为其数据类型。</p>
+<p>如果后缀中有<code>L</code>，则字面值的类型至少是<code>long</code>；如果后缀中有<code>LL</code>，则字面值的类型将是<code>long long</code>和<code>unsigned long long</code>中的一种。</p>
+<p>显然我们可以将<code>U</code>与<code>L</code>或<code>LL</code>合在一起使用。例如，以<code>UL</code>为后吹的字面值数据类型将根据具体数值情况或者取<code>unsigned long</code>，或者取<code>unsigned long long</code>。</p>
+</blockquote>
+<h3 id="浮点型字面值">浮点型字面值</h3>
+<table>
+<thead>
+<tr>
+<th>后缀</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>f</code> or <code>F</code></td>
+<td><code>float</code></td>
+</tr>
+<tr>
+<td><code>l</code> or <code>L</code></td>
+<td><code>long double</code></td>
+</tr>
+</tbody>
+</table>
+<p>通过添加上表所列的前缀和后缀，可以改变整型、浮点型和字符型字面值的默认类型。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">L&#x27;a&#x27;		// 宽字符型字面值，类型是 wchar_t</span><br><span class="line">u8&#x27;hi!&#x27;		// utf-8 字符串字面值（utf-8 用 8 位编码一个 Unicode 字符）</span><br><span class="line">42ULL		// 无符号整型字面值，类型是 unsigned long long</span><br><span class="line">1E-3F		// 单精度浮点型字面值，类型是 float</span><br><span class="line">3.14159L	// 扩展精度浮点型字面值，类型是 long double</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>PS：当使用一个长整型字面值时，请使用大写字母<code>L</code>来标记，因为小写字母<code>l</code>和数字<code>1</code>太容易混淆。</p>
+</blockquote>
+<h2 id="布尔字面值和指针字面值">布尔字面值和指针字面值</h2>
+<p><code>true</code>和<code>false</code>是布尔类型的字面值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> test = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
+<p><code>nullptr</code>是指针字面值。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CPP/" rel="tag"># CPP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/29/%E5%8D%8A%E5%B9%B4%E6%9C%AA%E5%8F%91%E7%89%88%E5%8F%B7%E6%9C%89%E6%84%9F/" rel="prev" title="半年未发版号有感">
+      <i class="fa fa-chevron-left"></i> 半年未发版号有感
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/" rel="next" title="C++ Primer学习笔记03：变量">
+      C++ Primer学习笔记03：变量 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">算术类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E7%AC%A6%E5%8F%B7%E5%9E%8B%E5%92%8C%E6%97%A0%E7%AC%A6%E5%8F%B7%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">带符号型和无符号型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AB%E6%9C%89%E6%97%A0%E7%AC%A6%E5%8F%B7%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">含有无符号类型的表达式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">字面值常量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E5%9E%8B%E5%92%8C%E6%B5%AE%E7%82%B9%E5%9E%8B%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="nav-number">3.1.</span> <span class="nav-text">整型和浮点型字面值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="nav-number">3.2.</span> <span class="nav-text">字符和字符串字面值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E4%B9%89%E5%BA%8F%E5%88%97"><span class="nav-number">3.3.</span> <span class="nav-text">转义序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E5%AD%97%E9%9D%A2%E5%80%BC%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.4.</span> <span class="nav-text">指定字面值的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E5%80%BC-2"><span class="nav-number">3.4.1.</span> <span class="nav-text">字符和字符串字面值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E5%9E%8B%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="nav-number">3.4.2.</span> <span class="nav-text">整型字面值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E5%9E%8B%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="nav-number">3.4.3.</span> <span class="nav-text">浮点型字面值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%83%E5%B0%94%E5%AD%97%E9%9D%A2%E5%80%BC%E5%92%8C%E6%8C%87%E9%92%88%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="nav-number">3.5.</span> <span class="nav-text">布尔字面值和指针字面值</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="《从0到1 - CTFer成长之路》学习笔记01：Web入门 - 信息搜集">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/27/%E3%80%8A%E4%BB%8E0%E5%88%B01-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001%EF%BC%9AWeb%E5%85%A5%E9%97%A8-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Nu1L.gif?raw=true">
+<meta property="article:published_time" content="2021-10-27T13:51:16.000Z">
+<meta property="article:modified_time" content="2021-10-27T13:51:16.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="网络安全">
+<meta property="article:tag" content="CTF-Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Nu1L.gif?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/27/%E3%80%8A%E4%BB%8E0%E5%88%B01-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001%EF%BC%9AWeb%E5%85%A5%E9%97%A8-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>《从0到1 - CTFer成长之路》学习笔记01：Web入门 - 信息搜集 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/27/%E3%80%8A%E4%BB%8E0%E5%88%B01-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001%EF%BC%9AWeb%E5%85%A5%E9%97%A8-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《从0到1 - CTFer成长之路》学习笔记01：Web入门 - 信息搜集
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-27 21:51:16" itemprop="dateCreated datePublished" datetime="2021-10-27T21:51:16+08:00">2021-10-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8A%E4%BB%8E0%E5%88%B01-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">《从0到1 - CTFer成长之路》学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <img src="https://github.com/Direct5dom/imageDB/blob/main/DB/Nu1L.gif?raw=true" alt="Nu1L.gif" style="zoom:200%;" />
+<span id="more"></span>
+<h1>信息搜集简述</h1>
+<p>信息搜集主要分三方面：</p>
+<ul>
+<li>敏感目录泄露</li>
+<li>敏感备份文件</li>
+<li>Banner识别</li>
+</ul>
+<h1>敏感目录泄露</h1>
+<h2 id="Git泄露">Git泄露</h2>
+<p>Git是一个主流的分布式版本控制系统，开发人员在开发过程中经常会遗忘<code>.git</code>子目录，导致攻击者可以通过<code>.git</code>子目录中的信息获取开发人员提交过的所有源码，进而可能导致服务器被攻击而沦陷。</p>
+<h3 id="常规Git泄露">常规Git泄露</h3>
+<p>即没有其他任何操作，参赛者通过运用现成的工具或自己编写的脚本即可获得网站源码或者flag。</p>
+<p>推荐工具scrabble：<a target="_blank" rel="noopener" href="https://github.com/denny0223/scrabble">denny0223/scrabble</a></p>
+<p>使用方法：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./scrabble http://example.com/</span><br></pre></td></tr></table></figure>
+<h4 id="常规Git泄露案例">常规Git泄露案例</h4>
+<h5 id="本地搭建靶场环境">本地搭建靶场环境</h5>
+<p>在<code>/var/www/html/git_test</code>目录下，创建<code>flag.php</code>文件，在其中输入内容（flag）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;testflag&#125;</span><br></pre></td></tr></table></figure>
+<p>使用Git创建存储库并生成一次提交：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add flag.php</span><br><span class="line">git commit -m <span class="string">&quot;flag&quot;</span></span><br></pre></td></tr></table></figure>
+<h5 id="运行工具-拿到flag">运行工具 拿到flag</h5>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ ./scrabble http://127.0.0.1/git_test/</span><br><span class="line">重新初始化已存在的 Git 仓库于 /root/scrabble/.git/</span><br><span class="line">parseCommit 0d99b02c1e4b61662529bccacc52f770c063095b</span><br><span class="line">downloadBlob 0d99b02c1e4b61662529bccacc52f770c063095b</span><br><span class="line">parseTree 96fa050685409540db69ac695802b11a6de850d8</span><br><span class="line">downloadBlob 96fa050685409540db69ac695802b11a6de850d8</span><br><span class="line">downloadBlob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391</span><br><span class="line">HEAD 现在位于 0d99b02 flag</span><br><span class="line">$ cat flag.php</span><br><span class="line">flag&#123;testflag&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就拿到了我们想要的flag。</p>
+<h3 id="Git回滚">Git回滚</h3>
+<p>git作为一个版本控制工具，会记录每次提交（commit）的修改，所以当题目存在git泄露时，flag（敏感）文件可能在修改中被删除或被覆盖了，这时我们可以利用git的<code>git reset</code>命令来恢复到以前的版本。</p>
+<h4 id="Git回滚案例">Git回滚案例</h4>
+<h5 id="本地搭建靶场环境-2">本地搭建靶场环境</h5>
+<p>在上面案例的目录中，创建一次<code>git commit</code>覆盖flag内容：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;flag is old&quot;</span> &gt; flag.php</span><br><span class="line">git add flag.php</span><br><span class="line">git commit -m <span class="string">&quot;old&quot;</span></span><br></pre></td></tr></table></figure>
+<h5 id="运行工具-拿到flag-2">运行工具 拿到flag</h5>
+<p>我们先用scrabble工具获取源码，再通过<code>git reset --hard HEAD^</code>命令跳到上一个版本。</p>
+<blockquote>
+<p>在git中，用HEAD表示当前版本，上一个版本是HEAD^</p>
+</blockquote>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">$ ./scrabble http://127.0.0.1/git_test/</span><br><span class="line">重新初始化已存在的 Git 仓库于 /root/scrabble/.git/</span><br><span class="line">parseCommit c3699eac2d4b7be800af7e4c046d3c9d30023098</span><br><span class="line">downloadBlob c3699eac2d4b7be800af7e4c046d3c9d30023098</span><br><span class="line">parseTree 1a24d872b03e68bb39ba2f7cb2f82ac7f93c6a8d</span><br><span class="line">downloadBlob 1a24d872b03e68bb39ba2f7cb2f82ac7f93c6a8d</span><br><span class="line">downloadBlob 3e9018d4fda0195c6e29f674de7a4ac7a9259c95</span><br><span class="line">parseCommit e231c29a96ce4a03e6e8e7f6e9a94187fae9929c</span><br><span class="line">downloadBlob e231c29a96ce4a03e6e8e7f6e9a94187fae9929c</span><br><span class="line">parseTree e40b6dba2a448d2d2c234c3133b1a3f9b8cc33c5</span><br><span class="line">downloadBlob e40b6dba2a448d2d2c234c3133b1a3f9b8cc33c5</span><br><span class="line">downloadBlob dfb5f676a79872404c408b12f6a80bc5bcb700f7</span><br><span class="line">parseCommit 0d99b02c1e4b61662529bccacc52f770c063095b</span><br><span class="line">downloadBlob 0d99b02c1e4b61662529bccacc52f770c063095b</span><br><span class="line">parseTree 96fa050685409540db69ac695802b11a6de850d8</span><br><span class="line">downloadBlob 96fa050685409540db69ac695802b11a6de850d8</span><br><span class="line">downloadBlob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391</span><br><span class="line">HEAD 现在位于 c3699ea old</span><br><span class="line">$ cat flag.php</span><br><span class="line">flag is old</span><br><span class="line">$ git reset --hard HEAD^</span><br><span class="line">HEAD 现在位于 e231c29 flag</span><br><span class="line">$ cat flag.php</span><br><span class="line">flag&#123;testflag&#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就得到了我们想要的flag。</p>
+<blockquote>
+<p>除了使用<code>git reset</code>，更简单的方式是通过<code>git log --stat</code>命令查看每个commit修改了哪些文件，再用<code>git diff HEAD commit-id</code>比较在当前版本与想查看的commit之间的变化。</p>
+</blockquote>
+<h3 id="Git分支">Git分支</h3>
+<p>在git上，每次提交都会被串成一条时间线，这条时间线就是一个分支。</p>
+<p>git允许多个分支的存在，这样可以把工作从主线上分离开来，以免相互影响。没有新建分支那么就只有一条分支。在git中默认为master分支。</p>
+<p>我们所寻找的敏感文件可能不会藏在当前分支中，这时使用<code>git log</code>命令只能找到当前分支上的修改，并不能看到我们想要的信息，因此需要切换分支来找到想要的内容。</p>
+<p>推荐的工具GitHacker：<a target="_blank" rel="noopener" href="https://github.com/WangYihang/GitHacker">WangYihang/GitHacker</a></p>
+<p>使用方法：</p>
+<p>安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install GitHacker</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>添加PATH：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=/home/sixiaolong/.<span class="built_in">local</span>/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">githacker --url http://127.0.0.1/.git/ --folder result</span><br></pre></td></tr></table></figure>
+<p>使用后会在工作目录下创建<code>result</code>文件夹。打开后可以执行<code>git log --all</code>或者<code>git branch -v</code>命令，只能看到master分支的信息。如果执行<code>git reflog</code>命令，就可以看到一些checkout的记录。</p>
+<h4 id="Git分支案例">Git分支案例</h4>
+<h5 id="本地搭建靶场环境-3">本地搭建靶场环境</h5>
+<p>在上面案例的目录中：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个新分支。</span></span><br><span class="line">$ git checkout -b NBranch</span><br><span class="line">Switched to a new branch <span class="string">&#x27;NBranch&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换回master，并填写新flag。</span></span><br><span class="line">$ git checkout master</span><br><span class="line">Switched to branch <span class="string">&#x27;master&#x27;</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;new flag&quot;</span> &gt; flag.php</span><br><span class="line">$ cat flag.php</span><br><span class="line">new flag</span><br><span class="line">$ git add flag.php</span><br><span class="line">$ git commit -m <span class="string">&quot;new flag&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换回新分支，再提交一次commit。</span></span><br><span class="line">$ git checkout NBranch</span><br><span class="line">Switched to a new branch <span class="string">&#x27;NBranch&#x27;</span></span><br><span class="line">$ cat flag.php</span><br><span class="line">flag is old</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;old flag&quot;</span> &gt; flag.php</span><br><span class="line">$ cat flag.php</span><br><span class="line">old flag</span><br><span class="line">$ git add flag.php</span><br><span class="line">$ git commit -m <span class="string">&quot;old flag&quot;</span></span><br></pre></td></tr></table></figure>
+<h5 id="运行工具-拿到flag-3">运行工具 拿到flag</h5>
+<p>使用命令：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">githacker --url http://127.0.0.1/git_test/ --folder result</span><br></pre></td></tr></table></figure>
+<p>在当前目录创建了一个<code>result</code>子目录，打开便是我们要的源码和<code>.git</code>目录。我们可以使用以下命令来直观的查看提交历史、各个分支的指向以及项目的分支分叉情况：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline --decorate --graph --all</span><br><span class="line">* 8dc295c (HEAD -&gt; NBranch, origin/NBranch, origin/HEAD) old flag</span><br><span class="line">| * 33c584c (origin/master) new flag</span><br><span class="line">|/</span><br><span class="line">* 4f0685f old</span><br><span class="line">* 4542728 flag</span><br></pre></td></tr></table></figure>
+<p>可以看到我们现在处于<code>NBranch</code>分支，直接在此分支查看<code>flag.php</code>是看不到我们想要的flag的。此时需要我们切换到<code>master</code>分支再寻找我们的flag。</p>
+<p>只需要：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">$ cat flag.php</span><br><span class="line">new flag</span><br></pre></td></tr></table></figure>
+<h2 id="总结经验">总结经验</h2>
+<p>无论是<code>.git</code>这些隐藏目录，还是实战中的<code>admin</code>之类的敏感后台目录，其关键在于字典的强大。</p>
+<p>推荐的工具dirsearch：<a target="_blank" rel="noopener" href="https://github.com/maurosoria/dirsearch">maurosoria/dirsearch</a></p>
+<blockquote>
+<p>dirsearch是一个开源的目录扫描工具。</p>
+</blockquote>
+<p>CTF线上比赛往往会有重定向一类问题。例如直接访问<code>.git</code>就会返回403。此时可以试探性的访问<code>.git/config</code>，如果有文件内容返回，就说明存在Git泄露，反之一般不存在。而在SVN泄露中，一般是在entries中爬取源代码，但有时会出现entries为空的情况，这时注意<code>wc.db</code>文件存在与否，便可以通过其中的<code>checksum</code>和<code>pristine</code>目录中获取源代码。</p>
+<h1>敏感备份文件</h1>
+<p>通过一些敏感的备份文件，我们往往能获得某一文件的源码，亦或网站的整体目录等。</p>
+<h2 id="gedit备份文件">gedit备份文件</h2>
+<p>Linux下使用gedit编辑的文件保存后会在当前目录下生成一个后缀为<code>~</code>的文件，其文件内容就是刚编辑的内容。</p>
+<p>假设刚才保存的文件名为<code>flag</code>，则该文件名为<code>flag~</code>。</p>
+<p>通过浏览器访问这个带有<code>~</code>的文件即可得到源码。</p>
+<h2 id="vim备份文件">vim备份文件</h2>
+<p>当用户使用vim编辑文件意外退出时（如SSH过程中因网络问题卡死退出），会在当前目录下生成一个备份文件，格式为：<code>&lt;文件名&gt;.swp</code>。该文件用来备份缓冲区中（即退出时）的文件内容。</p>
+<p>对于<code>.swp</code>备份文件，可以使用<code>vim -r &lt;文件名&gt;</code>命令恢复文件的内容。</p>
+<h2 id="常规文件">常规文件</h2>
+<p>有很多，可以用于让我们更好的了解网站，例如：</p>
+<ul>
+<li><code>robots.txt</code> - 记录一些目录和CMS版本信息。</li>
+<li><code>readme.md</code> - 记录CMS版本信息，有的甚至有Github地址。</li>
+<li><code>www.zip/rar/tar.gz</code> - 往往是网站的源码备份。</li>
+<li>……</li>
+</ul>
+<h2 id="总结经验-2">总结经验</h2>
+<p>在CTF线上比赛的过程中，出题人往往会在线运维题目，有时会因为各种情况导致<code>.swp</code>备份文件的生成，所以读者在比赛过程中可以编写实时监控脚本，对题目服务进行监控。</p>
+<p>vim在第一次意外退出时生成的备份文件为<code>*.swp</code>，第二次为<code>*.swo</code>，第三次为<code>*.swn</code>，以此类推。vim官方手册中还有<code>*.un.&lt;文件名&gt;.swp</code>类型的备份文件。</p>
+<p>另外，在实际环境中，网站的备份往往可能是网站域名的压缩包。</p>
+<h1>Banner识别</h1>
+<p>一个网站的Banner信息（服务器对外显示的一些基础信息）对解题有着十分重要的作用，选手往往可以通过Banner信息来获得解题思路，如得知网站是用ThinkPHP的Web框架编写时，我们可以尝试ThinkPHP框架的相关历史漏洞。或者得知这个网站是Windows服务器，那么我们在测试上传漏洞时可以根据Windows的特性进行尝试。</p>
+<h2 id="指纹库">指纹库</h2>
+<p>Github上有大量成型且公开的CMS指纹库，同时可以借鉴一些成型扫描器对网站进行识别。</p>
+<h2 id="已有工具">已有工具</h2>
+<p>Wappalyzer是一个很好的Banner识别工具，Edge扩展下载链接：<a target="_blank" rel="noopener" href="https://microsoftedge.microsoft.com/addons/detail/wappalyzer/mnbndgmknlpdjdnjfmfcdjoegcckoikn?hl=zh-CN">Wappalyzer - Microsoft Edge Addons</a>。</p>
+<p>其也提供了成型的Python库，可以通过以下命令安装：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pip install python-Wappalyzer</span><br></pre></td></tr></table></figure>
+<p>调用方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> Wappalyzer <span class="keyword">import</span> Wappalyzer, WebPage</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>wappalyzer = Wappalyzer.latest()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>webpage = WebPage.new_from_url(’http://example.com‘)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>wappalyzer.analyze(webpage)</span><br><span class="line"><span class="built_in">set</span>([<span class="string">u&#x27;EdgeCast&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p>在<code>data</code>目录下，<code>apps.json</code>文件是其规则库，读者可以根据自己需求自由添加。</p>
+<h2 id="总结经验-3">总结经验</h2>
+<p>在进行服务器的Banner信息探测时，除了通过上述两种常见的识别方式，我们还可以尝试随意输入一些URL，有时可以通过404页面和302跳转页面发现一些信息。例如，开启了debug选项的ThinkPHP网站会在一些错误页面显示ThinkPHP的版本。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" rel="tag"># 网络安全</a>
+              <a href="/tags/CTF-Web/" rel="tag"># CTF-Web</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/24/Manim-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003-%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9D%97-Mobject-%E5%8A%A8%E7%94%BB%E5%8C%96-%E5%9C%BA%E6%99%AF/" rel="prev" title="Manim 学习笔记03：构建模块（Mobject、动画化、场景）">
+      <i class="fa fa-chevron-left"></i> Manim 学习笔记03：构建模块（Mobject、动画化、场景）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/30/%E5%88%A9%E7%94%A8ADB%E5%8D%B8%E8%BD%BDAndroid%E6%89%8B%E6%9C%BA%E9%A2%84%E8%A3%85%E8%BD%AF%E4%BB%B6/" rel="next" title="利用ADB卸载Android手机预装软件">
+      利用ADB卸载Android手机预装软件 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">信息搜集简述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">敏感目录泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E6%B3%84%E9%9C%B2"><span class="nav-number">2.1.</span> <span class="nav-text">Git泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%84Git%E6%B3%84%E9%9C%B2"><span class="nav-number">2.1.1.</span> <span class="nav-text">常规Git泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%84Git%E6%B3%84%E9%9C%B2%E6%A1%88%E4%BE%8B"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">常规Git泄露案例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.1.1.1.</span> <span class="nav-text">本地搭建靶场环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%B7%A5%E5%85%B7-%E6%8B%BF%E5%88%B0flag"><span class="nav-number">2.1.1.1.2.</span> <span class="nav-text">运行工具 拿到flag</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git%E5%9B%9E%E6%BB%9A"><span class="nav-number">2.1.2.</span> <span class="nav-text">Git回滚</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Git%E5%9B%9E%E6%BB%9A%E6%A1%88%E4%BE%8B"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">Git回滚案例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83-2"><span class="nav-number">2.1.2.1.1.</span> <span class="nav-text">本地搭建靶场环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%B7%A5%E5%85%B7-%E6%8B%BF%E5%88%B0flag-2"><span class="nav-number">2.1.2.1.2.</span> <span class="nav-text">运行工具 拿到flag</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git%E5%88%86%E6%94%AF"><span class="nav-number">2.1.3.</span> <span class="nav-text">Git分支</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Git%E5%88%86%E6%94%AF%E6%A1%88%E4%BE%8B"><span class="nav-number">2.1.3.1.</span> <span class="nav-text">Git分支案例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83-3"><span class="nav-number">2.1.3.1.1.</span> <span class="nav-text">本地搭建靶场环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%B7%A5%E5%85%B7-%E6%8B%BF%E5%88%B0flag-3"><span class="nav-number">2.1.3.1.2.</span> <span class="nav-text">运行工具 拿到flag</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E7%BB%8F%E9%AA%8C"><span class="nav-number">2.2.</span> <span class="nav-text">总结经验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">敏感备份文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gedit%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">gedit备份文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vim%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">vim备份文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%84%E6%96%87%E4%BB%B6"><span class="nav-number">3.3.</span> <span class="nav-text">常规文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E7%BB%8F%E9%AA%8C-2"><span class="nav-number">3.4.</span> <span class="nav-text">总结经验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">Banner识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E7%BA%B9%E5%BA%93"><span class="nav-number">4.1.</span> <span class="nav-text">指纹库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%B2%E6%9C%89%E5%B7%A5%E5%85%B7"><span class="nav-number">4.2.</span> <span class="nav-text">已有工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E7%BB%8F%E9%AA%8C-3"><span class="nav-number">4.3.</span> <span class="nav-text">总结经验</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

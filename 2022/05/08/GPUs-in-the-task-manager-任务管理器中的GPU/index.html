@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="GPUs in the task manager（任务管理器中的GPU）">
+<meta property="og:url" content="https://direct5dom.github.io/2022/05/08/GPUs-in-the-task-manager-%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E7%9A%84GPU/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081143769.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081143769.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081144808.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081145721.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081145252.png">
+<meta property="article:published_time" content="2022-05-08T04:34:32.000Z">
+<meta property="article:modified_time" content="2022-05-10T06:42:30.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="计算机图形学">
+<meta property="article:tag" content="DirectX">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081143769.png">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/05/08/GPUs-in-the-task-manager-%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E7%9A%84GPU/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>GPUs in the task manager（任务管理器中的GPU） | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/05/08/GPUs-in-the-task-manager-%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E7%9A%84GPU/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GPUs in the task manager（任务管理器中的GPU）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-08 12:34:32" itemprop="dateCreated datePublished" datetime="2022-05-08T12:34:32+08:00">2022-05-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-10 14:42:30" itemprop="dateModified" datetime="2022-05-10T14:42:30+08:00">2022-05-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DirectX/" itemprop="url" rel="index"><span itemprop="name">DirectX</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081143769.png" alt=""></p>
+<span id="more"></span>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/directx/gpus-in-the-task-manager/">GPUs in the task manager - DirectX Developer Blog (microsoft.com)</a></p>
+<p>Bryan L 发布于 2017 年 7 月 21 日</p>
+<p>下面的帖子来自Steve Pronovost，他是我们负责GPU调度和内存管理的首席工程师。</p>
+<blockquote>
+<p>The below posting is from Steve Pronovost, our lead engineer responsible for the GPU scheduler and memory manager.</p>
+</blockquote>
+<h2 id="任务管理器中的GPU（GPUs-in-the-Task-Manager）">任务管理器中的GPU（GPUs in the Task Manager）</h2>
+<p>我们很高兴在任务管理器中引入对GPU性能数据的支持。这是用户的需求功能之一，我们听取了用户的建议。GPU终于在这个古老的性能工具上首次亮相。要立即使用这个功能，你可以加入<a target="_blank" rel="noopener" href="https://insider.windows.com/">Windows内部程序</a>。或者，你可以等待<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/windows/upcoming-features">Windows Fall Creator’s Update.</a></p>
+<blockquote>
+<p>We’re excited to introduce support for GPU performance data in the Task Manager. This is one of the features you have often requested, and we listened. The GPU is finally making its debut in this venerable performance tool. To see this feature right away, you can join the <a target="_blank" rel="noopener" href="https://insider.windows.com/">Windows Insider Program</a>. Or, you can wait for the <a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/windows/upcoming-features">Windows Fall Creator’s Update.</a></p>
+</blockquote>
+<p>要了解所有的GPU性能数据，了解Windows如何使用GPU是很有帮助的。本博客将深入研究这些细节，并解释任务管理器的GPU性能数据是如何活跃起来的。这个博客可能会有点长，但我们还是希望你能喜欢它。</p>
+<blockquote>
+<p>To understand all the GPU performance data, its helpful to know how Windows uses a GPUs. This blog dives into these details and explains how the Task Manager’s GPU performance data comes alive. This blog is going to be a bit long, but we hope you enjoy it nonetheless.</p>
+</blockquote>
+<h3 id="系统要求（System-Requirements）">系统要求（System Requirements）</h3>
+<p>在Windows中，GPU 通过Windows显示驱动程序模型 (WDDM) 公开。WDDM的核心是图形内核，它负责在所有正在运行的进程（每个应用程序都有一个或多个进程）之间抽象、管理和共享GPU。图形内核包括一个GPU调度程序 (VidSch) 以及一个显存管理器 (VidMm)。VidSch负责将GPU的各种引擎调度到想要使用它们的进程，并在它们之间仲裁和优先访问。VidMm负责管理GPU使用的所有内存，包括VRAM（显卡上的内存）以及GPU直接访问的主DRAM（系统内存）的页面。为系统中的每个GPU实例化一个VidMm和VidSch实例。</p>
+<blockquote>
+<p>In Windows, the GPU is exposed through the Windows Display Driver Model (WDDM). At the heart of WDDM is the Graphics Kernel, which is responsible for abstracting, managing, and sharing the GPU among all running processes (each application has one or more processes). The Graphics Kernel includes a GPU scheduler (VidSch) as well as a video memory manager (VidMm). VidSch is responsible for scheduling the various engines of the GPU to processes wanting to use them and to arbitrate and prioritize access among them. VidMm is responsible for managing all memory used by the GPU, including both VRAM (the memory on your graphics card) as well as pages of main DRAM (system memory) directly accessed by the GPU. An instance of VidMm and VidSch is instantiated for each GPU in your system.</p>
+</blockquote>
+<p>任务管理器中的数据直接从VidSch和VidMm收集。因此，无论使用什么API，无论是Microsoft DirectX API、OpenGL、OpenCL、Vulkan 还是专有API，例如AMD的Mantle或Nvidia的CUDA，都可以获得GPU的性能数据。此外，由于VidMm和VidSch是决定使用GPU资源的实际代理，因此任务管理器中的数据将比许多其他实用程序更准确，这些实用程序通常会尽力做出一些“预测”，因为它们无法访问实际的数据。</p>
+<blockquote>
+<p>The data in the Task Manager is gathered directly from VidSch and VidMm. As such, performance data for the GPU is available no matter what API is being used, whether it be Microsoft DirectX API, OpenGL, OpenCL, Vulkan or even proprietary API such as AMD’s Mantle or Nvidia’s CUDA. Further, because VidMm and VidSch are the actual agents making decisions about using GPU resources, the data in the Task Manager will be more accurate than many other utilities, which often do their best to make intelligent guesses since they do not have access to the actual data.</p>
+</blockquote>
+<p>任务管理器的GPU性能数据需要支持WDDM 2.0或更高版本的GPU驱动程序。WDDMv2是在Windows 10的原始版本中引入的，并且受到大约70%的Windows 10用户的支持。如果您不确定您的GPU驱动程序使用的WDDM版本，您可以使用作为Windows一部分提供的dxdiag实用程序来查找。要启动dxdiag，请打开开始菜单并输入dxdiag.exe。查看<em>Display</em>选项卡下的<em>Drivers</em>部分中的<em>Driver Model</em>。不幸的是，如果您在较旧的WDDMv1.x GPU上运行，任务管理器将不会为您显示GPU数据。</p>
+<blockquote>
+<p>The Task Manager’s GPU performance data requires a GPU driver that supports WDDM version 2.0 or above. WDDMv2 was introduced with the original release of Windows 10 and is supported by roughly 70% of the Windows 10 population. If you are unsure of the WDDM version your GPU driver is using, you may use the dxdiag utility that ships as part of windows to find out. To launch dxdiag open the start menu and simply type dxdiag.exe. Look under the <em>Display</em> tab, in the <em>Drivers</em> section for the <em>Driver Model</em>. Unfortunately, if you are running on an older WDDMv1.x GPU, the Task Manager will not be displaying GPU data for you.</p>
+</blockquote>
+<h3 id="性能选项卡（Performance-Tab）">性能选项卡（Performance Tab）</h3>
+<p>在“性能”选项卡下，您将找到所有进程汇总的所有支持WDDMv2的GPU的性能数据。</p>
+<blockquote>
+<p>Under the Performance tab you’ll find performance data, aggregated across all processes, for all of your WDDMv2 capable GPUs.</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081143769.png" alt=""></p>
+<h4 id="GPU和交火-SLI（GPUs-and-Links）">GPU和交火/SLI（GPUs and Links）</h4>
+<p>在左侧的面板上，您可以看到系统中的GPU列表。其中GPU #是一个任务管理器概念，用于任务管理器UI的其他部分，以简洁的方式代表特定的GPU。因此，不必直接说Intel® HD Graphics 530来指代上面屏幕截图中的Intel GPU，我们可以简单地说GPU 0。当存在多个GPU时，它们按其物理位置排序（PCI 总线/设备/ 功能）。</p>
+<blockquote>
+<p>On the left panel, you’ll see the list of GPUs in your system. The GPU # is a Task Manager concept and used in other parts of the Task Manager UI to reference specific GPU in a concise way. So instead of having to say Intel® HD Graphics 530 to reference the Intel GPU in the above screenshot, we can simply say GPU 0. When multiple GPUs are present, they are ordered by their physical location (PCI bus/device/function).</p>
+</blockquote>
+<p>Windows支持将多个GPU链接在一起以创建更大、更强大的逻辑GPU。链接的GPU共享一个VidMm和VidSch实例，因此可以非常紧密地协作，包括读取和写入彼此的VRAM。您可能会更熟悉我们合作伙伴的链接商业名称，即Nvidia SLI和AMD Crossfire。当GPU链接在一起时，任务管理器将为每个链接分配一个链接编号，并识别属于其中一部分的GPU。任务管理器可让您检查链接中每个物理GPU的状态，从而观察您的游戏如何充分利用每个GPU。</p>
+<blockquote>
+<p>Windows supports linking multiple GPUs together to create a larger and more powerful logical GPU. Linked GPUs share a single instance of VidMm and VidSch, and as a result, can cooperate very closely, including reading and writing to each other’s VRAM. You’ll probably be more familiar with our partners’ commercial name for linking, namely Nvidia SLI and AMD Crossfire. When GPUs are linked together, the Task Manager will assign a Link # for each link and identify the GPUs which are part of it. Task Manager lets you inspect the state of each physical GPU in a link allowing you to observe how well your game is taking advantage of each GPU.</p>
+</blockquote>
+<h4 id="GPU利用率（GPU-Utilization）">GPU利用率（GPU Utilization）</h4>
+<p>在右侧面板的顶部，您将找到有关各种GPU引擎的利用率信息。</p>
+<blockquote>
+<p>At the top of the right panel you’ll find utilization information about the various GPU engines.</p>
+</blockquote>
+<p>GPU引擎代表GPU上的一个独立硅单元，可以调度并且可以彼此并行运行。例如，Copy引擎可用于传输数据，而3D引擎可用于3D渲染。虽然3D引擎也可用于移动数据，但可以将简单的数据传输卸载到复制引擎，从而使3D引擎能够处理更复杂的任务，从而提高整体性能。在这种情况下，复制引擎和3D引擎将并行运行。</p>
+<blockquote>
+<p>A GPU engine represents an independent unit of silicon on the GPU that can be scheduled and can operate in parallel with one another. For example, a copy engine may be used to transfer data around while a 3D engine is used for 3D rendering. While the 3D engine can also be used to move data around, simple data transfers can be offloaded to the copy engine, allowing the 3D engine to work on more complex tasks, improving overall performance. In this case both the copy engine and the 3D engine would operate in parallel.</p>
+</blockquote>
+<p>VidSch负责在想要使用它们的各种进程中对这些GPU引擎中的每一个进行仲裁、优先级排序和调度。</p>
+<blockquote>
+<p>VidSch is responsible for arbitrating, prioritizing and scheduling each of these GPU engines across the various processes wanting to use them.</p>
+</blockquote>
+<p>将GPU引擎与GPU核心区分开来很重要。GPU引擎由GPU内核组成。例如，3D引擎可能有1000多个核心，但这些核心在一个称为引擎的实体中组合在一起，并被安排为一个组。当一个进程获得一个引擎的时间片时，它就可以使用该引擎的所有底层核心。</p>
+<blockquote>
+<p>It’s important to distinguish GPU engines from GPU cores. GPU engines are made up of GPU cores. The 3D engine, for instance, might have 1000s of cores, but these cores are grouped together in an entity called an engine and are scheduled as a group. When a process gets a time slice of an engine, it gets to use all of that engine’s underlying cores.</p>
+</blockquote>
+<p>一些GPU支持多个引擎映射到相同的底层核心集。虽然这些引擎也可以并行调度，但它们最终会共享底层内核。这在概念上类似于CPU上的超线程。例如，3D引擎和Compute引擎实际上可能依赖于同一组统一内核。在这种情况下，内核在执行时在引擎之间进行空间或时间分区。</p>
+<blockquote>
+<p>Some GPUs support multiple engines mapping to the same underlying set of cores. While these engines can also be scheduled in parallel, they end up sharing the underlying cores. This is conceptually similar to hyper-threading on the CPU. For example, a 3D engine and a compute engine may in fact be relying on the same set of unified cores. In such a scenario, the cores are either spatially or temporally partitioned between engines when executing.</p>
+</blockquote>
+<p>下图展现了假象的GPU引擎和内核。</p>
+<blockquote>
+<p>The figure below illustrates engines and cores of a hypothetical GPU.</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081144808.png" alt=""></p>
+<p>默认情况下，任务管理器会选择4个引擎来显示。任务管理器将选择它认为最有趣的引擎。您可以通过单击引擎名称并从GPU公开的引擎列表中选择另一个引擎来决定要观察哪个引擎。</p>
+<blockquote>
+<p>By default, the Task Manager will pick 4 engines to be displayed. The Task Manager will pick the engines it thinks are the most interesting. However, you can decide which engine you want to observe by clicking on the engine name and choosing another one from the list of engines exposed by the GPU.</p>
+</blockquote>
+<p>引擎的数量和这些引擎的使用在GPU之间会有所不同。GPU驱动程序可能决定使用Video Decode引擎对特定媒体剪辑进行解码，而使用不同视频格式的另一个剪辑可能依赖于Compute引擎，甚至是多个引擎的组合。使用新的任务管理器，您可以在GPU上运行工作负载，然后观察哪些引擎可以处理它。</p>
+<blockquote>
+<p>The number of engines and the use of these engines will vary between GPUs. A GPU driver may decide to decode a particular media clip using the video decode engine while another clip, using a different video format, might rely on the compute engine or even a combination of multiple engines. Using the new Task Manager, you can run a workload on the GPU then observe which engines gets to process it.</p>
+</blockquote>
+<p>在GPU名称下的左窗格和右窗格的底部，您会注意到GPU的汇总利用率百分比。在这里，我们有几个不同的选择来汇总跨引擎的利用率。跨引擎的平均利用率可能会让人有所误解，因为具有10个引擎的GPU（例如，运行一个完全饱和3D引擎的游戏）会聚合到10%的总体利用率！ 这绝对不是游戏玩家想要看到的。我们也可以选择3D引擎来代表整个GPU，因为它通常是最突出和最常用的引擎，但这也可能误导用户。例如，在某些情况下播放视频可能根本不使用3D引擎，在这种情况下，在播放视频时GPU上的聚合利用率会报告为0%！ 相反，我们选择选择最繁忙引擎的百分比利用率作为整体GPU使用率的代表。</p>
+<blockquote>
+<p>In the left pane under the GPU name and at the bottom of the right pane, you’ll notice an aggregated utilization percentage for the GPU. Here we had a few different choices on how we could aggregate utilization across engines. The average utilization across engines felt misleading since a GPU with 10 engines, for example, running a game fully saturating the 3D engine, would have aggregated to a 10% overall utilization! This is definitely not what gamers want to see. We could also have picked the 3D Engine to represent the GPU as a whole since it is typically the most prominent and used engine, but this could also have misled users. For example, playing a video under some circumstances may not use the 3D engine at all in which case the aggregated utilization on the GPU would have been reported as 0% while the video is playing! Instead we opted to pick the percentage utilization of the busiest engine as a representative of the overall GPU usage.</p>
+</blockquote>
+<h4 id="显存（Video-Memory）">显存（Video Memory）</h4>
+<p>引擎图表下方是显存利用率图表和摘要。显存分为两大类：专用和共享。</p>
+<blockquote>
+<p>Below the engines graphs are the video memory utilization graphs and summary. Video memory is broken into two big categories: dedicated and shared.</p>
+</blockquote>
+<p>专用内存表示专门保留供GPU使用并由VidMm管理的内存。在独立显卡上，这就是您的VRAM，即位于显卡上的内存。在集成显卡上，这是为图形保留的系统内存量。许多集成显卡避免为专有图形使用保留内存，而是选择完全依赖与CPU共享的内存，这样效率更高。</p>
+<blockquote>
+<p>Dedicated memory represents memory that is exclusively reserved for use by the GPU and is managed by VidMm. On discrete GPUs this is your VRAM, the memory that sits on your graphics card. Â Â On integrated GPUs, this is the amount of system memory that is reserved for graphics. Many integrated GPU avoid reserving memory for exclusive graphics use and instead opt to rely purely on memory shared with the CPU which is more efficient.</p>
+</blockquote>
+<p>这少量的驱动程序保留内存由硬件保留内存表示。</p>
+<blockquote>
+<p>This small amount of driver reserved memory is represented by the Hardware Reserved Memory.</p>
+</blockquote>
+<p>对于集成显卡，情况更为复杂。一些集成显卡具有专用内存，而另一些则没有。一些集成GPU在固件中（或在驱动程序初始化期间）从主DRAM中保留内存。尽管此内存是从与CPU共享的DRAM中分配的，但它是从Windows中取出的，并且不受Windows内存管理器 (Mm) 的控制，并由VidMm专门管理。这种类型的保留通常不鼓励使用更灵活的共享内存，但某些GPU当前需要它。</p>
+<blockquote>
+<p>For integrated GPUs, it’s more complicated. Some integrated GPUs will have dedicated memory while others won’t. Some integrated GPUs reserve memory in the firmware (or during driver initialization) from main DRAM. Although this memory is allocated from DRAM shared with the CPU, it is taken away from Windows and out of the control of the Windows memory manager (Mm) and managed exclusively by VidMm. This type of reservation is typically discouraged in favor of shared memory which is more flexible, but some GPUs currently need it.</p>
+</blockquote>
+<p>性能选项卡下的专用内存量表示当前所有进程消耗的字节数，这与许多显示进程请求的内存的现有实用程序不同。</p>
+<blockquote>
+<p>The amount of dedicated memory under the performance tab represents the number of bytes currently consumed across all processes, unlike many existing utilities which show the memory requested by a process.</p>
+</blockquote>
+<p>共享内存表示可由GPU或CPU使用的普通系统内存。这种内存很灵活，可以以任何一种方式使用，甚至可以根据用户工作负载的需要来回切换。独立和集成显卡都可以使用共享内存。</p>
+<blockquote>
+<p>Shared memory represents normal system memory that can be used by either the GPU or the CPU. This memory is flexible and can be used in either way, and can even switch back and forth as needed by the user workload. Both discrete and integrated GPUs can make use of shared memory.</p>
+</blockquote>
+<p>Windows有一个策略，即GPU在任何给定时刻只允许使用一半的物理内存。这是为了确保系统的其余部分有足够的内存继续正常运行。在16GB系统上，GPU可以随时使用多达8GB的DRAM。应用程序可以分配比这更多的显存。事实上，显存在Windows上是完全虚拟化的，仅受系统提交总限制（即安装的DRAM总量 + 磁盘上页面文件的大小）的限制。VidMm将通过动态锁定和释放DRAM页面来确保GPU不会超过其一半的DRAM预算。同样，当表面不使用时，VidMm会随着时间的推移将内存页面释放回Mm，以便在必要时可以重新调整它们的用途。性能选项卡下消耗的共享内存量本质上表示GPU当前消耗的此类共享系统内存量与此限制相比。</p>
+<blockquote>
+<p>Windows has a policy whereby the GPU is only allowed to use half of physical memory at any given instant. This is to ensure that the rest of the system has enough memory to continue operating properly. On a 16GB system the GPU is allowed to use up to 8GB of that DRAM at any instant. It is possible for applications to allocate much more video memory than this. Â As a matter of fact, video memory is fully virtualized on Windows and is only limited by the total system commit limit (i.e. total DRAM installed + size of the page file on disk). VidMm will ensure that the GPU doesn’t go over its half of DRAM budget by locking and releasing DRAM pages dynamically. Similarly, when surfaces aren’t in use, VidMm will release memory pages back to Mm over time, such that they may be repurposed if necessary. The amount of shared memory consumed under the performance tab essentially represents the amount of such shared system memory the GPU is currently consuming against this limit.</p>
+</blockquote>
+<h3 id="进程选项卡（Processes-Tab）">进程选项卡（Processes Tab）</h3>
+<p>在进程选项卡下，您会找到按进程细分的GPU利用率汇总摘要。</p>
+<blockquote>
+<p>Under the process tab you’ll find an aggregated summary of GPU utilization broken down by processes.</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081145721.png" alt=""></p>
+<p>值得讨论一下聚合在这个视图中是如何工作的。正如我们之前看到的，一台PC可以有多个GPU，每个GPU通常都有多个引擎。为每个GPU和引擎组合添加一个列会导致典型PC上出现数十个新列，从而使视图变得笨拙。性能选项卡旨在让用户快速简单地了解其系统资源在各种运行进程中的使用情况，因此我们希望保持其简洁明了，同时仍提供有关GPU的有用信息。</p>
+<blockquote>
+<p>It’s worth discussing how the aggregation works in this view. As we’ve seen previously, a PC can have multiple GPUs and each of these GPU will typically have several engines. Adding a column for each GPU and engine combinations would leads to dozens of new columns on typical PC making the view unwieldy. The performance tab is meant to give a user a quick and simple glance at how his system resources are being utilized across the various running processes so we wanted to keep it clean and simple, while still providing useful information about the GPU.</p>
+</blockquote>
+<p>我们决定采用的解决方案是显示所有GPU中最繁忙引擎的利用率，以表示该进程的整体GPU利用率。但如果这就是我们所做的一切，事情仍然会令人困惑。一个应用程序可能使3D引擎饱和100%，而另一个应用程序使视频引擎饱和100%。在这种情况下，两个应用程序都报告了 100% 的总体利用率，这会令人困惑。为了解决这个问题，我们添加了第二列，它指示所显示的利用率对应于哪个 GPU 和引擎组合。我们想听听您对这种设计选择的看法。</p>
+<blockquote>
+<p>The solution we decided to go with is to display the utilization of the busiest engine, across all GPUs, for that process as representing its overall GPU utilization. But if that’s all we did, things would still have been confusing. One application might be saturating the 3D engine at 100% while another saturates the video engine at 100%. In this case, both applications would have reported an overall utilization of 100%, which would have been confusing. To address this problem, we added a second column, which indicates which GPU and Engine combination the utilization being shown corresponds to. We would like to hear what you think about this design choice.</p>
+</blockquote>
+<p>同样，列顶部的利用率摘要是所有GPU的利用率最大值。此处的计算与性能选项卡下显示的整体GPU利用率相同。</p>
+<blockquote>
+<p>Similarly, the utilization summary at the top of the column is the maximum of the utilization across all GPUs. The calculation here is the same as the overall GPU utilization displayed under the performance tab.</p>
+</blockquote>
+<h3 id="详细信息选项卡（Details-Tab）">详细信息选项卡（Details Tab）</h3>
+<p>默认情况下，详细信息选项卡下没有关于GPU的信息。但是您可以右键单击列标题，选择“选择列”，然后添加GPU利用率计数器（与上述相同）或显存使用计数器。</p>
+<blockquote>
+<p>Under the details tab there is no information about the GPU by default. But you can right-click on the column header, choose “Select columns”, and add either GPU utilization counters (the same one as described above) or video memory usage counters.</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Direct5dom/imageDB/main/202205081145252.png" alt=""></p>
+<p>关于这些显存使用计数器，有几点需要注意。计数器表示该进程当前使用的专用和共享显存的总量。这包括私有内存（即由该进程专门使用的内存）以及跨进程共享内存（即与其他进程共享的内存，不要与CPU和GPU之间共享的内存混淆）。</p>
+<blockquote>
+<p>There are a few things that are important to note about these video memory usage counters. The counters represent the total amount of dedicated and shared video memory currently in used by that process. This includes both private memory (i.e. memory that is used exclusively by that process) as well as cross-process shared memory (i.e. memory that is shared with other processes not to be confused with memory shared between the CPU and the GPU).</p>
+</blockquote>
+<p>因此，添加每个单独进程使用的内存总和将超过GPU使用的内存量，因为跨进程共享的内存将被多次计算。每个进程的细分有助于了解特定进程当前使用了多少显存，但要了解GPU使用了多少总内存，应该在性能选项卡下查看适当考虑共享内存的总和。</p>
+<blockquote>
+<p>As a result of this, adding the memory utilized by each individual process will sum up to an amount of memory larger than that utilized by the GPU since memory shared across processes will be counted multiple times. The per process breakdown is useful to understand how much video memory a particular process is currently using, but to understand how much overall memory is used by a GPU, one should look under the performance tab for a summation that properly takes into account shared memory.</p>
+</blockquote>
+<p>另一个有趣的结果是，一些与其他进程共享大量内存的系统进程，特别是dwm.exe和csrss.exe，看起来会比实际大得多。例如，当应用程序创建一个顶级窗口时，将分配显存来保存该窗口的内容。该显存表面由csrss.exe代表应用程序创建，可能映射到应用程序进程本身并与桌面窗口管理器 (dwm.exe) 共享，以便可以将窗口组合到桌面上。显存只分配一次，但可能从所有三个进程都可以访问，并且显示在它们各自的内存利用率上。同样，应用程序DirectX交换链或DCOMP视觉 (XAML) 与桌面合成器共享。这两个进程出现的大部分显存实际上是应用程序创建与它们共享的东西的结果，因为它们自己分配的很少。这也是为什么您会看到这些随着您的桌面变得忙碌而增长的原因，但请记住，它们并没有真正消耗您的所有资源。</p>
+<blockquote>
+<p>Another interesting consequence of this is that some system processes, in particular dwm.exe and csrss.exe, that share a lot of memory with other processes will appear much larger than they really are. For example, when an application creates a top level window, video memory will be allocated to hold the content of that window. That video memory surface is created by csrss.exe on behalf of the application, possibly mapped into the application process itself and shared with the desktop window manager (dwm.exe) such that the window can be composed onto the desktop. The video memory is allocated only once but is accessible from possibly all three processes and appears against their individual memory utilization. Similarly, application DirectX swapchain or DCOMP visual (XAML) are shared with the desktop compositor. Most of the video memory appearing against these two processes is really the result of an application creating something that is shared with them as they by themselves allocate very little. This is also why you will see these grow as your desktop gets busy, but keep in mind that they aren’t really consuming up all of your resources.</p>
+</blockquote>
+<p>我们本可以决定显示每个进程的私有内存故障并忽略共享内存。但是，这会使许多应用程序看起来比实际小得多，因为我们在Windows中大量使用了共享内存。特别是，对于通用应用程序，应用程序通常具有与桌面合成器完全共享的复杂可视树，因为这允许合成器仅在需要时呈现应用程序的更智能和更有效的方式，并导致整体更好的性能 系统。我们不认为隐藏共享内存是正确的答案。我们也可以选择为常规进程显示私有+共享，但只对csrss.exe和dwm.exe显示私有，但这也感觉像是对高级用户隐藏有用的信息。</p>
+<blockquote>
+<p>We could have decided to show a per process private memory breakdown instead and ignore shared memory. However, this would have made many applications looks much smaller than they really are since we make significant use of shared memory in Windows. In particular, with universal applications it’s typical for an application to have a complex visual tree that is entirely shared with the desktop compositor as this allows the compositor a smarter and more efficient way of rendering the application only when needed and results in overall better performance for the system. We didn’t think that hiding shared memory was the right answer. We could also have opted to show private+shared for regular processes but only private for csrss.exe and dwm.exe, but that also felt like hiding useful information to power users.</p>
+</blockquote>
+<p>这种增加的复杂性是我们不在默认视图中显示此信息并将其保留给知道如何找到它的高级用户的原因之一。最后，我们决定采用透明度，并采用包括私有和跨进程共享内存的细分。这是我们对反馈特别感兴趣的领域，并期待听到您的想法。</p>
+<blockquote>
+<p>This added complexity is one of the reason we don’t display this information in the default view and reserve this for power users who will know how to find it. In the end, we decided to go with transparency and went with a breakdown that includes both private and cross-process shared memory. This is an area we’re particularly interested in feedback and are looking forward to hearing your thoughts.</p>
+</blockquote>
+<h3 id="结语（Closing-thought）">结语（Closing thought）</h3>
+<p>我们希望您发现此信息很有用，并将帮助您充分利用新的任务管理器 GPU 性能数据。</p>
+<blockquote>
+<p>We hope you found this information useful and that it will help you get the most out of the new Task Manager GPU performance data.</p>
+</blockquote>
+<p>请放心，这项工作背后的团队将密切关注您的建设性反馈和建议，让他们不断涌现！ 提供反馈的最佳方式是通过反馈中心。要启动反馈中心，请使用我们的键盘快捷键 Windows 键 + f。在 <em>Desktop Environment -&gt; Task Manager.</em> 类别下提交您的反馈（并向我们发送赞成票）</p>
+<blockquote>
+<p>Rest assured that the team behind this work will be closely monitoring your constructive feedback and suggestions so keep them coming! The best way to provide feedback is through the Feedback Hub. To launch the Feedback Hub use our keyboard shortcut Windows key + f. Submit your feedback (and send us upvotes) under the category <em>Desktop Environment -&gt; Task Manager.</em></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 计算机图形学</a>
+              <a href="/tags/DirectX/" rel="tag"># DirectX</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/29/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004/" rel="prev" title="C++ Primer学习笔记04：复合类型">
+      <i class="fa fa-chevron-left"></i> C++ Primer学习笔记04：复合类型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/15/%E5%85%B3%E4%BA%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/" rel="next" title="关于计算机存储单位的那些事">
+      关于计算机存储单位的那些事 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E7%9A%84GPU%EF%BC%88GPUs-in-the-Task-Manager%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">任务管理器中的GPU（GPUs in the Task Manager）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%A6%81%E6%B1%82%EF%BC%88System-Requirements%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">系统要求（System Requirements）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E9%80%89%E9%A1%B9%E5%8D%A1%EF%BC%88Performance-Tab%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">性能选项卡（Performance Tab）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GPU%E5%92%8C%E4%BA%A4%E7%81%AB-SLI%EF%BC%88GPUs-and-Links%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">GPU和交火&#x2F;SLI（GPUs and Links）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPU%E5%88%A9%E7%94%A8%E7%8E%87%EF%BC%88GPU-Utilization%EF%BC%89"><span class="nav-number">1.2.2.</span> <span class="nav-text">GPU利用率（GPU Utilization）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%AD%98%EF%BC%88Video-Memory%EF%BC%89"><span class="nav-number">1.2.3.</span> <span class="nav-text">显存（Video Memory）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%89%E9%A1%B9%E5%8D%A1%EF%BC%88Processes-Tab%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">进程选项卡（Processes Tab）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF%E9%80%89%E9%A1%B9%E5%8D%A1%EF%BC%88Details-Tab%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">详细信息选项卡（Details Tab）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD%EF%BC%88Closing-thought%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">结语（Closing thought）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

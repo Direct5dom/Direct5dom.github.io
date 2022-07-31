@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ Primer学习笔记04：复合类型">
+<meta property="og:url" content="https://direct5dom.github.io/2022/03/29/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+<meta property="article:published_time" content="2022-03-29T07:10:29.000Z">
+<meta property="article:modified_time" content="2022-03-29T07:11:29.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="CPP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/03/29/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>C++ Primer学习笔记04：复合类型 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/03/29/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B004/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Primer学习笔记04：复合类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-03-29 15:10:29 / Modified: 15:11:29" itemprop="dateCreated datePublished" datetime="2022-03-29T15:10:29+08:00">2022-03-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CPP Primer学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/CPP.png?raw=true" alt="CPP.png"></p>
+<span id="more"></span>
+<p><strong>复合类型（compound type）</strong> 是指基于其他类型定义的类型。</p>
+<p>一条声明语句由一个<strong>基本数据类型（base type）</strong> 和紧随其后的一个<strong>声明符（declarator）</strong> 列表组成。每个声明符命名了一个变量并指定该变量为与基本数据类型有关的某种类型。</p>
+<h1>引用</h1>
+<p><strong>引用（reference）</strong> 为对象起了另外一个名字，其本身并不是对象，引用类型引用（refers to）另外一种类型。</p>
+<blockquote>
+<p>一般来说，“引用”指的是“左值引用”。</p>
+</blockquote>
+<p>通过将声明符写成<code>&amp;d</code>的形式来定义引用类型，其中<code>d</code>是声明的变量名：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">1024</span>;		</span><br><span class="line"><span class="keyword">int</span> &amp;refVal = ival;		<span class="comment">// refVal 指向 ival（是ival的另一个名字）</span></span><br><span class="line"><span class="keyword">int</span> &amp;refVal2;			<span class="comment">// 报错：引用必须被初始化</span></span><br></pre></td></tr></table></figure>
+<p>一般在初始化变量时，初始值会被拷贝到新建的对象中。然而定义引用时，程序把引用和它的初始值<strong>绑定（bind）</strong> 在一起，而不是将初始值拷贝给引用。一旦初始化完成，引用将和它的初始值对象一直绑定在一起。因为无法令引用重新绑定到另一个对象，因此引用必须初始化。</p>
+<h2 id="引用即别名">引用即别名</h2>
+<blockquote>
+<p>引用并非对象，相反的，它只是为一个已经存在的对象所起的另外一个名字。</p>
+</blockquote>
+<p>定义了一个引用之后，对其进行的所有操作都是在与之绑定的对象上进行的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">refVal = <span class="number">2</span>;			<span class="comment">// 把 2 赋给 refVal 指向的对象，此处即是赋给了 ival</span></span><br><span class="line"><span class="keyword">int</span> li = refVal;	<span class="comment">// 与 li = ival 执行结果一样</span></span><br></pre></td></tr></table></figure>
+<p>为引用赋值，实际上是把值赋给了与引用绑定的对象。获取引用的值，实际上是获取了与引用绑定的对象的值。</p>
+<p>同理，以引用作为初始值，实际上是以与引用绑定的对象作为初始值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 正确：refVal3 绑定到了那个与 refVal 绑定的对象上，这里就是绑定到 ival 上</span></span><br><span class="line"><span class="keyword">int</span> &amp;refVal3 = refVal;</span><br><span class="line"><span class="comment">// 利用与 refVal 绑定的对象的值初始化变量 i</span></span><br><span class="line"><span class="keyword">int</span> i = refVal;		<span class="comment">// 正确：i 被初始化为 ival 的值</span></span><br></pre></td></tr></table></figure>
+<p>因为引用本身不是一个对象，所以不能定义引用的引用。</p>
+<h2 id="引用的定义">引用的定义</h2>
+<p>允许在一条语句中定义多个引用，其中每个引用标识符都必须以符号<code>&amp;</code>开头。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">1024</span>, i2 = <span class="number">2048</span>;	<span class="comment">// i 和 i2 都是 int</span></span><br><span class="line"><span class="keyword">int</span> &amp;r = i, r2 = i2;		<span class="comment">// r 是一个引用，与 i 绑定在一起，r2 是 int</span></span><br><span class="line"><span class="keyword">int</span> i3 = <span class="number">1024</span>, &amp;ri = i3;	<span class="comment">// i3 是 int，ri 是一个引用，与 i3 绑定在一起</span></span><br><span class="line"><span class="keyword">int</span> &amp;r3 = i3, &amp;r4 = i2;		<span class="comment">// r3 和 r4 都是引用</span></span><br></pre></td></tr></table></figure>
+<p>大多数情况下（事实上只有两种例外），其他所有引用的类型都要和与之绑定的对象严格匹配。</p>
+<p>而且，引用只能绑定在对象上，而不能与字面值或某个表达式的计算结果绑定在一起。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> &amp;refVal4 = <span class="number">10</span>;		<span class="comment">// 错误：引用类型的初始值必须是一个对象</span></span><br><span class="line"><span class="keyword">double</span> dval = <span class="number">3.14</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;refVal5 = dval;	<span class="comment">// 错误：此处引用类型的初始值必须是 int 型对象</span></span><br></pre></td></tr></table></figure>
+<h1>指针</h1>
+<p><strong>指针（pointer）</strong> 是“指向（point to）”另外一种类型的复合类型。与引用类似，指针也实现了对其它对象的间接访问。然而指针与引用相比又有很多不同点。</p>
+<ol>
+<li>指针本身就是一个对象，允许对指针赋值和拷贝，而且在指针的生命周期内它可以先后指向几个不同的对象。</li>
+<li>指针无须在定义时赋初值。和其他内置类型一样，在块作用域内定义的指针如果没有被初始化，也将拥有一个不确定的值。</li>
+</ol>
+<p>定义指针类型的方法将声明符携程<code>*d</code>的形式，其中<code>d</code>是变量名。如果在一条语句中定义了几个指针变量，每个变量前面都必须有符号<code>*</code>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *ip1, *ip2;		<span class="comment">// ip1 和 ip2 都是指向 int 型对象的指针</span></span><br><span class="line"><span class="keyword">double</span> dp, *dp2;	<span class="comment">// dp2 是指向 double 型对象的指针，dp 是 double 型对象</span></span><br></pre></td></tr></table></figure>
+<h2 id="获取对象的地址">获取对象的地址</h2>
+<p>指针存放某个对象的抵制，要想获取该抵制，需要使用<strong>取地址符</strong>（操作符<code>&amp;</code>）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;ival;		<span class="comment">// p 存放变量 ival 的地址，或者说 p 是指向变量 ival 的指针</span></span><br></pre></td></tr></table></figure>
+<p>第二条语句把<code>p</code>定义为一个指向<code>int</code>的指针，随后初始化<code>p</code>令其指向名为<code>ival</code>的<code>int</code>对象。</p>
+<blockquote>
+<p>因为引用不是对象，没有实际地址，所以不能定义指向引用的指针。</p>
+</blockquote>
+<p>大多数情况下（事实上只有两种例外），其他所有指针的类型都要和它所指向的对象严格匹配：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> dval;</span><br><span class="line"><span class="keyword">double</span> *pd = &amp;dval;		<span class="comment">// 正确：初始值是 double 型对象的地址</span></span><br><span class="line"><span class="keyword">double</span> *pd2 = pd;		<span class="comment">// 正确：初始值是指向 double 对象的指针</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> *pi = pd;			<span class="comment">// 错误：指针 pi 的类型和 pd 的类型不匹配</span></span><br><span class="line">pi = &amp;dval;				<span class="comment">// 错误：试图把 double 型对象的地址赋给 int 型指针</span></span><br></pre></td></tr></table></figure>
+<p>因为在声明语句中指针的类型实际上被用于指定它所指向对象的类型，所以二者必须匹配。</p>
+<p>如果指针指向了一个其他类型的对象，对该对象的操作将发生错误。</p>
+<h2 id="指针值">指针值</h2>
+<p>指针的值（即地址）应属下列4种状态之一：</p>
+<ol>
+<li>指向一个对象。</li>
+<li>指向紧邻对象所占空间的下一个位置。</li>
+<li>空指针，意味着指针没有指向任何对象。</li>
+<li>无效指针，也就是上述情况之外的其他值。</li>
+</ol>
+<blockquote>
+<p>试图拷贝或以其他方式访问无效指针的值都将引发错误。**编译器并不负责检查此类错误，这一点和试图使用未经初始化的变量是一样的。**访问无效指针的后果无法预计，因此程序员必须清楚任意给定的指针是否有效。</p>
+</blockquote>
+<blockquote>
+<p>尽管第2种和第3种形式的指针是有效的，但其使用同样受到限制。显然这些指针没有指向任何具体对象，所以试图访问此类指针（假定的）对象的行为不被允许。<strong>如果这样做了，后果也无法预计。</strong></p>
+</blockquote>
+<h2 id="利用指针访问对象">利用指针访问对象</h2>
+<p>如果指针指向了一个对象，则允许使用<strong>解引用符</strong>（操作符<code>*</code>）来访问该对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;ival;		<span class="comment">// p 存放着变量 ival 的地址，或者说 p 是指向变量 ival 的指针</span></span><br><span class="line">cout &lt;&lt; *p;			<span class="comment">// 由符号 * 得到的指针 p 所指的对象，输出 42</span></span><br></pre></td></tr></table></figure>
+<p>对指针解引用会得出所指的对象，因此如果给解引用的结果赋值，实际上也就是给指针所指的对象赋值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*p = <span class="number">0</span>;			<span class="comment">// 由符号 * 得到指针 p 所指的对象，即可经由 p 为变量 ival 赋值</span></span><br><span class="line">cout &lt;&lt; *p;		<span class="comment">// 输出 0</span></span><br></pre></td></tr></table></figure>
+<p>如上述程序所示，为<code>*p</code>赋值实际上是为<code>p</code>所指的对象赋值。</p>
+<blockquote>
+<p>解引用操作仅适用于那些确实指向了某个对象的有效指针。</p>
+</blockquote>
+<h3 id="注意：某些符号有多重含义">注意：某些符号有多重含义</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;r = i;		<span class="comment">// &amp; 紧随类型名出现，因此是声明的一部分（即：int &amp; 是一个整体），r是一个引用</span></span><br><span class="line"><span class="keyword">int</span> *p;			<span class="comment">// * 紧随类型名出现，因此是声明的一部分（即：int * 是一个整体），p是一个指针</span></span><br><span class="line">p = &amp;i;			<span class="comment">// &amp; 出现在表达式中，是一个取地址符</span></span><br><span class="line">*p = i;			<span class="comment">// * 出现在表达式中，是一个解引用符</span></span><br><span class="line"><span class="keyword">int</span> &amp;r2 = *p;	<span class="comment">// &amp; 是声明的一部分，*是一个解引用符</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在声明语句中，这些符号<strong>用于组成复合类型</strong>；在表达式中，它们则作为运算符出现。</p>
+<p>不同场景下出现的虽然是一个符号，但由于含义完全不同，<strong>所以完全可以把它当作不同的符号来看待。</strong></p>
+</blockquote>
+<h2 id="空指针">空指针</h2>
+<p><strong>空指针（null pointer）</strong> 不指向任何对象，在试图使用一个指针之前代码可以首先检查它是否为空。</p>
+<p>一些生成空指针的方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p1 = <span class="literal">nullptr</span>;	<span class="comment">// 等价于 int *p1 = 0; 这是是 C++11 新标准引入的。</span></span><br><span class="line"><span class="keyword">int</span> *p2 = <span class="number">0</span>;		<span class="comment">// 直接将 p2 初始化为字面常量 0</span></span><br><span class="line"><span class="comment">// 首先需要 #include cstdlib</span></span><br><span class="line"><span class="keyword">int</span> *p3 = <span class="literal">NULL</span>;		<span class="comment">// 等价于 int *p3 = 0;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>nullptr</code>是一种特殊类型的字面值，它可以被转换成任意其他指针类型。</p>
+<p>过去的程序还会用到一个名为<code>NULL</code>的<strong>预处理变量（preprocessor variavle）</strong> 来给指针赋值，这个变量在头文件<code>cstdlib</code>中定义，它的值就是<code>0</code>。</p>
+<p>在新标准下，最好使用<code>nullptr</code>而不是<code>NULL</code>。</p>
+<blockquote>
+<p>预处理器是运行于编译过程之前的一段程序。它不属于命名空间<code>std</code>，它由预处理器负责管理，因此我们可以直接使用预处理变量而无需在前面加上<code>std::</code></p>
+</blockquote>
+</blockquote>
+<p>把<code>int</code>变量直接赋给指针是错误的操作，即使<code>int</code>变量的值恰好等于<code>0</code>也不行。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> zero = <span class="number">0</span>;</span><br><span class="line">pi = zero;		<span class="comment">// 错误：不能把 int 变量直接赋给指针。</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>建议初始化所有指针，未经初始化的指针是引发运行错误的一大原因。</p>
+</blockquote>
+<h2 id="赋值和指针">赋值和指针</h2>
+<p>指针和引用都能提供对其他对象的间接访问，然而在具体实现细节上二者有很大不同，其中最重要的一点就是<strong>引用本身并非一个对象</strong>。</p>
+<p>一旦定义了引用，就无法令其再绑定到另外的对象，之后每次使用这个引用都是访问它最初绑定的那个对象。</p>
+<p>而指针和它存放的地址之间就没有这种限制了。和其他任何变量（只要不是引用）一样，给指针赋值就是令它存放一个新的地址，从而指向一个新的对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">int</span> *pi = <span class="number">0</span>;		<span class="comment">// pi 被初始化，但没有指向任何对象</span></span><br><span class="line"><span class="keyword">int</span> *pi2 = &amp;i;		<span class="comment">// pi2 被初始化，存有 i 的地址</span></span><br><span class="line"><span class="keyword">int</span> *pi3;			<span class="comment">// 如果 pi3 定义于块内，则 pi3 的值是无法确定的</span></span><br><span class="line"></span><br><span class="line">pi3 = pi2;			<span class="comment">// pi3 和 pi2 指向同一个对象 i</span></span><br><span class="line">pi2 = <span class="number">0</span>;			<span class="comment">// 现在 pi2 不知想任何对象了</span></span><br></pre></td></tr></table></figure>
+<p>有时候想要搞清楚一条赋值语句到底是改变了指针的值还是改变了指针所指对象的值不太容易，最好的办法就是记住赋值永远改变的是等号左侧的对象。当写出如下语句时：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pi = &amp;ival;			<span class="comment">// pi 的值被改变，现在 pi 指向了 ival</span></span><br></pre></td></tr></table></figure>
+<p>意思是为<code>pi</code>赋一个新的值，也就是改变了那个存放在<code>pi</code>内的地址值。相反的，如果写出如下语句：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*pi = <span class="number">0</span>;			<span class="comment">// ival 的值被改变，指针 pi 并没有改变</span></span><br></pre></td></tr></table></figure>
+<p>则<code>*pi</code>（也就是指针<code>pi</code>指向的那个对象）发生改变。</p>
+<h2 id="其他指针操作">其他指针操作</h2>
+<p>只要指针拥有一个合法值，就能将它用在条件表达式中。</p>
+<blockquote>
+<p>如果指针的值是<code>0</code>，条件取<code>false</code>。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">int</span> *pi = <span class="number">0</span>;		<span class="comment">// pi 合法，是一个空指针</span></span><br><span class="line"><span class="keyword">int</span> *pi2 = &amp;ival;	<span class="comment">// pi2 是一个合法的指针，存放着 ival 的地址</span></span><br><span class="line"><span class="keyword">if</span> (pi)				<span class="comment">// pi 的值是 0，因此条件的值是 false</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">if</span> (pi2)			<span class="comment">// pi2 指向 ival，因此它的值不是 0，条件的值是 true</span></span><br><span class="line">    <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p>任何非<code>0</code>指针对应的条件值都是<code>true</code>。</p>
+<p>对于两个类型相同的合法指针，可以用相等操作符（<code>==</code>）或不相等操作符（<code>!=</code>）来比较它们，比较的结果是布尔类型。比较的内容是指针存放的地址，若地址相同，则相等；反之不相等。</p>
+<p>这里的两个指针地址相同（即两个指针相等）有三种可能：</p>
+<ul>
+<li>它们都为空；</li>
+<li>都指向同一个对象；</li>
+<li>都指向同一个对象的下一地址。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：一个指针指向某对象，同时另一个指针指向另外对象的下一个地址，此时也可能出现两个指针值相同的情况，即指针相等。</p>
+</blockquote>
+<blockquote>
+<p>因为上述操作要用到指针的值，所以不论是作为条件出现还是参与比较运算，都必须使用合法指针，使用非法指针作为条件或进行比较都会引发不可预计的后果。</p>
+</blockquote>
+<h2 id="void-指针"><code>void*</code>指针</h2>
+<p>**<code>void*</code>**是一种特殊的指针类型，可用于存放任意对象的地址。</p>
+<p>一个<code>void*</code>指针存放着一个地址，这一点与其他指针类似。<strong>不同点在于，我们对该地址中到底是个什么类型的对象并不了解：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> obj = <span class="number">3.14</span>, *pd = &amp;obj;	</span><br><span class="line"><span class="comment">// 正确：void* 能存放任意类型对象的地址。</span></span><br><span class="line"><span class="keyword">void</span> *pv = &amp;obj;	<span class="comment">// obj 可以是任意类型的对象</span></span><br><span class="line">pv = pd;			<span class="comment">// pv 可以存放任意类型的指针</span></span><br></pre></td></tr></table></figure>
+<p>利用<code>void*</code>指针能做到的事比较有限：</p>
+<ul>
+<li>拿它和别的指针比较；</li>
+<li>作为函数的输入或输出；</li>
+<li>赋给另一个<code>void*</code>指针。</li>
+</ul>
+<p>不能直接操作<code>void*</code>指针所指的对象，因为我们并不知道这个对象到底是什么类型，也就无法确定能在这个对象上做哪些操作。</p>
+<p><strong>概括来说</strong>，以<code>void*</code>的视角来看内存空间也就仅仅是内存空间，没办法访问内存空间中所存的对象（后续将会讲述获取<code>void*</code>指针所存地址的方法）。</p>
+<h1>理解复合类型的声明</h1>
+<p>在同一条定义语句中，虽然基本数据类型只有一个，但是声明符的形式却可以不同。也就是说，一条定义语句可能定义出不同的变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// i 是一个 int 型的数，p 是一个 int 型的指针，r 是一个 int 型引用</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">1024</span>, *p = &amp;i, &amp;r = i;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>类型修饰符不过是声明符的一部分而已。</p>
+</blockquote>
+<h2 id="定义多个变量">定义多个变量</h2>
+<p>一种<strong>常见的错误</strong>就是认为类型修饰符（<code>*</code>或<code>&amp;</code>）可以作用于本次定义的全部变量。</p>
+<p>造成这种错误看法的原因有很多，其中之一便是我们可以把空格写在类型修饰符和变量名中间：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>* p;		<span class="comment">// 合法但是容易产生误导</span></span><br></pre></td></tr></table></figure>
+<p>看似好像<code>int*</code>放在一起好像是这条语句中所有变量共同的类型一样。其实恰恰相反，基本数据类型是<code>int</code>而非<code>int*</code>，<code>*</code>仅仅修饰了<code>p</code>而已，对声明语句中的其他变量，它不产生任何作用。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>* p1, p2;		<span class="comment">// p1 是指向 int 的指针，p2 是 int</span></span><br></pre></td></tr></table></figure>
+<p>涉及指针或引用的声明，一般有两种写法：</p>
+<ul>
+<li>
+<p>把修饰符和变量标识符写在一起：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p1, *p2;		<span class="comment">// p1 和 p2 都是指向 int 的指针</span></span><br></pre></td></tr></table></figure>
+<p>这种形式着重强调具有复合类型。</p>
+</li>
+<li>
+<p>把修饰符和类型名写在一起，并且每条语句只定义一个变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>* p1;		<span class="comment">// p1 是指向 int 的指针</span></span><br><span class="line"><span class="keyword">int</span>* p2;		<span class="comment">// p2 是指向 int 的指针</span></span><br></pre></td></tr></table></figure>
+<p>这种形式着重强调本次声明定义了一种复合类型。</p>
+</li>
+</ul>
+<blockquote>
+<p>更推荐用第一种方法。</p>
+</blockquote>
+<h2 id="指向指针的指针">指向指针的指针</h2>
+<p>一般来说，声明符中修饰符的个数并没有限制。当有多个修饰符连写在一起时，按照其逻辑关系详加解释即可。</p>
+<p>以指针为例，指针是内存中的对象，像其他对象一样也有自己的地址，因此允许把指针的地址再存放到另一个指针当中。</p>
+<p>通过<code>*</code>的格式可以区分指针的级别。也就是说，<code>**</code>表示指向指针的指针，<code>***</code>表示指向指针的指针的指针，以此类推：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">int</span> *pi = &amp;ival;		<span class="comment">// pi 指向一个 int 型的数</span></span><br><span class="line"><span class="keyword">int</span> **pi = &amp;pi;			<span class="comment">// ppi 指向一个 int 型的指针</span></span><br></pre></td></tr></table></figure>
+<p>此处<code>pi</code>是指向<code>int</code>型数的指针，而<code>ppi</code>是指向<code>int</code>型指针的指针：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ppi    pi    ival</span><br><span class="line">[]  -&gt; [] -&gt;[1024]</span><br></pre></td></tr></table></figure>
+<p>解引用<code>int</code>型指针会得到一个<code>int</code>型的数，同样，解引用指向指针的指针会得到一个指针。此时为了访问最原始那个对象，需要对指针的指针做两次解引用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; <span class="string">&quot;The value of ival\n&quot;</span></span><br><span class="line">     &lt;&lt; <span class="string">&quot;direct value: &quot;</span> &lt;&lt; ival &lt;&lt; <span class="string">&quot;\n&quot;</span></span><br><span class="line">     &lt;&lt; <span class="string">&quot;indirect value: &quot;</span> &lt;&lt; *pi &lt;&lt; <span class="string">&quot;\n&quot;</span></span><br><span class="line">     &lt;&lt; <span class="string">&quot;doubly indirect value: &quot;</span> &lt;&lt; **ppi</span><br><span class="line">     &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+<p>该程序使用三种不同的方式输出了变量<code>ival</code>的值：</p>
+<ul>
+<li>第一种直接输出；</li>
+<li>第二种通过<code>int</code>型指针<code>pi</code>输出；</li>
+<li>第三种两次解引用<code>ppi</code>，取得<code>ival</code>的值。</li>
+</ul>
+<h2 id="指向指针的引用">指向指针的引用</h2>
+<p>引用本身不是一个对象，因此不能定义指向引用的指针。</p>
+<p>但指针是对象，所以存在对指针的引用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">int</span> *p;			<span class="comment">// p 是一个 int 型指针</span></span><br><span class="line"><span class="keyword">int</span> *&amp;r = p;	<span class="comment">// r 是一个对指针 p 的引用</span></span><br><span class="line"></span><br><span class="line">r = &amp;i;			<span class="comment">// r 引用了一个指针，因此给 r 赋值 &amp;i 就算令 p 指向 i</span></span><br><span class="line">*r = <span class="number">0</span>;			<span class="comment">// 解引用 r 得到 i，也就是 p 指向的对象，将 i 的值改为 0</span></span><br></pre></td></tr></table></figure>
+<p>要理解<code>r</code>的类型到底是什么，最简单的办法是<strong>从右向左阅读<code>r</code>的定义</strong>。</p>
+<p>离变量名最近的符号（此例中是<code>&amp;r</code>的符号<code>&amp;</code>）对变量的类型有最直接的影响，因为<code>r</code>是一个引用。</p>
+<p>声明符的其余部分用以确定<code>r</code>引用的类型是什么，此例中的符号<code>*</code>说明<code>r</code>引用的是一个指针。</p>
+<p>最后，声明的基本数据类型部分指出<code>r</code>引用的是一个<code>int</code>指针。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CPP/" rel="tag"># CPP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/13/CPP-Primer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/" rel="prev" title="C++ Primer学习笔记03：变量">
+      <i class="fa fa-chevron-left"></i> C++ Primer学习笔记03：变量
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/08/GPUs-in-the-task-manager-%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E7%9A%84GPU/" rel="next" title="GPUs in the task manager（任务管理器中的GPU）">
+      GPUs in the task manager（任务管理器中的GPU） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">引用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E5%8D%B3%E5%88%AB%E5%90%8D"><span class="nav-number">1.1.</span> <span class="nav-text">引用即别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">引用的定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%9C%B0%E5%9D%80"><span class="nav-number">2.1.</span> <span class="nav-text">获取对象的地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%80%BC"><span class="nav-number">2.2.</span> <span class="nav-text">指针值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E6%8C%87%E9%92%88%E8%AE%BF%E9%97%AE%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.3.</span> <span class="nav-text">利用指针访问对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E6%9F%90%E4%BA%9B%E7%AC%A6%E5%8F%B7%E6%9C%89%E5%A4%9A%E9%87%8D%E5%90%AB%E4%B9%89"><span class="nav-number">2.3.1.</span> <span class="nav-text">注意：某些符号有多重含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E6%8C%87%E9%92%88"><span class="nav-number">2.4.</span> <span class="nav-text">空指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC%E5%92%8C%E6%8C%87%E9%92%88"><span class="nav-number">2.5.</span> <span class="nav-text">赋值和指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%8C%87%E9%92%88%E6%93%8D%E4%BD%9C"><span class="nav-number">2.6.</span> <span class="nav-text">其他指针操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#void-%E6%8C%87%E9%92%88"><span class="nav-number">2.7.</span> <span class="nav-text">void*指针</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">理解复合类型的声明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%A4%9A%E4%B8%AA%E5%8F%98%E9%87%8F"><span class="nav-number">3.1.</span> <span class="nav-text">定义多个变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%90%91%E6%8C%87%E9%92%88%E7%9A%84%E6%8C%87%E9%92%88"><span class="nav-number">3.2.</span> <span class="nav-text">指向指针的指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%90%91%E6%8C%87%E9%92%88%E7%9A%84%E5%BC%95%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">指向指针的引用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

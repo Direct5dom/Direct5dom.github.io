@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前不久2021农历新年特惠，Steam服务器崩了好几次，知乎上相关问题推荐就给我淹没了。 大量的同质问题，没办法得到完全的解答。实际上Steam服务器宕机导致服务不稳定的次数在我印象里已经数不胜数了，之前每次宕机都会有人提问，然后下次宕机继续提问，所以写一篇万能文章，以后再有类似问题直接放链接。 关于Steam服务器状态，一般只要去查看服务器状态就好。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Steam服务器「炸了」">
+<meta property="og:url" content="https://direct5dom.github.io/2021/02/07/%E5%85%B3%E4%BA%8ESteam%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%8C%E7%82%B8%E4%BA%86%E3%80%8D/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="前不久2021农历新年特惠，Steam服务器崩了好几次，知乎上相关问题推荐就给我淹没了。 大量的同质问题，没办法得到完全的解答。实际上Steam服务器宕机导致服务不稳定的次数在我印象里已经数不胜数了，之前每次宕机都会有人提问，然后下次宕机继续提问，所以写一篇万能文章，以后再有类似问题直接放链接。 关于Steam服务器状态，一般只要去查看服务器状态就好。">
+<meta property="og:locale">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-8b5c500f6fdb6ec28df9f95b9755aaf0_b.png">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-dffeb32b36ec111d2fc8cae247f2240c_b.png">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-47d4189bead2100d14b3aa28459ba8c8_b.png">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-54d467bc2edd462914c95da77948bcac_b.png">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-63d28ba58cb91d321d6b9511822de2b4_b.png">
+<meta property="article:published_time" content="2021-02-07T04:12:12.000Z">
+<meta property="article:modified_time" content="2021-10-06T11:06:57.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.zhimg.com/v2-8b5c500f6fdb6ec28df9f95b9755aaf0_b.png">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/02/07/%E5%85%B3%E4%BA%8ESteam%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%8C%E7%82%B8%E4%BA%86%E3%80%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>关于Steam服务器「炸了」 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/02/07/%E5%85%B3%E4%BA%8ESteam%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%8C%E7%82%B8%E4%BA%86%E3%80%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于Steam服务器「炸了」
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-07 12:12:12" itemprop="dateCreated datePublished" datetime="2021-02-07T12:12:12+08:00">2021-02-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-06 19:06:57" itemprop="dateModified" datetime="2021-10-06T19:06:57+08:00">2021-10-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前不久2021农历新年特惠，Steam服务器崩了好几次，知乎上相关问题推荐就给我淹没了。</p>
+<p>大量的同质问题，没办法得到完全的解答。实际上Steam服务器宕机导致服务不稳定的次数在我印象里已经数不胜数了，之前每次宕机都会有人提问，然后下次宕机继续提问，所以写一篇万能文章，以后再有类似问题直接放链接。</p>
+<p>关于Steam服务器状态，一般只要去查看服务器状态就好。</p>
+<span id="more"></span>
+<h2 id="通过Steam统计数据查看服务器状态：">通过Steam统计数据查看服务器状态：</h2>
+<p>最方便的方式是通过Steam统计数据看玩家在线曲线：</p>
+<p><a target="_blank" rel="noopener" href="https://store.steampowered.com/stats">Steam: Game and Player Statistics (steampowered.com)</a></p>
+<p>服务器正常的情况下应该是近似两个正弦函数叠加出来的曲线，也就是下图这样：</p>
+<p><img src="https://pic1.zhimg.com/v2-8b5c500f6fdb6ec28df9f95b9755aaf0_b.png" alt="img"></p>
+<p>当Steam服务器发生任何问题时，波及的一般不可能是一两个玩家，应该会影响到上万名乃至上十万名玩家，这会导致曲线出现剧烈波动或断崖，如下图红圈：</p>
+<p><img src="https://pic1.zhimg.com/v2-dffeb32b36ec111d2fc8cae247f2240c_b.png" alt="img"></p>
+<p>21年2月11日和21年2月12日连续两天出现的服务器不稳定，除了两个红圈内的波动外，其他曲线部分也存在小幅度的波动。</p>
+<p>这是Steam官方推荐的服务器状态查询方法。当然这个页面是挂载在Steam主域名下的，因此如果服务器崩的太严重，这个页面会打不开。所以就需要通过第三方网站查询Steam服务器状态。</p>
+<h2 id="通过第三方网站查询Steam状态：">通过第三方网站查询Steam状态：</h2>
+<p>这类第三方服务很多，我印象里一些App也提供了这种服务。我个人经常使用的是SteamDB的查询渠道：</p>
+<p><a target="_blank" rel="noopener" href="https://steamstat.us/">Steam Status · Is Steam Down?</a></p>
+<p>网页里提供了很多数据，包括Steam的服务器状态和Valve旗下游戏服务器的状态，以及各地区连接到Steam、CSGO服务器的宽带状态。</p>
+<p>如果想看Steam服务器炸没炸，只需要看这几行即可：</p>
+<p><img src="https://pic1.zhimg.com/v2-47d4189bead2100d14b3aa28459ba8c8_b.png" alt="img"></p>
+<p>可见现在Steam的商店、社区、网页API等都是正常的，当出现服务器宕机的情况，会显示红色的Offline。并且Steam Connection Managers的曲线会剧烈波动。</p>
+<p>当然这种方法本人不常用而且只适用于监测Steam服务器本身的问题，而有些时候我们连不上Steam还可能是其他自身原因等（比如国内上不去Steam社区，但这里Steam社区服务器是正常的），因此需要一种“可追溯”的方法来监测我们到Steam服务器的过程是否顺畅。</p>
+<h2 id="Ping网页：">Ping网页：</h2>
+<p>Windows的CMD命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping</span><br></pre></td></tr></table></figure>
+<p>很有用，所有的网站都可以通过这一短短的代码来监测我们到网站服务器的连接状态。</p>
+<p>单机开始菜单选择“命令提示符”（现在版本的Windows10应该全部是PowerShell了），输入命令就能查询</p>
+<p>比如这里我Ping一下Steam商店：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping store.steampowered.com</span><br></pre></td></tr></table></figure>
+<p><img src="https://pic1.zhimg.com/v2-54d467bc2edd462914c95da77948bcac_b.png" alt="img"></p>
+<p>可以看到数据包不存在丢失，这时候就说明我们和Steam的链接是正常的。</p>
+<p>这里我再Ping一下Steam社区：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping steamcommunity.com</span><br></pre></td></tr></table></figure>
+<p><img src="https://pic1.zhimg.com/v2-63d28ba58cb91d321d6b9511822de2b4_b.png" alt="img"></p>
+<p>会发现四次请求全部丢失，说明我和Steam社区的链接并不顺畅（即便Steam社区服务器正常）。</p>
+<p>当然这种方法并不适用于一些加速器加速后效果的检测，这是因为加速器的原理导致的。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/07/%E4%BD%BF%E7%94%A8MySQL-WorkBench%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E5%8C%85%E6%8B%AC%E6%95%B0%E6%8D%AE%EF%BC%89/" rel="prev" title="使用MySQL WorkBench导出数据库（包括数据）">
+      <i class="fa fa-chevron-left"></i> 使用MySQL WorkBench导出数据库（包括数据）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/04/%E7%89%B9%E5%AE%9A%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E6%8C%A0%E6%9B%B2%E7%BA%BF%E8%AE%A1%E7%AE%97%E5%8F%8A%E7%BB%98%E5%88%B6/" rel="next" title="特定情况下的挠曲线计算及绘制">
+      特定情况下的挠曲线计算及绘制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87Steam%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8A%B6%E6%80%81%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">通过Steam统计数据查看服务器状态：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BD%91%E7%AB%99%E6%9F%A5%E8%AF%A2Steam%E7%8A%B6%E6%80%81%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">通过第三方网站查询Steam状态：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ping%E7%BD%91%E9%A1%B5%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">Ping网页：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

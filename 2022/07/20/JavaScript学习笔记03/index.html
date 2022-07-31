@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript学习笔记03：JavaScript正则表达式、错误调试、声明提升、this、let与const">
+<meta property="og:url" content="https://direct5dom.github.io/2022/07/20/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAACzCAYAAAAgyDaKAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGv2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuZWRhMmIzZiwgMjAyMS8xMS8xNC0xMjozMDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjEgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0xMC0xMlQxODoyOToyOCswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OGNkMGRiZmEtZTNmMC04NTQxLWExNWQtODNhNDJlYzU1NmE4IiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6NTA4MDliYzAtN2QxYy1hYTQzLTgwY2MtNmFjMzVlZDk0ODc3IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MjNmYThkOGItMWI3OC1mNDQyLWIxOTctYjU0MDJlMzMxNzlkIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoyM2ZhOGQ4Yi0xYjc4LWY0NDItYjE5Ny1iNTQwMmUzMzE3OWQiIHN0RXZ0OndoZW49IjIwMjEtMTAtMTJUMTg6Mjk6MjgrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZjM2M0N2MtNjBmMS0xZDQwLWExMjYtMDUxOGU2NDAyZWMwIiBzdEV2dDp3aGVuPSIyMDIxLTEwLTEyVDE4OjMxOjUwKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjhjZDBkYmZhLWUzZjAtODU0MS1hMTVkLTgzYTQyZWM1NTZhOCIgc3RFdnQ6d2hlbj0iMjAyMi0wNy0xNFQxNzoyMjo1MSswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIzLjEgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvL9LZcAAB3TSURBVHic7Z3Xc13Hnec/3SfchEgSYM5BFJMYRFFUFi1aY8mybMv27Ng7Ls/M7j7swz7v/7AP+zxV3tqa8tQ4zbpsj3IiFUmKYs5gJgGCJBgQbjyhex/6XpCyFYh7LwDhqD9VEAoicE/fe76n+9e//gUxePrFV4BVQAGLZeqSA467wApg0eSOxWJpCpEEypM9CoulSZQlICZ7FBZLkxByskdgsTQTK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKK2hLorCCtiQKd7IHYJl8hPjsF4jqd0ADovp99H9ptOYzX18XrKAbRAhwXYEUX/27X0SsII71hApDCpCOEa4UgBAIAA1hrMkXFMWSQlbfnxDg+4JsWuA5Ao1AVwesNSgNKtaoSRa3FXSDxAoqBYVSmJmsDqQDnnPXrDiOOBIcR1RnVs1IQXP5Skj/QMTwsGJoJGZoRDOcjylVqoJ2zAPreYJsVtKSkXS0OXTNcJjV7TCryyWXkTiOwBUQK00cj/97+TysoBsg5QuuDkT87j+G6e2PSKXGpkilAQ3LF3s8v62FGdNcgnB8pjhHmpkWoFBUXOoLOdJToedcwMXekJu3I0aKmkIhplQ2YpfVHZaumh1ag0Dg+4LWFsG0dofODofZ3S7LFvisXpFiyUKfthaJ65iZXk2wsK2gG8BzBYWiZseuIkdOlWnNOWP6+zjWKK15fHOWbY/kcB0IwnEYp2dm/1uDMUdOVfjo0yI9Zyv0XYu5PaxQsRGvlMb8SPkC8TnLxeijpjUjI5qhIcWZCyFCQHurw8wZDvct9dm6Kcv6VWm6pzsgIQw1E2WJWEE3gMbY0H5KkE5J0mOdoZVAaY3vG8E1+6ZLCb4nKJYUh09WeOuDIgeOlui9GlIJNK4rjDnhjtXcMb+sNXjV7/mi4tbZiDOXAj49XGbjmgzPPpllw+o0uawkCCbGvraCbpTqpqo2w40ZTUMbyi/Cdcym79KVkNd35HnzwwIXeyOiWOO7glym8YvWHgJRff+eK4lj6L8W8fqNEY6cLPPskzm++0wr82e7hKEmVg1f9kuxgk4gnmem+8PHy/z2P4b5aG+RkaLG8wSZMa4iY8VxzKYziuF8b8hv/jxM37WIv3uxjVXLUohYE42jXW0FnTA8F7SCj/cV+dUfhth/tAxAOjUxXpQargNuRlAoKl7fkef2kOKf/radDavTaG08IeNy3XF5Vcuk4DjGDv/kUIn/89shjp4qV02BCVTyX+D7gjDU7NlfBK35rz/t5IH7UxAxLuaHPfpOCFIYG/bkmYBf/WGQwydLOM7kirmG5wmkFOw+UOL//m6QnnMBvi/q23N8BVbQCUBUDz36roX87uVhPj1cxpHGg/F1wXVBCsGu/SX+9Y+DXLoS4Xui3rOoL8QKOgF4rqBc0by5M8/O3UXi2Ljrvm54nvG979xV4pV38uQLCt9v7jitoKc4UoKQcOhEmTfezzM8okg1WSTNxPfMRvHVd0fYvb+E1hq3iTs5K+gpjusI8gXNzt1Fzl4KzTLeJD2PR0SdEOB70Hs15PevDnP8dIAUzRuz9XJMYWqbqmM9ZQ4cLROGkEk39pqqGvkXxdVDkKqQzeGJwHXNQ9SIALWGcqC52Bdx/nLI8sU+UtKUgCYr6CmMKwVBqPn0cJnL/eHoEXo9aKoxFwraWyVd011aWyUpz0TmVQLF8Ijm+o2IkaIaDXYay/W0NtdwXMH6+9M8+1QLG1ankUKgmuSXtoKewggJ127E9JwLKBY1mXR9albKCK293WH9/Sk2rE6zfIlP9wyHXFqigXxBce16xKnzAQeOlTnWU2FwWFXjQb7iAhrC2Fyja7rDE1uyfHdbK6tW+LgORFHzgpesoKcojgQEnLkU0Nsfmp/rQGsjqEXzPF74divfeiTHrG4HWQ0wqc3AXdNh8QKfzRsyPLU1x4efFnltR54z50MizRdu7GoPi+8L1t2f5jtPtfDElizd012iqmnTzDNDK+gpSk1ol3tNcL5Th11bMwFmdTv83YttfG97K+m0IAzvZNDou2zomh29dKHPgjkeSxZ4/O7lYXbvLxNG5tj9M68dmSPuWTNcvvVolu883cLKZSkcAUFYTYpoMlbQUxVhwkKv3YgolRQpf+xTdKzM0fS2R1vY/mQLqZSgVPr8GbMmbqU0cWQCnR7bnKWzzUGKQT7eVyKOzfG7UhBGmnRKsnGNmZW3bsrS2S6JIk3ZBidZ/hIhYHBYMTgUm/DksZrP2szCi+b7bN2YobNNUq7c2/KvgSDUeBrW3pfipy+2MTgUc+h4BSHN2ObPdnnm8RaefTLHsoU+wITERFtBT0GEMPotFBTFkjZ+3DG+htLGTbZ4nsfShT5RxJhNgDAChGbTugzf3R5xoS8kDDSPPJjlhWda2LgmTWtOEkQTl2NoBT1VEVCpaMoVPfrzWNCA0pr2Vsm09rGljt1NFEEqBVvWZ7i0vZV0SvDc0y0snOeB5p5n/WZhBT0FqVkYQaRHk2rrPefQ2oi7XtFpDZWypnuawz/8uB3XEbTkjK08GZnf9uh7CnOnMEwdf4vJ4C6WFCOFxtwNuvqC7a0O2YykEkxeGQMr6ClIbUZN+WI0MXessRa1PMAbtxUDNyJkAw9H7fpBqAmjya00YwU9VdGQzUgymTsVjMaCEMbFdvlKQM+5ADA/T3WsoKcgNZ9we4ukLSfrjoZzHcHATcWO3UXOXw5J+3Jcskgmkik+/G8uGmhtk3R2usg6bYVaLPUnB4v85s9DXOgLSafkZ078phpW0A2gNcSRQmv9uZWGxvfaGs8RzJzu0NYmUXUGLLsOlCqa19/L88tfD3L0VAUhjG0+FU0QK+gG0BoiZQ4pJjpHpGZmLJrrM2emRxzXH4SfcgXFkua1nXn+9y9v8sc3RrhyzWwUM+mvV27iVzGFF5evD5Nxu5UyAl44z2X+LJcTpyummGI9gxEmNSqKYP/RMpf6QvYdKfH4Q1nWrkwzc4ZDpha0pCa27O9YsYJukMmcu7SG6Z0uK5f77D5YMvWcG6gr5rogteDGrZg33y/wycEya+5L8ejmDOtXpZk/xyOTloSRIo7HflQ+EVhBT2Hi2BRc3LgmzY6Pixw+UW44PUoKSKUEcQy3hmI+3Fvi0Mky9y9LsWV9hrUrUyxd5NOWk8SqWuRcNb/QZL1YQU9hVNWOXr7QZ8OqND3nAqKYpngpajXqYgVDw4rd+8scOFZmyXyPTesybFidZu19KaZ3OmhMoNNEdyH4PKygpzhRrMlkHB7fkuWTwyVOngmaWi3JkeD4wsQ4B5oTZwJ6zge8v6fI+lVpNqxJsWFNmlldHp4nULEZ02RhBT3FqbWWWLXc5+mHc1zuiyhVml+bw5QLNgmzcay52BtyqTdk174iq+9LsWlNhoc2ZFgwxyWTEkSxNuGlE4wVdAIII00mLfn2Uy2cOBvwwe7CaPZIs6k1SXJdY2bcuBWz46MC+4+U2bm7wJYNGZ7ckmXhXI+Ub4Q9kYFKVtAJQGuzzC+c6/Kj51rovxZw4kxAJj2+R9k1O1spwUhe8cnBEqfOBuw9VGbbo1ke3ZRldrdbbbUxMfa1PVhJCHFsPA6bH8jwn3/YwcK5PpVAT4hrTUqTm5hJSwolxZ4DJf75X2/zv/75Bq+/V+D2YEzKn5iTRztDJ4ha5vW2R7OUyppf/WGQS33RhIlJVA9otGvyHd/fXeLM+YgTp01K1rJFpg5HJRi/qdoKOmGEEaR9wfPbcmTSgn/70xA9ZwNiZaqUTkTIiah20opjuHI95PevDHP6QsCL21t5dHOGthaTBDAeJogVdAIJQiOoZ59oYXqnw7+/Osye/eYk0Z/AENGajR1G8MlB033rUn8r39/ewqxud1xMIivohFIzP7ZuzDCr22HJAo83dhbovRoh5Z0C5BOB54IjBX39Ef/2xyFu3Y752ffbWDDPM6UNmihqK+gEE0ZGLIvm+fz8pQ7uW5Li9fcK7D1UYiSvkFI33Kf8XpES0mlBvqB4+e0R8kXFz19qZ8Uin5DmidoKOuHEClRFk8tKtj2WY/linw/3ptm5q8jx02VKZT3a0mK8hS0wplAl1Lz5XgEVa/7LTztZttCjUmlOERor6G8AGlO1SErBwrkes7pdHlybZtf+Eh/sLdFztkKxZKZIzx9/YfueoBKYltLZjMN/+2k73V0uQRM2ilbQ3yCU0pQrJktl5TKfhfM8HtqQZvenJT7aV+T8pZChvEIrM2OPp6sv5QsqFc3bH+WZN9vhJy+0k0mJ0Toj9WIFPcmYCkYTe80oNoH6vgurl6dYPM/nyYezHDhW4cN9RXrOBgzciqiUNb4rcZzGShx8Eb4vGBpWvPxOniULfJ7YkkXKxuKsraAnG31n8zaRaYlaQxCBiDS+B8sW+8yf67F1U4ZDx8vsOlDi5JkKfVcjSmVtOsM22Y9d81df7At54/08K5el6JrmEDTwhFtBTzb6TjmuSbo8YWQeKteBubNcZnfn2Lopw6lzAZ8cLHP4RJkz5ysMjihcRxjPSJN82Y5j6uPtP1Jh78ESz21rwXUFUZ0Fa6ygm8DXJVujUaJqLLPjQHubw0MPZFi3Ms2FvoBPD5XZe7jE8WorCimNb7kZwnZdwfWbEZ8eLfPIgxk6GigeaQXdAKb6kEAKgamxOXWyo7+MWvaJlKbp/aplKVYs9nnsoSwHjpTZfaDEweMlbt6OkVI0fKQuJWilOXmmwslzAY9szCBFfXsLK+gGqAlaiDpLCAgzu0fh1zPhVCkIlB6tg7d4vs+ieT4Pbciw73CJtz8qcOhYhVJZ4TXQH7HmB798JeLE6QoPr8+YzWEdcdRW0JNI7f7HNRv6azrB62pxdKWMqTF/tsvcma2sXpHirQ8LvLojT/+1CNcVdTcvktJUQu3tDxnOx7S2OOaDGSNW0JZ7pibsuGpnr1jiM2eWy8I5Hr99eZgTZwIE1GdXC1OW7OqNmKvXI9pbnbpWPhvgb6mLODbV+bNpyd881cIvftTB0gWe6TlYh/lVq3U9cDNi4FZs6lfXsWJZQSec8fRtmw6zGunAkw9n+N72Fjo7nLpqRNe6EgwNxaYRkqSueoFW0A1QW4LrLsFVpdYEqJn+P4EJEfW8+u3aeyUITLvjx7fkWLcyRRTXFz0ngJGCZjhfv8foGydox2neoYDWmkolRsWasfehqj4IgOcY+7EZCEzd51RKEARw9XpEqaLHNajfVGGFOTMdViz2SfuyvuN8YbraFkqKOFKIOp7wb8ym0JEgHeMnq7V0aGRCFMK4tUplTdTAsbWgGgAvGhwQZjPmuaYozNmLITs+LnChN+DbT7by2IMZoibGHf8lWpv2cp0dLq05yeBITD2zbM2MqYSmKupYP5TEC1oIc5MdR9B3NWTfkTJzZzmsXZmudkat/3VVtW1ZQ3EYshqLLOvX82g8s4SB2xG795V4870CB46WGc4rggAWz/VYOM+lVBmfXL7a8b3vm7HUuzFEGC+KUvXZcYkWtOOY5bdU1hw5Webld0fYta/EpjUpZk73mDvbvdPnb4wITDhmqaKJY12XoLU2/tdsVuK69YnAPKwwUlAcOl7hrQ/z7D1Y4upAPDpj7z5QYv7cYf7+h+20tzrjknVd2weEoTEb6nm+a6NyZJ2uPxIqaCnBdwVKw4XekLc+KPDuRwXOXAopVxR7Dmne21Pkpefa8L36YnCFNLEPtwZjKkG9gtY4UtDWIk1duDEMw3XMTFgJND3nzHv84JMi53tDtNKk/OoJJlAoKl5+p8CsLpfvbW81schNFrUQpnnR7cGIkaJC1JMloAGt8T1znF5Py87ECdpzzcbv1mDMrv0lXt+Z5+DxMvmCabjempMMjyheeXeEFUt8HlqfqWtX7khBuaK43BdSKCpjn48RrY3t3N7qmHoW9zAGKUwccRzDhd6I9/cUeOfDAj3nA0plIwbHuzMWgclCuXYj4jd/HjYlw57IkfKhEox5yJ9LraPWlWsRpy8ElMu6vtp6GhxXkMlIPFdWI+6+oTa044DvScqB4vDJMm++V2DnngLXBmIcKcik73zAris4fT7kD6+NMGemy7zZLuXyvee0CWGWxYGbEafOVSiVFOn02NZIgbHBpSPomuaQTYsv7ZNSE6YUMHArZv+REm/sLHDweJnbwzGu+9n3eDdSmFod5y9H/Mu/DwGabY/kyGVlU3L5vOoDtOdAmWOnKqYZUT16FtDW4tDR6iBEfS2Vp7yga9V6AC72hry3p8hrO/KcuxgQhBrP56/8sLVaax/sLdI13eWn329jzkyHclkTf8UsKTARaIWS5p2Pi5y9GOLUEW2mMRvSdErSPcPD9yWl8pdcXJg6zT3nKrz+Xp7dB8pcv2HKe6ZT8iuvLyX4Hpy5EPDLXw9x45biuadzzOpyTdhopGsr/j1TM+20gD0HSvz57RGu34rrClTS1cl4Rqc0NacVdfVfnNKCNrOyYHAo5tMjZV7bkefTw2WG8grPEaS/YMYC83elsuLPbw+j0fzku23Mn+0SK7PLrgXeA6PeJ0eA50uKZcVbH+Z55Z0RRgr1la7VGEF0TXPoaJPG5/oF9891oVzWvLojz5/eGOFCb0Ac3/Fs3Cu1cNDL/SH/8v8GudAb8u0ncqxdmaK91SGONdHdRcvvGlJNoKL6H8cxzYSG8zG79pX4/SvDHD0VVMNpx/xxjBZN75ruMbPLGS3mPlamrKClNBWCTpyp8PYHBXbuKtB3LTIzqH9vM4TnCoZHFH96c4SBGzHf2ZZj/ao07a1/3cxSSjOLnblYYeeuEi+/NcKlK1HdxcVVbF5zyQKP6Z0OUfzF1qKJt4ZrNyLOXQ6JIshm6rtuzcU3MqJ49d08x3oqPLIpw4bVGZYt9pg5wyHlVzeo+q//Fszqdm3A2Mt7D5f4YE+J3v6oGvRf17DMfsKBRXNd5nS7o02RxsqUFLSU5iYfOlHml7++zdFTZeJo7DNWzVwplRRvfVDgzIUKm9alWTzfZ1qnQ0tW4jqCMNQMjSgu94ccPVXm8MkKI3mF10AqklKmyMuKxT4zpjlfWvU+jDQtWcFTW0yA/dGeBjpecWdjqRScvxRwsTdkx64iK5f6LF1gIujaWiXplMBzxGgf71JFcXtIcXUgorc/4tTZCn1XQ+KYhtOyokgzc7rLiiU+2awkrDP7e0oKGoyoK2XN1YGISkXXXQu5VsA7juFcb8i5yyG5rGRau0NLTuJIczOHRhQ3B2PCUI+aOvUKqjb7z+pyWbrQJ5MyZsyX/b7SsGp5ir95qoVL/REj+Xi0cX29yOqhThzDlashvf0h77lFOtslba0OKU+M+sfDSFGuaAaHY4ZHFLFidEZuJLi/9v6iSLN4oc+aFSljftR54DUlBa0U4MD61Sm2P5bjty8PEUe6oZZmjmM8DuY4W9FbVJ9Z8kS1JUPqHs2ZLyOuZoFsXJNh6SKf8B5CLsNQk0oJnnk8x+mLAa+9mycMwfMaG4t5oAHMe1dac+N2zMBNky7ymW2EuPM5+E79hx9/SRhp2locNq1JM2+2V1emSo0pKWgwH8K0Dsm2R3IcOGYykxsNPBJUm+TIzz+1a1YoZhxB13SHB9eZtP17DbcMI83MGQ4/+k4rAzdCdu0vI+PmFYSREiQCnC+2X5sdjmq6D8B9S30eeTCD6wmiBorNTNloO63NrLVqeYoXnmmha4bb1LYHtYDzu7+aQRwbf+umtWnWr04D9x5PopQR9eoVKX7+UgdrV6ZMa+ZxCDj6vPc/HrHVlUDTPc1h+xM5li70UKoxv/iUFTQYcXguPL01x7OP5/B9UVdw+URhNleKOTNdnny4xfiAxzjeWvz1g+sy/OwH7Sxd4FGeoNYTzSaMzIr42OYsTz+cxavuZRphSgtaA5VQM2Oaww+/08rWTWmUMoVLvo6EYbVb1eM5Hlpf/+YnCE0g9batWX72A+M/rwRqSok6ikwNkM3rM/z4+Va6m7TCTmlBQ9X0iDSLF/j87fPtrF+VJoo10QS2ErsXzEMm2Loxy/PbWmhrdep2TYF5OBwJzzya4+cvtbNwrkcl0F/bh/luokgTRIr1q9L87AftrFiaIgybs8o4//N/rPzvQHfjLzV5GJ+sYN5sj67pDr39EdeuR2jMBm+yCUPjd37wgQy/+FEHa+5LEUWNx1DE1aPzZYt8Ojscrt2IuH4jJo6Nx2Yia+XdC7V9j9KwcXWaf/xPnWxZnwFoVi/DgUQIGszGSEoj6pkzXG4ORly5FhHFRtSTcXNrN1BI2LQuzT/+pIONa9PEumk3kFgZn/ji+R4L5hoX4MAtNVrvWch6ksOaT6yMqeT7gkc3Z/mHn3SyeV0GKZq6qiRH0GBE7UjB/Lkei+b5VCqa/usR+aKqxk5MnLCj2OzgU77gyYdz/OLHnTy4Lo1SzTeHYmViKxbOcbl/WYppHQ63h2JuDcUEwZ1Egsl4qGPFaB+VmV0OL2xv4ec/bGf1itSoy66JDExZP/QXYapoCtauTNHZ3smSRT6v7chzqS+kEph/c9zxK1JUc60JIVg41+WZx3J891ttLJrnVoN/xue6UaTRsake+qPnW7lvmcf7u4vs2lei92o0moTQyHH9WIhjTRgbV9+0dsmGNWm2P97CQw9k6GyXBOFXRzbWgxg8/eJRYHXzX3pyqYU2FsuaYz0V3v04z+4DJfqvx5TLevTYtxkp/rWZJowUjhRM73B4YFWa557OsWmd6csXNGnT81UIYcJjpWOKiZ8+F/DRviKfHCyNrlZmQ3mnLG4zZu5atFwUK+LY2PbtrZL7lphi6g9vyDJnposQZsYeJ+fqscQKGu5OkIVbQzEnTgfs3l/i0IkK/ddMDbVyxcymjmN8okJ8+dJcixnW2swwcWSuk8sKZnQ6rFji8/hDWTauzTC7y0EIMWF9ru9G3pU4OzSk6L0acqSnwoFjZc5eCBkcihkpKioV85TJamlcWbW5v0rk5pjcVA2NlYkzTaUlrS2SGR0Oq5an2fxAmlXLfWZ1u6R8QRCMz6x8F8kWdI1ayCQa8kVF//WIo6cqnDhd4WJfwK1BxXBeUSgqiqVq0qu849OsaVFpI5SUL8lmBC1ZSS4rmdHpsHKZz/rVGVYs8ZjW4eC5YsJm5S+jFnzlOiZlbGjEFEQ8fSHkzIWAvv6Qm4MxhaKiVNYUS4pSWRHFd50QVl+rFlQlpCCdEuQykmxamGCuTocFc12WL/JZuTTF3Jke7a0S1zObwWZtgr+Cb4aga9SyoIUwH3K5ork1GHPpSkhff8T1GxE3B2OKJUWlmr1cU7MQkEoJsmlBa85heqfDzC6XuTNdZnW7dLRJ0mkjnDCi7gr044UxRcz+QVc9DkGgGMlrrlyLuDpg3vuNwZjBQbNyxbH+TLuM2oPh+4KONvMgT+9wmN3tMWeW+Qw8z/y7wOwlJkjINY4lblP4ZSh1p3G640BLTtKak9UIL+MfVcocTxdLmkpwJ+LOcSCXdUinTJiqIxhdoqU0UWpRREOHJeNJ7QAqrJpIUkJLzqG1BWZ2uaMxFLXA+ig2gq9UNJEyhzi+L/A9ieuasFpZjb5zpEA6QPXvKnWWhmgG3yhB302tLGxtWXUcgVfdIGUzDu2tn404qxVBEdyJT9aqNotN1ruoj7vL4gKjG0NXCqRXs58FGjmahjVqUv/VZ2DCYaO4zqLvTeYbK+gaNbtQVY/tPnPzviHU7PyYqf8ZTPlYjmYzVW9kM5nKn4EVtCVRWEFbEoUVtCVRWEFbEoUVtCVRWEFbEoUVtCVRSJLTe91i0RJIT/YoLJYmkXaBHswReGGSB2OxNEIO6Pn/PLcoMWWI5C8AAAAASUVORK5CYII=">
+<meta property="article:published_time" content="2022-07-20T10:06:22.000Z">
+<meta property="article:modified_time" content="2022-07-20T10:06:22.780Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAACzCAYAAAAgyDaKAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGv2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuZWRhMmIzZiwgMjAyMS8xMS8xNC0xMjozMDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjEgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0xMC0xMlQxODoyOToyOCswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OGNkMGRiZmEtZTNmMC04NTQxLWExNWQtODNhNDJlYzU1NmE4IiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6NTA4MDliYzAtN2QxYy1hYTQzLTgwY2MtNmFjMzVlZDk0ODc3IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MjNmYThkOGItMWI3OC1mNDQyLWIxOTctYjU0MDJlMzMxNzlkIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoyM2ZhOGQ4Yi0xYjc4LWY0NDItYjE5Ny1iNTQwMmUzMzE3OWQiIHN0RXZ0OndoZW49IjIwMjEtMTAtMTJUMTg6Mjk6MjgrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZjM2M0N2MtNjBmMS0xZDQwLWExMjYtMDUxOGU2NDAyZWMwIiBzdEV2dDp3aGVuPSIyMDIxLTEwLTEyVDE4OjMxOjUwKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjhjZDBkYmZhLWUzZjAtODU0MS1hMTVkLTgzYTQyZWM1NTZhOCIgc3RFdnQ6d2hlbj0iMjAyMi0wNy0xNFQxNzoyMjo1MSswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIzLjEgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvL9LZcAAB3TSURB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">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/07/20/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>JavaScript学习笔记03：JavaScript正则表达式、错误调试、声明提升、this、let与const | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/07/20/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript学习笔记03：JavaScript正则表达式、错误调试、声明提升、this、let与const
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-20 18:06:22" itemprop="dateCreated datePublished" datetime="2022-07-20T18:06:22+08:00">2022-07-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JavaScript学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAACzCAYAAAAgyDaKAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGv2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuZWRhMmIzZiwgMjAyMS8xMS8xNC0xMjozMDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjEgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0xMC0xMlQxODoyOToyOCswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDctMTRUMTc6MjI6NTErMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OGNkMGRiZmEtZTNmMC04NTQxLWExNWQtODNhNDJlYzU1NmE4IiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6NTA4MDliYzAtN2QxYy1hYTQzLTgwY2MtNmFjMzVlZDk0ODc3IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MjNmYThkOGItMWI3OC1mNDQyLWIxOTctYjU0MDJlMzMxNzlkIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoyM2ZhOGQ4Yi0xYjc4LWY0NDItYjE5Ny1iNTQwMmUzMzE3OWQiIHN0RXZ0OndoZW49IjIwMjEtMTAtMTJUMTg6Mjk6MjgrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZjM2M0N2MtNjBmMS0xZDQwLWExMjYtMDUxOGU2NDAyZWMwIiBzdEV2dDp3aGVuPSIyMDIxLTEwLTEyVDE4OjMxOjUwKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjhjZDBkYmZhLWUzZjAtODU0MS1hMTVkLTgzYTQyZWM1NTZhOCIgc3RFdnQ6d2hlbj0iMjAyMi0wNy0xNFQxNzoyMjo1MSswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIzLjEgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvL9LZcAAB3TSURB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" alt="javascript.png"></p>
+<span id="more"></span>
+<h2 id="JavaScript正则表达式">JavaScript正则表达式</h2>
+<p>正则表达式（英语：Regular Expression，在代码中常简写为regex、regexp或RE）使用单个字符串来描述、匹配一系列符合某个句法规则的字符串搜索模式。</p>
+<p>搜索模式可用于文本搜索和文本替换。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/正则表达式主体/修饰符(可选)</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> patt = <span class="regexp">/runoob/i</span></span><br></pre></td></tr></table></figure>
+<p>实例解析：</p>
+<ul>
+<li>
+<p><code>/runoob/i</code>是一个正则表达式。</p>
+</li>
+<li>
+<p><code>runoob</code>是一个<strong>正则表达式主体</strong> (用于检索)。</p>
+</li>
+<li>
+<p><code>i</code>是一个<strong>修饰符</strong> (搜索不区分大小写)。</p>
+</li>
+</ul>
+<h3 id="使用字符串方法">使用字符串方法</h3>
+<p>在JavaScript中，正则表达式通常用于两个字符串方法：<code>search()</code>和<code>replace()</code>。</p>
+<ul>
+<li>
+<p>**<code>search()</code>**方法用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的子字符串，并返回子串的起始位置。</p>
+</li>
+<li>
+<p>**<code>replace()</code>**方法用于在字符串中用一些字符串替换另一些字符串，或替换一个与正则表达式匹配的子串。</p>
+</li>
+</ul>
+<h4 id="search-方法使用正则表达式"><code>search()</code>方法使用正则表达式</h4>
+<p>使用正则表达式搜索<code>&quot;Runoob&quot;</code>字符串，且不区分大小写：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;Visit Runoob!&quot;</span>; </span><br><span class="line"><span class="keyword">var</span> n = str.search(<span class="regexp">/Runoob/i</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6</span><br></pre></td></tr></table></figure>
+<h4 id="search-方法使用字符串"><code>search()</code>方法使用字符串</h4>
+<p><code>search</code>方法可使用字符串作为参数。字符串参数会转换为正则表达式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;Visit Runoob!&quot;</span>; </span><br><span class="line"><span class="keyword">var</span> n = str.search(<span class="string">&quot;Runoob&quot;</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6</span><br></pre></td></tr></table></figure>
+<h4 id="replace-方法使用正则表达式"><code>replace()</code>方法使用正则表达式</h4>
+<p>使用正则表达式且不区分大小写将字符串中的<code>Microsoft</code>替换为<code>Runoob</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>).innerHTML; </span><br><span class="line"><span class="keyword">var</span> txt = str.replace(<span class="regexp">/microsoft/i</span>,<span class="string">&quot;Runoob&quot;</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Visit Runoob!</span><br></pre></td></tr></table></figure>
+<h4 id="replace-方法使用字符串"><code>replace()</code>方法使用字符串</h4>
+<p><code>replace()</code>方法将接收字符串作为参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>).innerHTML; </span><br><span class="line"><span class="keyword">var</span> txt = str.replace(<span class="string">&quot;Microsoft&quot;</span>,<span class="string">&quot;Runoob&quot;</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Visit Runoob!</span><br></pre></td></tr></table></figure>
+<h3 id="正则表达式修饰符">正则表达式修饰符</h3>
+<p><strong>修饰符</strong>可以在全局搜索中不区分大小写：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">修饰符</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>i</code></td>
+<td style="text-align:left">执行对大小写不敏感的匹配。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>g</code></td>
+<td style="text-align:left">执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>m</code></td>
+<td style="text-align:left">执行多行匹配。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="正则表达式模式">正则表达式模式</h3>
+<p>方括号用于查找某个范围内的字符：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">表达式</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>[abc]</code></td>
+<td style="text-align:left">查找方括号之间的任何字符。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>[0-9]</code></td>
+<td style="text-align:left">查找任何从<code>0</code>至<code>9</code>的数字。</td>
+</tr>
+<tr>
+<td style="text-align:left">`(x</td>
+<td style="text-align:left">y)`</td>
+</tr>
+</tbody>
+</table>
+<p>元字符是拥有特殊含义的字符：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">元字符</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>\d</code></td>
+<td style="text-align:left">查找数字。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\s</code></td>
+<td style="text-align:left">查找空白字符。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\b</code></td>
+<td style="text-align:left">匹配单词边界。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\uxxxx</code></td>
+<td style="text-align:left">查找以十六进制数<code>xxxx</code>规定的 Unicode 字符。</td>
+</tr>
+</tbody>
+</table>
+<p>量词：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">量词</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>n+</code></td>
+<td style="text-align:left">匹配任何包含至少一个<code>n</code>的字符串。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>n*</code></td>
+<td style="text-align:left">匹配任何包含零个或多个<code>n</code>的字符串。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>n?</code></td>
+<td style="text-align:left">匹配任何包含零个或一个<code>n</code>的字符串。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用RegExp对象">使用<code>RegExp</code>对象</h2>
+<p>在JavaScript中，<code>RegExp</code>对象是一个预定义了属性和方法的正则表达式对象。</p>
+<h3 id="使用test">使用<code>test()</code></h3>
+<p><code>test()</code>方法是一个正则表达式方法。</p>
+<p><code>test()</code>方法用于检测一个字符串是否匹配某个模式，如果字符串中含有匹配的文本，则返回<code>true</code>，否则返回<code>false</code>。</p>
+<p>以下实例用于搜索字符串中的字符<code>&quot;e&quot;</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> patt = <span class="regexp">/e/</span>;</span><br><span class="line">patt.test(<span class="string">&quot;The best things in life are free!&quot;</span>);</span><br><span class="line"><span class="comment">//也可以不用设置正则表达式的变量，以上两行代码可以合并为一行</span></span><br><span class="line"><span class="regexp">/e/</span>.test(<span class="string">&quot;The best things in life are free!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>字符串中含有<code>&quot;e&quot;</code>，所以该实例输出为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">true</span><br></pre></td></tr></table></figure>
+<h3 id="使用exec">使用<code>exec()</code></h3>
+<p><code>exec()</code>方法是一个正则表达式方法。</p>
+<p><code>exec()</code>方法用于检索字符串中的正则表达式的匹配。</p>
+<p>该函数返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为<code>null</code>。</p>
+<p>以下实例用于搜索字符串中的字母<code>&quot;e&quot;</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/e/.exec(<span class="string">&quot;The best things in life are free!&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>字符串中含有 “e”，所以该实例输出为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">e</span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript错误-throw、try和catch">JavaScript错误 - <code>throw</code>、<code>try</code>和<code>catch</code></h2>
+<ul>
+<li>
+<p><code>try</code>语句测试代码块的错误。</p>
+</li>
+<li>
+<p><code>catch</code>语句处理错误。</p>
+</li>
+<li>
+<p><code>throw</code>语句创建自定义错误。</p>
+</li>
+<li>
+<p><code>finally</code>语句在<code>try</code>和<code>catch</code>语句之后，无论是否有触发异常，该语句都会执行。</p>
+</li>
+</ul>
+<h3 id="JavaScript错误">JavaScript错误</h3>
+<p>当JavaScript引擎执行JavaScript代码时，会发生各种错误。</p>
+<ul>
+<li>
+<p>可能是语法错误，通常是程序员造成的编码错误或错别字。</p>
+</li>
+<li>
+<p>可能是拼写错误或语言中缺少的功能（可能由于浏览器差异）。</p>
+</li>
+<li>
+<p>可能是由于来自服务器或用户的错误输出而导致的错误。</p>
+</li>
+<li>
+<p>可能是其他不可预知的因素</p>
+</li>
+</ul>
+<p>当错误发生时，JavaScript引擎通常会停止，并生成一个错误消息。</p>
+<p>描述这种情况的技术术语是：JavaScript将<strong>抛出</strong>一个错误。</p>
+<h4 id="JavaScript-try和catch">JavaScript <code>try</code>和<code>catch</code></h4>
+<ul>
+<li>
+<p><code>try</code>语句允许我们定义在执行时进行错误测试的代码块。</p>
+</li>
+<li>
+<p><code>catch</code>语句允许我们定义当<code>try</code>代码块发生错误时，所执行的代码块。</p>
+</li>
+</ul>
+<p>JavaScript语句<code>try</code>和<code>catch</code>是成对出现的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">//代码    //异常的抛出</span></span><br><span class="line">&#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">    <span class="comment">//代码    //异常的捕获与处理</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">//代码    //结束处理</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//实例</span></span><br><span class="line"><span class="comment">//在下面的例子中，我们故意在try块的代码中写了一个错字。</span></span><br><span class="line"><span class="comment">//catch块会捕捉到try块中的错误，并执行代码来处理它。</span></span><br><span class="line"><span class="keyword">var</span> txt=<span class="string">&quot;&quot;</span>; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">message</span>(<span class="params"></span>) </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">try</span> &#123; </span><br><span class="line">        adddlert(<span class="string">&quot;Welcome guest!&quot;</span>); </span><br><span class="line">    &#125; <span class="keyword">catch</span>(err) &#123; </span><br><span class="line">        txt=<span class="string">&quot;本页有一个错误。\n\n&quot;</span>; </span><br><span class="line">        txt+=<span class="string">&quot;错误描述：&quot;</span> + err.message + <span class="string">&quot;\n\n&quot;</span>; </span><br><span class="line">        txt+=<span class="string">&quot;点击确定继续。\n\n&quot;</span>; </span><br><span class="line">        alert(txt); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="throw语句"><code>throw</code>语句</h4>
+<p><code>throw</code>语句允许我们创建自定义错误。</p>
+<p>正确的技术术语是：创建或<strong>抛出异常</strong>（exception）。</p>
+<p>如果把<code>throw</code>与<code>try</code>和<code>catch</code>一起使用，那么您能够控制程序流，并生成自定义的错误消息。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">throw</span> exception</span><br><span class="line"></span><br><span class="line"><span class="comment">//实例</span></span><br><span class="line"><span class="comment">//本例检测输入变量的值。如果值是错误的，会抛出一个异常（错误）。catch会捕捉到这个错误，并显示一段自定义的错误消息。</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> message, x;</span><br><span class="line">    message = <span class="built_in">document</span>.getElementById(<span class="string">&quot;message&quot;</span>);</span><br><span class="line">    message.innerHTML = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    x = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>).value;</span><br><span class="line">    <span class="keyword">try</span> &#123; </span><br><span class="line">        <span class="keyword">if</span>(x == <span class="string">&quot;&quot;</span>)  <span class="keyword">throw</span> <span class="string">&quot;值为空&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">isNaN</span>(x)) <span class="keyword">throw</span> <span class="string">&quot;不是数字&quot;</span>;</span><br><span class="line">        x = <span class="built_in">Number</span>(x);</span><br><span class="line">        <span class="keyword">if</span>(x &lt; <span class="number">5</span>)    <span class="keyword">throw</span> <span class="string">&quot;太小&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(x &gt; <span class="number">10</span>)   <span class="keyword">throw</span> <span class="string">&quot;太大&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">        message.innerHTML = <span class="string">&quot;错误: &quot;</span> + err;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>请注意，如果<code>getElementById</code>函数出错，上面的例子也会抛出一个错误。</p>
+</blockquote>
+<h2 id="JavaScript调试">JavaScript调试</h2>
+<p>调试工具和断点之类的常识略。</p>
+<h3 id="console-log-方法"><code>console.log()</code>方法</h3>
+<p>可以使用<code>console.log()</code>方法在调试窗口上打印JavaScript值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">5</span>;</span><br><span class="line">b = <span class="number">6</span>;</span><br><span class="line">c = a + b;</span><br><span class="line"><span class="built_in">console</span>.log(c);</span><br></pre></td></tr></table></figure>
+<h3 id="debugger关键字"><code>debugger</code>关键字</h3>
+<p><code>debugger</code>关键字用于停止执行JavaScript，并调用调试函数。</p>
+<p>这个关键字与在调试工具中设置断点的效果是一样的。</p>
+<p>如果没有调试可用，<code>debugger</code>语句将无法工作。</p>
+<p>开启<code>debugger</code>，代码在第三行前停止执行。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">15</span> * <span class="number">5</span>;</span><br><span class="line"><span class="keyword">debugger</span>;</span><br><span class="line"><span class="built_in">document</span>.getElementbyId(<span class="string">&quot;demo&quot;</span>).innerHTML = x;</span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript声明提升">JavaScript声明提升</h2>
+<p>JavaScript中，函数及变量的声明都将被提升到函数的最顶部。</p>
+<p>JavaScript中，变量可以在使用后声明，也就是变量可以先使用再声明。</p>
+<p>以下两个实例将获得相同的结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实例1</span></span><br><span class="line">x = <span class="number">5</span>; <span class="comment">// 变量 x 设置为 5</span></span><br><span class="line"></span><br><span class="line">elem = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>); <span class="comment">// 查找元素</span></span><br><span class="line">elem.innerHTML = x;                     <span class="comment">// 在元素中显示 x</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x; <span class="comment">// 声明 x</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//——————————</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//实例2</span></span><br><span class="line"><span class="keyword">var</span> x; <span class="comment">// 声明 x</span></span><br><span class="line">x = <span class="number">5</span>; <span class="comment">// 变量 x 设置为 5</span></span><br><span class="line"></span><br><span class="line">elem = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>); <span class="comment">// 查找元素</span></span><br><span class="line">elem.innerHTML = x;                     <span class="comment">// 在元素中显示 x</span></span><br></pre></td></tr></table></figure>
+<p>要理解以上实例就需要理解“<strong>声明提升 (hoisting)</strong>”。</p>
+<p><strong>声明提升</strong>：函数声明和变量声明总是会被解释器悄悄地被“提升”到方法体的最顶部。</p>
+<h3 id="JavaScript初始化不会提升">JavaScript初始化不会提升</h3>
+<p>JavaScript只有声明的变量会提升，初始化的不会。</p>
+<p>以下两个实例结果结果不相同：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实例1</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">5</span>; <span class="comment">// 初始化 x</span></span><br><span class="line"><span class="keyword">var</span> y = <span class="number">7</span>; <span class="comment">// 初始化 y</span></span><br><span class="line"></span><br><span class="line">elem = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>); <span class="comment">// 查找元素</span></span><br><span class="line">elem.innerHTML = x + <span class="string">&quot; &quot;</span> + y;           <span class="comment">// 显示 x 和 y</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//——————————</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//实例2</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">5</span>; <span class="comment">// 初始化 x</span></span><br><span class="line"></span><br><span class="line">elem = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>); <span class="comment">// 查找元素</span></span><br><span class="line">elem.innerHTML = x + <span class="string">&quot; &quot;</span> + y;           <span class="comment">// 显示 x 和 y</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> y = <span class="number">7</span>; <span class="comment">// 初始化 y</span></span><br></pre></td></tr></table></figure>
+<p>实例2的<code>y</code>输出了<code>undefined</code>，这是因为变量声明 (<code>var y</code>) 提升了，但是初始化 (<code>y = 7</code>) 并不会提升，所以<code>y</code>变量是一个未定义的变量。</p>
+<p>实例2类似以下代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">5</span>; <span class="comment">// 初始化 x</span></span><br><span class="line"><span class="keyword">var</span> y;     <span class="comment">// 声明 y</span></span><br><span class="line"></span><br><span class="line">elem = <span class="built_in">document</span>.getElementById(<span class="string">&quot;demo&quot;</span>); <span class="comment">// 查找元素</span></span><br><span class="line">elem.innerHTML = x + <span class="string">&quot; &quot;</span> + y;           <span class="comment">// 显示 x 和 y</span></span><br><span class="line"></span><br><span class="line">y = <span class="number">7</span>;    <span class="comment">// 设置 y 为 7</span></span><br></pre></td></tr></table></figure>
+<h3 id="在头部声明变量">在头部声明变量</h3>
+<p>如果程序员不能很好的理解声明提升，他们写的程序就容易出现一些问题。</p>
+<p>为了避免这些问题，通常我们在每个作用域开始前声明这些变量，这也是正常的 JavaScript 解析步骤，易于我们理解。</p>
+<h2 id="JavaScript严格模式（-use-strict-）">JavaScript严格模式（<code>&quot;use strict&quot;</code>）</h2>
+<p>JavaScript严格模式（strict mode）即在严格的条件下运行。</p>
+<h3 id="使用-use-strict-指令">使用<code>&quot;use strict&quot;</code>指令</h3>
+<p><code>&quot;use strict&quot;</code>指令在JavaScript 1.8.5 (ECMAScript5)中新增。</p>
+<p>它不是一条语句，但是是一个字面量表达式，在JavaScript旧版本中会被忽略。</p>
+<p><code>&quot;use strict&quot;</code>的目的是指定代码在严格条件下执行。</p>
+<p>严格模式下你不能使用未声明的变量。</p>
+<p><code>&quot;use strict&quot;</code>指令只允许出现在脚本或函数的开头。</p>
+<h3 id="严格模式声明">严格模式声明</h3>
+<p>严格模式通过在脚本或函数的头部添加<code>&quot;use strict&quot;;</code>表达式来声明。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line">x = <span class="number">3.14</span>;       <span class="comment">// 报错 (x 未定义)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//——————————</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line">myFunction();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    y = <span class="number">3.14</span>;   <span class="comment">// 报错 (y 未定义)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//——————————</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//在函数内部声明是局部作用域 (只在函数内使用严格模式)</span></span><br><span class="line">x = <span class="number">3.14</span>;       <span class="comment">// 不报错</span></span><br><span class="line">myFunction();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">   &quot;use strict&quot;</span>;</span><br><span class="line">    y = <span class="number">3.14</span>;   <span class="comment">// 报错 (y 未定义)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为什么使用严格模式：</p>
+<ul>
+<li>消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为;</li>
+<li>消除代码运行的一些不安全之处，保证代码运行的安全；</li>
+<li>提高编译器效率，增加运行速度；</li>
+<li>为未来新版本的Javascript做好铺垫。</li>
+</ul>
+<p>“严格模式”体现了Javascript更合理、更安全、更严谨的发展方向。</p>
+<p>另一方面，同样的代码，在“严格模式”中，可能会有不一样的运行结果；一些在“正常模式”下可以运行的语句，在“严格模式”下将不能运行。</p>
+<h3 id="严格模式的限制">严格模式的限制</h3>
+<ul>
+<li>
+<p>不允许使用未声明的变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line">x = <span class="number">3.14</span>;                <span class="comment">// 报错 (x 未定义)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>对象也是一个变量：</p>
+</li>
+</ul>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line">x = &#123;<span class="attr">p1</span>:<span class="number">10</span>, <span class="attr">p2</span>:<span class="number">20</span>&#125;;      <span class="comment">// 报错 (x 未定义)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>不允许删除变量或对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> x = <span class="number">3.14</span>;</span><br><span class="line"><span class="keyword">delete</span> x;                <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许删除函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">x</span>(<span class="params">p1, p2</span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">delete</span> x;                <span class="comment">// 报错 </span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许变量重名：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">x</span>(<span class="params">p1, p1</span>) </span>&#123;&#125;;   <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许使用八进制：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> x = <span class="number">010</span>;             <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许使用转义字符：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> x = \<span class="number">010</span>;            <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许对只读属性赋值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&quot;x&quot;</span>, &#123;<span class="attr">value</span>:<span class="number">0</span>, <span class="attr">writable</span>:<span class="literal">false</span>&#125;);</span><br><span class="line"></span><br><span class="line">obj.x = <span class="number">3.14</span>;            <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许对一个使用<code>getter</code>方法读取的属性进行赋值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;<span class="keyword">get</span> <span class="title">x</span>() &#123;<span class="keyword">return</span> <span class="number">0</span>&#125; &#125;;</span><br><span class="line"></span><br><span class="line">obj.x = <span class="number">3.14</span>;            <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许删除一个不允许删除的属性：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="built_in">Object</span>.prototype; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>变量名不能使用<code>eval</code>字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">eval</span> = <span class="number">3.14</span>;         <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>变量名不能使用<code>arguments</code>字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">arguments</span> = <span class="number">3.14</span>;    <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>不允许使用以下这种语句：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">with</span> (<span class="built_in">Math</span>)&#123;x = cos(<span class="number">2</span>)&#125;; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>由于一些安全原因，在作用域<code>eval()</code>创建的变量不能被调用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="built_in">eval</span> (<span class="string">&quot;var x = 2&quot;</span>);</span><br><span class="line">alert (x);               <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>禁止<code>this</code>关键字指向全局对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !<span class="built_in">this</span>;</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">// 返回false，因为&quot;this&quot;指向全局对象，&quot;!this&quot;就是false</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123; </span><br><span class="line"><span class="meta">    &quot;use strict&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> !<span class="built_in">this</span>;</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">// 返回true，因为严格模式下，this的值为undefined，所以&quot;!this&quot;为true。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>因此，使用构造函数时，如果忘了加<code>new</code>，<code>this</code>不再指向全局对象，而是报错：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="meta">    &quot;use strict&quot;</span>;</span><br><span class="line">    <span class="built_in">this</span>.a = <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line">f();<span class="comment">// 报错，this未定义</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="保留关键字">保留关键字</h3>
+<p>为了向将来Javascript的新版本过渡，严格模式新增了一些保留关键字：</p>
+<ul>
+<li><code>implements</code></li>
+<li><code>interface</code></li>
+<li><code>let</code></li>
+<li><code>package</code></li>
+<li><code>private</code></li>
+<li><code>protected</code></li>
+<li><code>public</code></li>
+<li><code>static</code></li>
+<li><code>yield</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> public = <span class="number">1500</span>;      <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript-this关键字">JavaScript <code>this</code>关键字</h2>
+<p>面向对象语言中<code>this</code>表示当前对象的一个引用。</p>
+<p>但在JavaScript中<code>this</code>不是固定不变的，它会随着执行环境的改变而改变。</p>
+<ul>
+<li>在方法中，<code>this</code>表示该方法所属的对象。</li>
+<li>如果单独使用，<code>this</code>表示全局对象。</li>
+<li>在函数中，<code>this</code>表示全局对象。</li>
+<li>在函数中，在严格模式下，<code>this</code>是未定义的 (<code>undefined</code>)。</li>
+<li>在事件中，<code>this</code>表示接收事件的元素。</li>
+<li>类似<code>call()</code>和<code>apply()</code>方法可以将<code>this</code>引用到任何对象。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">  <span class="attr">firstName</span>: <span class="string">&quot;John&quot;</span>,</span><br><span class="line">  <span class="attr">lastName</span> : <span class="string">&quot;Doe&quot;</span>,</span><br><span class="line">  <span class="attr">id</span>       : <span class="number">5566</span>,</span><br><span class="line">  <span class="attr">fullName</span> : <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.firstName + <span class="string">&quot; &quot;</span> + <span class="built_in">this</span>.lastName;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="方法中的this">方法中的<code>this</code></h3>
+<p>在对象方法中，<code>this</code>指向调用它所在方法的对象。</p>
+<p>在上面一个实例中，<code>this</code>表示<code>person</code>对象。</p>
+<p><code>fullName</code>方法所属的对象就是<code>person</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fullName : <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">this</span>.firstName + <span class="string">&quot; &quot;</span> + <span class="built_in">this</span>.lastName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="单独使用this">单独使用<code>this</code></h3>
+<p>单独使用<code>this</code>，则它指向全局 (Global) 对象。</p>
+<p>在浏览器中，<code>window</code>就是该全局对象为<code>[object Window]</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="built_in">this</span>;</span><br></pre></td></tr></table></figure>
+<p>严格模式下，如果单独使用，<code>this</code>也是指向全局 (Global) 对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> x = <span class="built_in">this</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="函数中使用this（默认）">函数中使用<code>this</code>（默认）</h3>
+<p>在函数中，函数的所属者默认绑定到<code>this</code>上。</p>
+<p>在浏览器中，<code>window</code>就是该全局对象为<code>[object Window]</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数中使用this（严格模式）">函数中使用<code>this</code>（严格模式）</h3>
+<p>严格模式下函数是没有绑定到<code>this</code>上，这时候<code>this</code>是<code>undefined</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="事件中的this">事件中的<code>this</code></h3>
+<p>在HTML事件句柄中，<code>this</code>指向了接收事件的HTML元素：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;this.style.display=&#x27;none&#x27;&quot;</span>&gt;</span></span><br><span class="line">点我后我就消失了</span><br><span class="line"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="对象方法中绑定">对象方法中绑定</h3>
+<p>下面实例中，<code>this</code>是<code>person</code>对象，<code>person</code>对象是函数的所有者：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">  <span class="attr">firstName</span>  : <span class="string">&quot;John&quot;</span>,</span><br><span class="line">  <span class="attr">lastName</span>   : <span class="string">&quot;Doe&quot;</span>,</span><br><span class="line">  <span class="attr">id</span>         : <span class="number">5566</span>,</span><br><span class="line">  <span class="attr">myFunction</span> : <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//——————————</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">  <span class="attr">firstName</span>: <span class="string">&quot;John&quot;</span>,</span><br><span class="line">  <span class="attr">lastName</span> : <span class="string">&quot;Doe&quot;</span>,</span><br><span class="line">  <span class="attr">id</span>       : <span class="number">5566</span>,</span><br><span class="line">  <span class="attr">fullName</span> : <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.firstName + <span class="string">&quot; &quot;</span> + <span class="built_in">this</span>.lastName;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>说明：<code>this.firstName</code>表示<code>this</code> (<code>person</code>) 对象的<code>firstName</code>属性。</p>
+<h3 id="显式函数绑定">显式函数绑定</h3>
+<p>在JavaScript中函数也是对象，对象则有方法，<code>apply</code>和<code>call</code>就是函数对象的方法。这两个方法异常强大，他们允许切换函数执行的上下文环境（context），即<code>this</code>绑定的对象。</p>
+<p>在下面实例中，当我们使用<code>person2</code>作为参数来调用<code>person1.fullName</code>方法时，<code>this</code>将指向<code>person2</code>，即便它是<code>person1</code>的方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person1 = &#123;</span><br><span class="line">  <span class="attr">fullName</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.firstName + <span class="string">&quot; &quot;</span> + <span class="built_in">this</span>.lastName;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person2 = &#123;</span><br><span class="line">  <span class="attr">firstName</span>:<span class="string">&quot;John&quot;</span>,</span><br><span class="line">  <span class="attr">lastName</span>: <span class="string">&quot;Doe&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line">person1.fullName.call(person2);  <span class="comment">// 返回 &quot;John Doe&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript-let和const">JavaScript <code>let</code>和<code>const</code></h2>
+<p>ES2015(ES6) 新增加了两个重要的 JavaScript 关键字：<code>let</code>和<code>const</code>。</p>
+<ul>
+<li>
+<p><code>let</code>声明的变量只在<code>let</code>命令所在的代码块内有效。</p>
+</li>
+<li>
+<p><code>const</code>声明一个只读的常量，一旦声明，常量的值就不能改变。</p>
+</li>
+</ul>
+<p>在ES6之前，JavaScript只有两种作用域： <strong>全局变量</strong>与<strong>函数内的局部变量</strong>。</p>
+<p>而ES6为JavaScript添加了更多的新特性。</p>
+<h3 id="JavaScript块级作用域-Block-Scope">JavaScript块级作用域 (Block Scope)</h3>
+<p>使用<code>var</code>关键字声明的变量不具备块级作用域的特性，它在<code>&#123;&#125;</code>外依然能被访问到。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">2</span>; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里可以使用 x 变量</span></span><br></pre></td></tr></table></figure>
+<p>ES6可以使用<code>let</code>关键字来实现块级作用域。<code>let</code>声明的变量只在<code>let</code>命令所在的代码块<code>&#123;&#125;</code>内有效，在<code>&#123;&#125;</code>之外不能访问。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里不能使用 x 变量</span></span><br></pre></td></tr></table></figure>
+<h3 id="重新定义变量">重新定义变量</h3>
+<p>使用<code>var</code>关键字重新声明变量可能会带来问题。</p>
+<p>在块中重新声明变量也会重新声明块外的变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</span><br><span class="line"><span class="comment">// 这里输出 x 为 10</span></span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">// 这里输出 x 为 2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里输出 x 为 2</span></span><br></pre></td></tr></table></figure>
+<p><code>let</code>关键字就可以解决这个问题，因为它只在<code>let</code>命令所在的代码块<code>&#123;&#125;</code>内有效。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</span><br><span class="line"><span class="comment">// 这里输出 x 为 10</span></span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">// 这里输出 x 为 2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里输出 x 为 10</span></span><br></pre></td></tr></table></figure>
+<h3 id="循环作用域">循环作用域</h3>
+<p>使用<code>var</code>关键字，它声明的变量是全局的，包括循环体内与循环体外：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="comment">// 一些代码...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里输出 i 为 10</span></span><br></pre></td></tr></table></figure>
+<p>使用<code>let</code>关键字， 它声明的变量作用域只在循环体内，循环体外的变量不受影响：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="comment">// 一些代码...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里输出 i 为 5</span></span><br></pre></td></tr></table></figure>
+<h3 id="局部变量">局部变量</h3>
+<p>在函数体内使用<code>var</code>和<code>let</code>关键字声明的变量有点类似。</p>
+<p>它们的作用域都是<strong>局部的</strong>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 var</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> carName = <span class="string">&quot;Volvo&quot;</span>;   <span class="comment">// 局部作用域</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 let</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunction</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> carName = <span class="string">&quot;Volvo&quot;</span>;   <span class="comment">//  局部作用域</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="全局变量">全局变量</h3>
+<p>在函数体外或代码块外使用<code>var</code>和<code>let</code>关键字声明的变量也有点类似。</p>
+<p>它们的作用域都是<strong>全局的</strong>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 var</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">2</span>;       <span class="comment">// 全局作用域</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 let</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">2</span>;       <span class="comment">// 全局作用域</span></span><br></pre></td></tr></table></figure>
+<h3 id="HTML代码中使用全局变量">HTML代码中使用全局变量</h3>
+<p>在JavaScript中，全局作用域是针对JavaScript环境。</p>
+<p>在HTML中, 全局作用域是针对<code>window</code>对象。</p>
+<p>使用<code>var</code>关键字声明的全局作用域变量属于<code>window</code>对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> carName = <span class="string">&quot;Volvo&quot;</span>;</span><br><span class="line"><span class="comment">// 可以使用 window.carName 访问变量</span></span><br></pre></td></tr></table></figure>
+<p>使用<code>let</code>关键字声明的全局作用域变量不属于<code>window</code>对象:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> carName = <span class="string">&quot;Volvo&quot;</span>;</span><br><span class="line"><span class="comment">// 不能使用 window.carName 访问变量</span></span><br></pre></td></tr></table></figure>
+<h4 id="重置变量">重置变量</h4>
+<p>使用<code>var</code>关键字声明的变量在任何地方都可以修改：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">2</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// x 为 2</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> x = <span class="number">3</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 现在 x 为 3</span></span><br></pre></td></tr></table></figure>
+<p>在相同的作用域或块级作用域中，不能使用<code>let</code>关键字来重置<code>var</code>关键字声明的变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">2</span>;       <span class="comment">// 合法</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">3</span>;       <span class="comment">// 不合法</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">4</span>;   <span class="comment">// 合法</span></span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">5</span>   <span class="comment">// 不合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在相同的作用域或块级作用域中，不能使用<code>let</code>关键字来重置<code>let</code>关键字声明的变量:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">2</span>;       <span class="comment">// 合法</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">3</span>;       <span class="comment">// 不合法</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">4</span>;   <span class="comment">// 合法</span></span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">5</span>;   <span class="comment">// 不合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在相同的作用域或块级作用域中，不能使用<code>var</code>关键字来重置<code>let</code>关键字声明的变量:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">2</span>;       <span class="comment">// 合法</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">3</span>;       <span class="comment">// 不合法</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">4</span>;   <span class="comment">// 合法</span></span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">5</span>;   <span class="comment">// 不合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>let</code>关键字在不同作用域，或不同块级作用域中是可以重新声明赋值的:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">2</span>;       <span class="comment">// 合法</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">3</span>;   <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">4</span>;   <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="变量提升">变量提升</h3>
+<p>JavaScript 中，<code>var</code>关键字定义的变量可以在使用后声明，也就是变量可以先使用再声明：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在这里可以使用 carName 变量</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> carName;</span><br></pre></td></tr></table></figure>
+<p><code>let</code>关键字定义的变量则不可以在使用后声明，也就是变量需要先声明再使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在这里不可以使用 carName 变量</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> carName;</span><br></pre></td></tr></table></figure>
+<h3 id="const关键字"><code>const</code>关键字</h3>
+<p><code>const</code>用于声明一个或多个常量，声明时必须进行初始化，且初始化后值不可再修改：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PI = <span class="number">3.141592653589793</span>;</span><br><span class="line">PI = <span class="number">3.14</span>;      <span class="comment">// 报错</span></span><br><span class="line">PI = PI + <span class="number">10</span>;   <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+<p><code>const</code>定义常量与使用<code>let</code> 定义的变量相似：</p>
+<ul>
+<li>二者都是块级作用域。</li>
+<li>都不能和它所在作用域内的其他变量或函数拥有相同的名称。</li>
+</ul>
+<p>两者还有以下两点区别：</p>
+<ul>
+<li><code>const</code>声明的常量必须初始化，而<code>let</code>声明的变量不用。</li>
+<li>const 定义常量的值不能通过再赋值修改，也不能再次声明。而 let 定义的变量值可以修改。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</span><br><span class="line"><span class="comment">// 这里输出 x 为 10</span></span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">const</span> x = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">// 这里输出 x 为 2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里输出 x 为 10</span></span><br></pre></td></tr></table></figure>
+<p><code>const</code>声明的常量必须初始化：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误写法</span></span><br><span class="line"><span class="keyword">const</span> PI;</span><br><span class="line">PI = <span class="number">3.14159265359</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确写法</span></span><br><span class="line"><span class="keyword">const</span> PI = <span class="number">3.14159265359</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="并非真正的常量">并非真正的常量</h4>
+<p><code>const</code>的本质：<code>const</code>定义的变量并非常量，并非不可变，它定义了一个常量引用一个值。使用<code>const</code>定义的对象或者数组，其实是可变的。</p>
+<p>修改常量对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建常量对象</span></span><br><span class="line"><span class="keyword">const</span> car = &#123;<span class="attr">type</span>:<span class="string">&quot;Fiat&quot;</span>, <span class="attr">model</span>:<span class="string">&quot;500&quot;</span>, <span class="attr">color</span>:<span class="string">&quot;white&quot;</span>&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 修改属性:</span></span><br><span class="line">car.color = <span class="string">&quot;red&quot;</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 添加属性</span></span><br><span class="line">car.owner = <span class="string">&quot;Johnson&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>但是我们不能对常量对象重新赋值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> car = &#123;<span class="attr">type</span>:<span class="string">&quot;Fiat&quot;</span>, <span class="attr">model</span>:<span class="string">&quot;500&quot;</span>, <span class="attr">color</span>:<span class="string">&quot;white&quot;</span>&#125;;</span><br><span class="line">car = &#123;<span class="attr">type</span>:<span class="string">&quot;Volvo&quot;</span>, <span class="attr">model</span>:<span class="string">&quot;EX60&quot;</span>, <span class="attr">color</span>:<span class="string">&quot;red&quot;</span>&#125;;    <span class="comment">// 错误</span></span><br></pre></td></tr></table></figure>
+<p>修改常量数组：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建常量数组</span></span><br><span class="line"><span class="keyword">const</span> cars = [<span class="string">&quot;Saab&quot;</span>, <span class="string">&quot;Volvo&quot;</span>, <span class="string">&quot;BMW&quot;</span>];</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 修改元素</span></span><br><span class="line">cars[<span class="number">0</span>] = <span class="string">&quot;Toyota&quot;</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 添加元素</span></span><br><span class="line">cars.push(<span class="string">&quot;Audi&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>但是我们不能对常量数组重新赋值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cars = [<span class="string">&quot;Saab&quot;</span>, <span class="string">&quot;Volvo&quot;</span>, <span class="string">&quot;BMW&quot;</span>];</span><br><span class="line">cars = [<span class="string">&quot;Toyota&quot;</span>, <span class="string">&quot;Volvo&quot;</span>, <span class="string">&quot;Audi&quot;</span>];    <span class="comment">// 错误</span></span><br></pre></td></tr></table></figure>
+<h4 id="重置变量-2">重置变量</h4>
+<p>使用<code>var</code>关键字声明的变量在任何地方都可以修改：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">2</span>;    <span class="comment">//  合法</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">3</span>;    <span class="comment">//  合法</span></span><br><span class="line">x = <span class="number">4</span>;        <span class="comment">//  合法</span></span><br></pre></td></tr></table></figure>
+<p>在相同的作用域或块级作用域中，不能使用<code>const</code>关键字来重置<code>var</code>和<code>let</code>关键字声明的变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">2</span>;         <span class="comment">// 合法</span></span><br><span class="line"><span class="keyword">const</span> x = <span class="number">2</span>;       <span class="comment">// 不合法</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;     <span class="comment">// 合法</span></span><br><span class="line">    <span class="keyword">const</span> x = <span class="number">2</span>;   <span class="comment">// 不合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在相同的作用域或块级作用域中，不能使用<code>const</code>关键字来重置<code>const</code>关键字声明的变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> x = <span class="number">2</span>;       <span class="comment">// 合法</span></span><br><span class="line"><span class="keyword">const</span> x = <span class="number">3</span>;       <span class="comment">// 不合法</span></span><br><span class="line">x = <span class="number">3</span>;             <span class="comment">// 不合法</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">3</span>;         <span class="comment">// 不合法</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">3</span>;         <span class="comment">// 不合法</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> x = <span class="number">2</span>;   <span class="comment">// 合法</span></span><br><span class="line">    <span class="keyword">const</span> x = <span class="number">3</span>;   <span class="comment">// 不合法</span></span><br><span class="line">    x = <span class="number">3</span>;         <span class="comment">// 不合法</span></span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">3</span>;     <span class="comment">// 不合法</span></span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">3</span>;     <span class="comment">// 不合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>const</code>关键字在不同作用域，或不同块级作用域中是可以重新声明赋值的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> x = <span class="number">2</span>;       <span class="comment">// 合法</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> x = <span class="number">3</span>;   <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> x = <span class="number">4</span>;   <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="变量提升-2">变量提升</h4>
+<p><code>var</code>关键字定义的变量可以在使用后声明，也就是变量可以先使用再声明。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">carName = <span class="string">&quot;Volvo&quot;</span>;    <span class="comment">// 这里可以使用 carName 变量</span></span><br><span class="line"><span class="keyword">var</span> carName;</span><br></pre></td></tr></table></figure>
+<p><code>const</code>关键字定义的变量则不可以在使用后声明，也就是变量需要先声明再使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">carName = <span class="string">&quot;Volvo&quot;</span>;    <span class="comment">// 在这里不可以使用 carName 变量</span></span><br><span class="line"><span class="keyword">const</span> carName = <span class="string">&quot;Volvo&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/18/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002/" rel="prev" title="JavaScript学习笔记02：JavaScript逻辑分支和类型转换">
+      <i class="fa fa-chevron-left"></i> JavaScript学习笔记02：JavaScript逻辑分支和类型转换
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/23/Vue%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B001/" rel="next" title="Vue学习笔记01：声明式渲染和组件化应用构建">
+      Vue学习笔记01：声明式渲染和组件化应用构建 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">JavaScript正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">使用字符串方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#search-%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.1.1.</span> <span class="nav-text">search()方法使用正则表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#search-%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.1.2.</span> <span class="nav-text">search()方法使用字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replace-%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.1.3.</span> <span class="nav-text">replace()方法使用正则表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replace-%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.1.4.</span> <span class="nav-text">replace()方法使用字符串</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="nav-number">1.2.</span> <span class="nav-text">正则表达式修饰符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">正则表达式模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8RegExp%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">使用RegExp对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8test"><span class="nav-number">2.1.</span> <span class="nav-text">使用test()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8exec"><span class="nav-number">2.2.</span> <span class="nav-text">使用exec()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E9%94%99%E8%AF%AF-throw%E3%80%81try%E5%92%8Ccatch"><span class="nav-number">3.</span> <span class="nav-text">JavaScript错误 - throw、try和catch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript%E9%94%99%E8%AF%AF"><span class="nav-number">3.1.</span> <span class="nav-text">JavaScript错误</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JavaScript-try%E5%92%8Ccatch"><span class="nav-number">3.1.1.</span> <span class="nav-text">JavaScript try和catch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#throw%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.1.2.</span> <span class="nav-text">throw语句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E8%B0%83%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">JavaScript调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#console-log-%E6%96%B9%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">console.log()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#debugger%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">4.2.</span> <span class="nav-text">debugger关键字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E5%A3%B0%E6%98%8E%E6%8F%90%E5%8D%87"><span class="nav-number">5.</span> <span class="nav-text">JavaScript声明提升</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8D%E4%BC%9A%E6%8F%90%E5%8D%87"><span class="nav-number">5.1.</span> <span class="nav-text">JavaScript初始化不会提升</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%A4%B4%E9%83%A8%E5%A3%B0%E6%98%8E%E5%8F%98%E9%87%8F"><span class="nav-number">5.2.</span> <span class="nav-text">在头部声明变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%EF%BC%88-use-strict-%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">JavaScript严格模式（&quot;use strict&quot;）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-use-strict-%E6%8C%87%E4%BB%A4"><span class="nav-number">6.1.</span> <span class="nav-text">使用&quot;use strict&quot;指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E5%A3%B0%E6%98%8E"><span class="nav-number">6.2.</span> <span class="nav-text">严格模式声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">6.3.</span> <span class="nav-text">严格模式的限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E7%95%99%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">6.4.</span> <span class="nav-text">保留关键字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-this%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">7.</span> <span class="nav-text">JavaScript this关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84this"><span class="nav-number">7.1.</span> <span class="nav-text">方法中的this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%8B%AC%E4%BD%BF%E7%94%A8this"><span class="nav-number">7.2.</span> <span class="nav-text">单独使用this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%B8%AD%E4%BD%BF%E7%94%A8this%EF%BC%88%E9%BB%98%E8%AE%A4%EF%BC%89"><span class="nav-number">7.3.</span> <span class="nav-text">函数中使用this（默认）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%B8%AD%E4%BD%BF%E7%94%A8this%EF%BC%88%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%EF%BC%89"><span class="nav-number">7.4.</span> <span class="nav-text">函数中使用this（严格模式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E4%B8%AD%E7%9A%84this"><span class="nav-number">7.5.</span> <span class="nav-text">事件中的this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E6%96%B9%E6%B3%95%E4%B8%AD%E7%BB%91%E5%AE%9A"><span class="nav-number">7.6.</span> <span class="nav-text">对象方法中绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E5%87%BD%E6%95%B0%E7%BB%91%E5%AE%9A"><span class="nav-number">7.7.</span> <span class="nav-text">显式函数绑定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-let%E5%92%8Cconst"><span class="nav-number">8.</span> <span class="nav-text">JavaScript let和const</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F-Block-Scope"><span class="nav-number">8.1.</span> <span class="nav-text">JavaScript块级作用域 (Block Scope)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="nav-number">8.2.</span> <span class="nav-text">重新定义变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">8.3.</span> <span class="nav-text">循环作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="nav-number">8.4.</span> <span class="nav-text">局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">8.5.</span> <span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">8.6.</span> <span class="nav-text">HTML代码中使用全局变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E7%BD%AE%E5%8F%98%E9%87%8F"><span class="nav-number">8.6.1.</span> <span class="nav-text">重置变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87"><span class="nav-number">8.7.</span> <span class="nav-text">变量提升</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">8.8.</span> <span class="nav-text">const关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B6%E9%9D%9E%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%B8%B8%E9%87%8F"><span class="nav-number">8.8.1.</span> <span class="nav-text">并非真正的常量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E7%BD%AE%E5%8F%98%E9%87%8F-2"><span class="nav-number">8.8.2.</span> <span class="nav-text">重置变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87-2"><span class="nav-number">8.8.3.</span> <span class="nav-text">变量提升</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

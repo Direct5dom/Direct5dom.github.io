@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="实现原理 WSL2原生不支持图形界面，这里通过远程桌面的方式来间接打开WSL2的图形界面。 实现过程 安装Ubuntu桌面环境 可以根据喜好安装各种桌面环境，如：KDE、Gnome、xfce、lxde等。 这里我们选择xfce，其他桌面环境同理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WSL2+Ubuntu+xrdp+xfce4实现图形界面">
+<meta property="og:url" content="https://direct5dom.github.io/2021/09/01/WSL2-Ubuntu-xrdp-xfce4%E5%AE%9E%E7%8E%B0%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="实现原理 WSL2原生不支持图形界面，这里通过远程桌面的方式来间接打开WSL2的图形界面。 实现过程 安装Ubuntu桌面环境 可以根据喜好安装各种桌面环境，如：KDE、Gnome、xfce、lxde等。 这里我们选择xfce，其他桌面环境同理。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-09-01T14:01:12.000Z">
+<meta property="article:modified_time" content="2021-09-04T07:35:37.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="WSL">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/09/01/WSL2-Ubuntu-xrdp-xfce4%E5%AE%9E%E7%8E%B0%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>WSL2+Ubuntu+xrdp+xfce4实现图形界面 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/09/01/WSL2-Ubuntu-xrdp-xfce4%E5%AE%9E%E7%8E%B0%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WSL2+Ubuntu+xrdp+xfce4实现图形界面
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-01 22:01:12" itemprop="dateCreated datePublished" datetime="2021-09-01T22:01:12+08:00">2021-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-04 15:35:37" itemprop="dateModified" datetime="2021-09-04T15:35:37+08:00">2021-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WSL/" itemprop="url" rel="index"><span itemprop="name">WSL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="实现原理">实现原理</h2>
+<p>WSL2原生不支持图形界面，这里通过远程桌面的方式来间接打开WSL2的图形界面。</p>
+<h2 id="实现过程">实现过程</h2>
+<h3 id="安装Ubuntu桌面环境">安装Ubuntu桌面环境</h3>
+<p>可以根据喜好安装各种桌面环境，如：KDE、Gnome、xfce、lxde等。</p>
+<p>这里我们选择xfce，其他桌面环境同理。</p>
+<span id="more"></span>
+<h4 id="安装xfce4">安装xfce4</h4>
+<p>通过apt安装xfce4：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install xfce4</span><br></pre></td></tr></table></figure>
+<p>其中出现<code>Configuring lightdm</code>时，选择<code>lightdm</code>，若不小心错过，可以输入如下代码重选：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg-reconfigure lightdm</span><br></pre></td></tr></table></figure>
+<h3 id="设置默认桌面环境">设置默认桌面环境</h3>
+<p>这里将xfce4设为默认，输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --config x-session-manager</span><br></pre></td></tr></table></figure>
+<p>终端会弹出选择窗口：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  Selection    Path                    Priority   Status</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">  0            /usr/bin/gnome-session   50        auto mode</span><br><span class="line">  1            /usr/bin/gnome-session   50        manual mode</span><br><span class="line">  2            /usr/bin/startxfce4      50        manual mode</span><br><span class="line">* 3            /usr/bin/xfce4-session   40        manual mode</span><br><span class="line">Press &lt;enter&gt; to keep the current choice[*], or type selection number:</span><br></pre></td></tr></table></figure>
+<p>这里选择<code>3</code>即可。</p>
+<h3 id="安装并启动xrdp服务">安装并启动xrdp服务</h3>
+<p>安装xrdp：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install xrdp</span><br></pre></td></tr></table></figure>
+<p>可以查看服务是否启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service xrdp status</span><br></pre></td></tr></table></figure>
+<p>若没有则启动服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service xrdp start</span><br></pre></td></tr></table></figure>
+<h3 id="利用Windows远程连接">利用Windows远程连接</h3>
+<p>Win+R输入<code>mstsc</code>启动“远程桌面链接”，输入<code>localhost:3389</code>（若修改端口则需要改为修改后的端口）</p>
+<p>点击连接即可进入图形界面。</p>
+<h2 id="参考资料">参考资料</h2>
+<p>[1]<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43878324/article/details/113616883">(5条消息) WSL2 Ubuntu图形界面安装与远程桌面_渝涅的博客-CSDN博客</a></p>
+<p>[2]<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45579994/article/details/112381567">(5条消息) WSL2 Linux搭建xfce4桌面和使用xrdp远程连接_IYATT-yx的博客-CSDN博客_wsl2 xfce</a></p>
+<p>[3]<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/149501381">WSL2使用xrdp实现图形桌面 - 知乎 (zhihu.com)</a></p>
+<h2 id="问题排查大全（内容来自其他参考资料）">问题排查大全（内容来自其他参考资料）</h2>
+<h3 id="远程桌面点击连接后显示连接失败">远程桌面点击连接后显示连接失败</h3>
+<ul>
+<li>如果弹窗说<strong>你正在运行一个控制台会话</strong>，说明xrdp默认的3389端口已经被其他（控制台）应用占用了，尝试修改xrdp监听的端口<code>sudo nano /etc/xrdp/xrdp.ini</code>，修改文件中的port。</li>
+<li>如果弹窗说<strong>无法连接到远程计算机</strong>，IP地址不对或者xrdp没有正常运行。
+<ul>
+<li>使用<code>ip addr | grep eth0</code>命令重新看下IP地址，因为每次WSL重启后IP地址都会变（Windows 18945 以上版本直接用localhost就好）。</li>
+<li>尝试<code>sudo systemctl restart xrdp</code>重启 xrdp 服务。</li>
+</ul>
+</li>
+</ul>
+<h3 id="可以连接，但是进去后桌面一片漆黑">可以连接，但是进去后桌面一片漆黑</h3>
+<ul>
+<li>
+<p>第一次进入桌面会比较卡，稍等一会看看。</p>
+</li>
+<li>
+<p>尝试重启wsl（cmd管理员运行：<code>net stop LxssManager</code> 和 <code>net start LxssManager</code>）。</p>
+</li>
+<li>
+<p>尝试重新安装桌面环境。</p>
+</li>
+<li>
+<p>对于xfce4黑屏可以参考：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;Section &quot;ServerFlags&quot;&#x27; &gt;&gt; /etc/X11/xrdp/xorg.conf &amp;&amp; echo &#x27;        Option  &quot;BlankTime&quot;  &quot;0&quot;&#x27; &gt;&gt; /etc/X11/xrdp/xorg.conf &amp;&amp; echo &#x27;        Option  &quot;StandbyTime&quot;  &quot;0&quot;&#x27; &gt;&gt; /etc/X11/xrdp/xorg.conf &amp;&amp; echo &#x27;        Option  &quot;SuspendTime&quot;  &quot;0&quot;&#x27; &gt;&gt; /etc/X11/xrdp/xorg.conf &amp;&amp; echo &#x27;        Option  &quot;OffTime&quot;  &quot;0&quot;&#x27; &gt;&gt; /etc/X11/xrdp/xorg.conf &amp;&amp; echo &#x27;EndSection&#x27; &gt;&gt; /etc/X11/xrdp/xorg.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="闪退">闪退</h3>
+<ul>
+<li>权限问题，尝试使用非root账户登录。</li>
+<li>安装问题，尝试重新安装桌面环境。</li>
+<li>对于闪退问题如果实在无法解决可以重新进行安装步骤，或者更换一个桌面环境尝试。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WSL/" rel="tag"># WSL</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/01/WSL2-Linux%E5%AE%89%E8%A3%85Docker/" rel="prev" title="WSL2 Linux安装Docker">
+      <i class="fa fa-chevron-left"></i> WSL2 Linux安装Docker
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/01/%E5%B0%86%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84SSH%E7%BB%88%E7%AB%AF%E9%9B%86%E6%88%90%E5%88%B0Windows-Termianl%E4%B8%AD/" rel="next" title="将树莓派的SSH终端集成到Windows Terminal中">
+      将树莓派的SSH终端集成到Windows Terminal中 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Ubuntu%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.</span> <span class="nav-text">安装Ubuntu桌面环境</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85xfce4"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装xfce4</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%BB%98%E8%AE%A4%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83"><span class="nav-number">2.2.</span> <span class="nav-text">设置默认桌面环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%B9%B6%E5%90%AF%E5%8A%A8xrdp%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.3.</span> <span class="nav-text">安装并启动xrdp服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8Windows%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5"><span class="nav-number">2.4.</span> <span class="nav-text">利用Windows远程连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%A4%A7%E5%85%A8%EF%BC%88%E5%86%85%E5%AE%B9%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">问题排查大全（内容来自其他参考资料）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%82%B9%E5%87%BB%E8%BF%9E%E6%8E%A5%E5%90%8E%E6%98%BE%E7%A4%BA%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5"><span class="nav-number">4.1.</span> <span class="nav-text">远程桌面点击连接后显示连接失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E8%BF%9E%E6%8E%A5%EF%BC%8C%E4%BD%86%E6%98%AF%E8%BF%9B%E5%8E%BB%E5%90%8E%E6%A1%8C%E9%9D%A2%E4%B8%80%E7%89%87%E6%BC%86%E9%BB%91"><span class="nav-number">4.2.</span> <span class="nav-text">可以连接，但是进去后桌面一片漆黑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AA%E9%80%80"><span class="nav-number">4.3.</span> <span class="nav-text">闪退</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

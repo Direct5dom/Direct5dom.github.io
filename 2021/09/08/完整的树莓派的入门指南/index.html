@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="完整的树莓派的入门指南">
+<meta property="og:url" content="https://direct5dom.github.io/2021/09/08/%E5%AE%8C%E6%95%B4%E7%9A%84%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/raspberry-pi-logo-1920.png?raw=true">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/a6331df010eb56a7fafb04466af3f1aa/43eee/3a15d4da-46e3-4940-8be6-9fc7d201affe_RPi_4B_FEATURED.jpg">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/391c8a80d908358052477829f0533997/43eee/656a14be-ba7e-476d-94ff-3dba02c4050e_Pi%2BZERO%2BAngle%2B1.jpg">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/39f6fcaabef8363b8e38bba612111051/43eee/94107323-e359-4bf0-a7cb-a5f4f72586ad_RP2040%2BLO%2BRES.jpg">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/bdc42b00ebe8f2312c4d229beb9325bf/43eee/7d247ace-afb2-4555-b7b3-4f236eb779d6_Raspberry%2BPi%2BPico%2B1.jpg">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/3cc2aea4df61df03a5c5e1ec99eb26b0/43eee/c2831d25-216f-4a77-a1ad-45b1019c082e_RPi_400%2BFeatured.jpg">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/391c8a80d908358052477829f0533997/43eee/656a14be-ba7e-476d-94ff-3dba02c4050e_Pi%2BZERO%2BAngle%2B1.jpg">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/a6331df010eb56a7fafb04466af3f1aa/43eee/3a15d4da-46e3-4940-8be6-9fc7d201affe_RPi_4B_FEATURED.jpg">
+<meta property="og:image" content="https://www.raspberrypi.org/homepage-9df4b/static/3cc2aea4df61df03a5c5e1ec99eb26b0/ae23f/c2831d25-216f-4a77-a1ad-45b1019c082e_RPi_400%2BFeatured.jpg">
+<meta property="article:published_time" content="2021-09-08T14:52:21.000Z">
+<meta property="article:modified_time" content="2021-10-31T10:59:17.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="树莓派">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/raspberry-pi-logo-1920.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/09/08/%E5%AE%8C%E6%95%B4%E7%9A%84%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>完整的树莓派的入门指南 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/09/08/%E5%AE%8C%E6%95%B4%E7%9A%84%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          完整的树莓派的入门指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-08 22:52:21" itemprop="dateCreated datePublished" datetime="2021-09-08T22:52:21+08:00">2021-09-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-31 18:59:17" itemprop="dateModified" datetime="2021-10-31T18:59:17+08:00">2021-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/" itemprop="url" rel="index"><span itemprop="name">树莓派</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <img src="https://github.com/Direct5dom/imageDB/blob/main/DB/raspberry-pi-logo-1920.png?raw=true" alt="raspberry-pi-logo-1920.png" style="zoom:25%;" />
+<span id="more"></span>
+<h1>Before the Start</h1>
+<h2 id="为什么选择树莓派？">为什么选择树莓派？</h2>
+<blockquote>
+<p>这节是为没做好选择的人准备的。如果你已经明确了自己要选择树莓派，请跳过这一节。</p>
+</blockquote>
+<p>树莓派是什么？按照官方的说法：</p>
+<blockquote>
+<p>Raspberry Pi is a series of small single-board computers (SBCs) developed in the United Kingdom by the Raspberry Pi Foundation in association with Broadcom.</p>
+</blockquote>
+<p>这里明确了树莓派的定位：<strong>Small Single-board Computer (SBC)</strong>，也就是<strong>微型单板计算机</strong>。</p>
+<p>因此要明确的是，树莓派并非单片机 (Microcontroller, MCU)，而是一种比单片机更“高级”的计算机。</p>
+<p>一个不负责任但正确的粗俗说法：<strong>越”高级”意味着越靠近软件，越“低级”意味着越接近硬件</strong>。</p>
+<p>如果你想要玩硬件，做避障小车，搞嵌入式开发，那么更加靠近硬件的单片机更加适合你。</p>
+<p>如果你想要玩软件，架设私有NAS，搞长期爬虫，那么更加靠近软件的树莓派更加适合你。</p>
+<h2 id="为什么是树莓派？">为什么是树莓派？</h2>
+<blockquote>
+<p>这节是为新人准备的。如果你已经是个老手了，请跳过这节。</p>
+</blockquote>
+<p>在微型SBC领域，或者换到开发板领域，树莓派并非独一家。有很多其他的厂商也在做，它们的价格或许更便宜，性能也许更强，那么为什么不选择别的板子呢？</p>
+<p>原因在于，树莓派作为最知名的微型SBC开发板，他的资源是最全的。</p>
+<p>这就好比一款手机APP，可以没有WP版，但是必须要有Android和iOS版，而你几乎无法在Ubuntu touch上找到现在的主流软件。</p>
+<p>开发板也一样，其他的板子或许有各种优点，但是可能存在一系列未知或者没有良好解决办法的Bug，作为新人暂时没有解决经验和技术产出能力，这些杂七杂八的事情很容易干扰心情。因此树莓派是最好的选择。</p>
+<h2 id="树莓派都有那些？">树莓派都有那些？</h2>
+<blockquote>
+<p>这节是为没有搞清树莓派版本的人准备的。如果你能分清，请跳过这节。</p>
+</blockquote>
+<p>树莓派的型号众多，在官网打开<a target="_blank" rel="noopener" href="https://www.raspberrypi.org/products/">Hardware</a>一栏，你可以看到很多产品：</p>
+<ul>
+<li>树莓派
+<ul>
+<li>普通版
+<ul>
+<li>Pi 1A+</li>
+<li>Pi 1B+</li>
+<li>Pi 3B</li>
+<li>Pi 3B+</li>
+<li>Pi 3A+</li>
+<li>Pi 4B</li>
+</ul>
+</li>
+<li>Zero系列
+<ul>
+<li>Zero</li>
+<li>Zero W</li>
+</ul>
+</li>
+<li>RP2040</li>
+<li>Pico</li>
+<li>树莓派400</li>
+</ul>
+</li>
+</ul>
+<p>列表说明的话：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>普通版</th>
+<th>Zero系列</th>
+<th>RP2040</th>
+<th>Pico</th>
+<th>树莓派400</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图片</td>
+<td><img src="https://www.raspberrypi.org/homepage-9df4b/static/a6331df010eb56a7fafb04466af3f1aa/43eee/3a15d4da-46e3-4940-8be6-9fc7d201affe_RPi_4B_FEATURED.jpg" alt="img"></td>
+<td><img src="https://www.raspberrypi.org/homepage-9df4b/static/391c8a80d908358052477829f0533997/43eee/656a14be-ba7e-476d-94ff-3dba02c4050e_Pi%2BZERO%2BAngle%2B1.jpg" alt="img"></td>
+<td><img src="https://www.raspberrypi.org/homepage-9df4b/static/39f6fcaabef8363b8e38bba612111051/43eee/94107323-e359-4bf0-a7cb-a5f4f72586ad_RP2040%2BLO%2BRES.jpg" alt="img"></td>
+<td><img src="https://www.raspberrypi.org/homepage-9df4b/static/bdc42b00ebe8f2312c4d229beb9325bf/43eee/7d247ace-afb2-4555-b7b3-4f236eb779d6_Raspberry%2BPi%2BPico%2B1.jpg" alt="img"></td>
+<td><img src="https://www.raspberrypi.org/homepage-9df4b/static/3cc2aea4df61df03a5c5e1ec99eb26b0/43eee/c2831d25-216f-4a77-a1ad-45b1019c082e_RPi_400%2BFeatured.jpg" alt="img"></td>
+</tr>
+<tr>
+<td>描述</td>
+<td>最通常意义上的树莓派，也是型号最多的一个系列。</td>
+<td>最低成本的树莓派系列，适合IoT开发使用。</td>
+<td>树莓派的单片机芯片</td>
+<td>树莓派的单片机</td>
+<td>更加完整的树莓派，更接近个人电脑。</td>
+</tr>
+</tbody>
+</table>
+<p>树莓派现在也在出单片机芯片和开发板，但我们本文所探讨的树莓派均指代非单片机版本。因此可选项只剩下普通版、Zero系列、树莓派400。</p>
+<p>这三者的性能排序（只考虑最新型号）：</p>
+<p>树莓派400 &gt; 普通版 &gt; Zero</p>
+<p>价格和上面的排序也是相同的（普通版4B 8GB版本的价格超过了树莓派400），毕竟一分钱一分货。</p>
+<h2 id="选择哪个树莓派？">选择哪个树莓派？</h2>
+<blockquote>
+<p>这节是为没有选择好树莓派版本的人准备的。如果你已经选择好，请跳过这节。</p>
+</blockquote>
+<p>本文不讨论单片机版本的树莓派，因此我们首先排除了Pico和他的芯片RP2040</p>
+<p>对于剩下的三个版本的选择。</p>
+<h3 id="Zero系列">Zero系列</h3>
+<p><img src="https://www.raspberrypi.org/homepage-9df4b/static/391c8a80d908358052477829f0533997/43eee/656a14be-ba7e-476d-94ff-3dba02c4050e_Pi%2BZERO%2BAngle%2B1.jpg" alt="img"></p>
+<p>Zero版因为性能问题，它在软件方面能做的事情很少，它最常作为一个IoT开发或部署设备出现，在树莓派SBC领域算是靠近硬件应用的一个产品，因此如果你打算制作硬件领域的应用，可以选择Zero系列。</p>
+<p>同样因为性能问题，无法支持起图形界面的使用，你的一切操作都只能局限在Linux命令行下操作，如果你不熟悉在Linux命令行下的操作，使用Zero将会是一场噩梦。</p>
+<blockquote>
+<p><strong>注意</strong>：这里必须明确的是，树莓派的很多硬件项目虽然看起来只是硬件的调用，但背后可能存在大量的复杂算法，而这种项目Zero可能难以承受。</p>
+</blockquote>
+<p>Zero有两个版本：</p>
+<ul>
+<li>Zero：最早的Zero版本，不带WLAN和蓝牙模块。</li>
+<li>Zero W(ireless)：带WLAN和蓝牙模块的Zero。</li>
+</ul>
+<p>硬件规格：</p>
+<ul>
+<li>
+<p>Zero：</p>
+<ul>
+<li>1GHz single-core CPU</li>
+<li>512MB RAM</li>
+<li>Mini HDMI port</li>
+<li>Micro USB OTG port</li>
+<li>Micro USB power</li>
+<li>HAT-compatible 40-pin header</li>
+<li>Composite video and reset headers</li>
+<li>CSI camera connector (v1.3 only)</li>
+</ul>
+</li>
+<li>
+<p>Zero W</p>
+<ul>
+<li>1GHz single-core CPU</li>
+<li>512MB RAM</li>
+<li>Mini HDMI port</li>
+<li>Micro USB OTG port</li>
+<li>Micro USB power</li>
+<li>HAT-compatible 40-pin header</li>
+<li>Composite video and reset headers</li>
+<li>CSI camera connector (v1.3 only)</li>
+</ul>
+</li>
+</ul>
+<h3 id="普通版">普通版</h3>
+<p><img src="https://www.raspberrypi.org/homepage-9df4b/static/a6331df010eb56a7fafb04466af3f1aa/43eee/3a15d4da-46e3-4940-8be6-9fc7d201affe_RPi_4B_FEATURED.jpg" alt="img"></p>
+<p>普通版树莓派是树莓派最具代表性的一个系列，一般提到树莓派说的就算这个系列。</p>
+<p>这个版本的树莓派也是领域最全面的，也是最适合新人入手的系列。因为型号众多，版本众多，这里只探讨最新的4B版。</p>
+<p>树莓派4B的性能也是树莓派系列第一次支撑得起流畅的图形界面的版本，因此是入坑的最佳推荐。假如你不熟悉命令行的操作，还可以打开图形界面去寻找问题的原因，对于没有命令行经验的新手来说是很好的选择。</p>
+<p>树莓派4B有三个版本，对应内存为2GB、4GB以及8GB，内存越大价格越贵。在内存的选择上没有什么最好与最坏之分，需求仍然决定一切，对于没有明确自己需求的人来说，4GB版是最好的选择。</p>
+<p>2GB的版本不适合图形界面的使用，而对于纯新人来说图形界面还是有必要存在的。8GB是为64位操作系统所准备的，这个版本的系统目前Bug仍比较多（除非你选择其他操作系统入坑，但不建议）。</p>
+<p>4GB版本兼顾了价格和性能，同时4GB也作为64位操作系统的准入门槛，在未来或者当下即可尝试64位操作系统。</p>
+<p>树莓派4B的硬件规格：</p>
+<ul>
+<li>Broadcom BCM2711, Quad core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5GHz</li>
+<li>2GB, 4GB or 8GB LPDDR4-3200 SDRAM (depending on model)</li>
+<li>2.4 GHz and 5.0 GHz IEEE 802.11ac wireless, Bluetooth 5.0, BLE</li>
+<li>Gigabit Ethernet</li>
+<li>2 USB 3.0 ports; 2 USB 2.0 ports.</li>
+<li>Raspberry Pi standard 40 pin GPIO header (fully backwards compatible with previous boards)</li>
+<li>2 × micro-HDMI ports (up to 4kp60 supported)</li>
+<li>2-lane MIPI DSI display port</li>
+<li>2-lane MIPI CSI camera port</li>
+<li>4-pole stereo audio and composite video port</li>
+<li>H.265 (4kp60 decode), H264 (1080p60 decode, 1080p30 encode)</li>
+<li>OpenGL ES 3.1, Vulkan 1.0</li>
+<li>Micro-SD card slot for loading operating system and data storage</li>
+<li>5V DC via USB-C connector (minimum 3A*)</li>
+<li>5V DC via GPIO header (minimum 3A*)</li>
+<li>Power over Ethernet (PoE) enabled (requires separate PoE HAT)</li>
+<li>Operating temperature: 0 – 50 degrees C ambient</li>
+</ul>
+<p>* A good quality 2.5A power supply can be used if downstream USB peripherals consume less than 500mA in total.</p>
+<h3 id="树莓派400">树莓派400</h3>
+<p><img src="https://www.raspberrypi.org/homepage-9df4b/static/3cc2aea4df61df03a5c5e1ec99eb26b0/ae23f/c2831d25-216f-4a77-a1ad-45b1019c082e_RPi_400%2BFeatured.jpg" alt="img"></p>
+<p>是一个键盘计算机，在上个世纪这种形式的计算机很多。</p>
+<p>个人认为这个版本的树莓派才算完成树莓派最开始的任务：</p>
+<blockquote>
+<p>The Raspberry Pi project originally leaned towards the promotion of teaching basic computer science in schools and in developing countries.</p>
+<p>Raspberry Pi 项目最初倾向于在学校和发展中国家促进基础计算机科学的教学。</p>
+</blockquote>
+<p>作为一个整合度较高的树莓派，它的任务几乎被局限在软件领域（虽然提供了GPIO结构，但是因为结构问题并不适合硬件应用）。而它确实也拥有全系列最高的配置，对于软件上的应用，无论是人脸识别，机器学习这种算法，还是搭中控、NAS，都是一个很好的选择。</p>
+<p>不过按照设计，树莓派400更推荐的用法还是当成一台个人电脑来用，但这又是一个仁者见仁的东西。</p>
+<p>树莓派400的硬件规格：</p>
+<ul>
+<li>Broadcom BCM2711 quad-core Cortex-A72 (ARM v8) 64-bit SoC @ 1.8GHz</li>
+<li>4GB LPDDR4-3200</li>
+<li>Dual-band (2.4GHz and 5.0GHz) IEEE 802.11b/g/n/ac wireless LAN</li>
+<li>Bluetooth 5.0, BLE</li>
+<li>Gigabit Ethernet</li>
+<li>2 × USB 3.0 and 1 × USB 2.0 ports</li>
+<li>Horizontal 40-pin GPIO header</li>
+<li>2 × micro HDMI ports (supports up to 4Kp60)</li>
+<li>H.265 (4Kp60 decode); H.264 (1080p60 decode, 1080p30 encode); OpenGL ES 3.1, Vulkan 1.0</li>
+<li>MicroSD card slot for operating system and data storage</li>
+<li>78- or 79-key compact keyboard (depending on regional variant)</li>
+<li>5V DC via USB connector</li>
+<li>Operating temperature: 0°C to +50°C ambient</li>
+<li>Maximum dimensions 286 mm × 122 mm × 23 mm</li>
+</ul>
+<h2 id="其他需要知道的">其他需要知道的</h2>
+<p>你现在已经明白了什么是树莓派、为什么选择树莓派、树莓派的种类并且选择好了自己想要的树莓派，但是先不要着急，你还需要知道一些其他的内容。</p>
+<h3 id="Linux不是Windows">Linux	不是Windows</h3>
+<p>在树莓派上最好的入门操作系统是Linux，或者更准确的说是Raspberry Pi OS，一个基于Debian的Linux发行版。</p>
+<p>操作系统的差异意味着你很难将常见的软件运行在树莓派上，日常软件如QQ、微信；商业软件如Office、Chrome (有开源社区版)、Edge。</p>
+<p>Linux的生态从日常使用的PC角度来讲，和Windows的差别简直比太阳到火星的距离还要大。只有在服务器领域、编程领域的生态能和Linux打平，只有在一些创客的作品或者小圈子里才能看到Linux Only的软件或程序。</p>
+<h3 id="ARM不是x86">ARM	不是x86</h3>
+<p>上面提到了Linux在日常领域不如Windows，这也许会让你萌生在树莓派上安装Windows的想法。这的确是可行的，但是这里就要提到第二个差异：架构差异。</p>
+<p>树莓派使用的是ARM架构，而不是x86。而架构的差异最先体现在x86下很多常见的软件并不能运行，因此即便你安装了ARM版Windows，你同样不能运行你想运行的很多Windows程序，而且因为ARM Windows起步更晚，你在ARM Windows下的体验甚至不如Linux。</p>
+<p>综上，如果你抱着任何日常使用树莓派替代主力PC的想法，请你马上打消掉。</p>
+<h1>Start</h1>
+<h2 id="购买">购买</h2>
+<h3 id="选择版本购买">选择版本购买</h3>
+<p>搞清楚须知并选择好树莓派的版本后，你要做的第一件事就是下单树莓派。</p>
+<p>你可以在树莓派官网找到<a target="_blank" rel="noopener" href="https://www.raspberrypi.org/products/">Buy a Raspberry Pi</a>的页面，在这里你可以选择自己想要的树莓派，点击进入详情。</p>
+<p>也许你会害怕从这里购买会导致跨境消费和跨境快递等一系列问题，这你不用担心，在你点击Buy Now后，会跳转到代理商选择页面，这里的国家会根据IP选择，你也可以手动选择为China。你会看到好几家可以购买的店铺，其中大部分在淘宝，我们也只需要通过淘宝购买就可以了。</p>
+<h3 id="选择配件或套装">选择配件或套装</h3>
+<p>树莓派除了单板以外，还需要一些其他配件才能正常启动运行。这当中两个<strong>必需品</strong>就是：</p>
+<ul>
+<li><strong>电源</strong></li>
+<li><strong>SD卡</strong>（注意：SD卡需要连接到Windows PC进行一些操作，若电脑没有SD卡接口，需要自行准备读卡器或大卡卡套）</li>
+</ul>
+<p>因此最好一同下单这些东西，当然很多店家也会选配好一些套装，这当中可能会带有上面提到的读卡器、大卡卡套，也会有外壳。这里尤其建议买外壳，因为树莓派的针脚外露，板子本身也比较脆弱，需要做好保护。建议的组合是：</p>
+<ul>
+<li>树莓派板子</li>
+<li>外壳</li>
+<li>风扇</li>
+<li><strong>SD卡</strong></li>
+<li><strong>电源线</strong></li>
+<li>大卡卡套/读卡器</li>
+</ul>
+<p>只需要挑选和上述组合近似的套装即可。</p>
+<p>此外关于一些“入门者套装”或者“传感器”，即给了一大堆传感器或者键盘鼠标的套装，个人建议不要购买。</p>
+<p>对于键盘鼠标，我们日后几乎不会将其接在树莓派上使用，对于传感器，我们只需要日后根据个人需要选购即可，大部分传感器套装的传感器可能一辈子也用不上。</p>
+<h2 id="准备">准备</h2>
+<h3 id="操作系统镜像">操作系统镜像</h3>
+<p>我们需要先给树莓派安装系统，和PC不同，树莓派的系统安装是<code>.img</code>格式文件烧录的做法。</p>
+<p>首先你需要一个烧录工具，这里推荐：<a target="_blank" rel="noopener" href="https://win32diskimager.org/">Win32 Disk Imager</a></p>
+<p>接下来你需要下载系统镜像，虽然你可以选择从官网下载，或者使用官方的边下边装镜像，但是因为网络问题这里还是建议使用国内镜像来下载。</p>
+<p>这里推荐<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a>，你可以找到<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/raspberry-pi-os-images/"><code>Index of /raspberry-pi-os-images/</code></a>，在里面找到你需要的操作系统版本，下载镜像即可。</p>
+<p>下载好的镜像一般是<code>.zip</code>格式的压缩包，你需要解压缩才能看到<code>.img</code>的镜像文件。</p>
+<p>打开Win32 Disk Imager，选择好<code>.img</code>文件和SD卡盘符，</p>
+<blockquote>
+<p><strong>注意：一定要选好SD卡盘符，【不要】选成本地硬盘，否则你硬盘上的数据就会灰飞烟灭，无法挽救回来。</strong></p>
+</blockquote>
+<p>然后点击”写入(Write)“，等待进度条走完即可。</p>
+<h3 id="配置SSH和WLAN">配置SSH和WLAN</h3>
+<p>上面烧录好的SD卡会出现两个分区，其中一个无法读取（<strong>不要格式化掉这个无法读取的分区</strong>），另一个可以读取，名为<code>boot</code>。</p>
+<p>在Windows下创建一个名为<code>ssh</code>的空文件（即：无后辍的文件）。</p>
+<p>在Windows下创建一个名为<code>wpa_supplicant.conf</code>的文件，打开后输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">country=CN</span><br><span class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev</span><br><span class="line">update_config=1</span><br><span class="line">network=&#123;</span><br><span class="line">ssid=<span class="string">&quot;&lt;You SSID&gt;&quot;</span></span><br><span class="line">psk=<span class="string">&quot;&lt;You Passwd&gt;&quot;</span></span><br><span class="line">key_mgmt=WPA-PSK</span><br><span class="line">priority=1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意将上面的<code>&lt;You SSID&gt;</code>和<code>You Passwd</code>换成自己的WLAN名称和密码。</p>
+<p>这里要注意下，为了方便之后的配置，我们最好把树莓派连接到PC热点或者家用WLAN中，而不要连接到学校/酒店的WLAN上，因为后两者的网络环境复杂，我们可能无法SSH到我们的树莓派。</p>
+</blockquote>
+<p>将二者拖到SD卡中（即Windows下可读的那个boot分区）即可。</p>
+<h2 id="开机初始化">开机初始化</h2>
+<p>将准备好并烧录配置完成的SD卡插入树莓派的SD卡槽，通电开机。</p>
+<p>这时获取树莓派的IP，如果是家里的WLAN可以通过配置界面获取IP；如果是自己电脑的热点可以通过热点设置页面获取。</p>
+<p>为了避免之后每次修改IP，可以给树莓派固定IP。这里是通过外部固定，也是我推荐的，还有内部固定的方法，可以自行查阅，我之前的文章<a href="https://direct5dom.github.io/2021/09/01/%E5%B0%86%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84SSH%E7%BB%88%E7%AB%AF%E9%9B%86%E6%88%90%E5%88%B0Windows-Termianl%E4%B8%AD/">将树莓派的SSH终端集成到Windows Terminal中</a>也有介绍。</p>
+<p>接下来可以SSH到树莓派，我这里只介绍PowerShell的方法，还有其他比如PuTTY的方法，可以自行查阅。</p>
+<p>在Windows的PowerShell中输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ssh pi@192.168.107.233 -p 22</span><br><span class="line">## 解释</span><br><span class="line"># pi：树莓派的默认用户名</span><br><span class="line"># 192.168.107.233：改成你树莓派的IP，这里是占位符</span><br><span class="line"># 22：树莓派的SSH端口，默认是22</span><br></pre></td></tr></table></figure>
+<p>连接上后会出现提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pi@192.168.107.233&#x27;s password:</span><br></pre></td></tr></table></figure>
+<p>接下来输入密码。</p>
+<p>树莓派的默认用户名为<code>pi</code>，默认密码为<code>raspberry</code>。</p>
+<p>这里只需要输入密码即可。</p>
+<p>然后我们就进入了树莓派的Linux系统。</p>
+<h2 id="换源">换源</h2>
+<p>换源是Linux下的第一件事，因为系统所使用的软件源在欧洲，国内的下载速度很慢，所以有必要换到国内的源。</p>
+<p>这里可以使用<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/raspbian/">清华的raspbian软件源</a>。</p>
+<p>这里以Debian 10版本的系统为例，编辑可以使用Linux下的文本编辑器<code>nano</code>，完整代码即：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano &lt;目录&gt;</span><br></pre></td></tr></table></figure>
+<p>换源内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 编辑 `/etc/apt/sources.list` 文件，删除原文件所有内容，用以下内容取代：</span><br><span class="line">deb http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ buster main non-free contrib rpi</span><br><span class="line">deb-src http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ buster main non-free contrib rpi</span><br><span class="line"></span><br><span class="line"># 编辑 `/etc/apt/sources.list.d/raspi.list` 文件，删除原文件所有内容，用以下内容取代：</span><br><span class="line">deb http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ buster main ui</span><br></pre></td></tr></table></figure>
+<p>换源后执行更新命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt upgrade</span><br></pre></td></tr></table></figure>
+<p>将现在系统内的软件更新到最新。</p>
+<hr>
+<p><strong>至此，树莓派的所有准备工作就完成了。接下来你可以自由的去探索项目，也可以继续完成下面的内容。</strong></p>
+<hr>
+<h1>Others</h1>
+<h2 id="通过VNC打开图形界面并连接">通过VNC打开图形界面并连接</h2>
+<p>首先你需要下载或启用VNC这个软件，树莓派的操作系统已经内置了VNC，默认情况下是开启的，如果没有开启，通过终端运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config</span><br></pre></td></tr></table></figure>
+<p>依次选择<code>Interface Options -&gt; VNC -&gt; Yes -&gt; OK -&gt; Finish</code>，之后便启动了VNC。</p>
+<p>在Windows上需要下载安装，在官网即可<a href="www.realvnc.com/en/connect/download/vnc/windows/">下载</a>。</p>
+<p>使用VNC需要先在树莓派终端输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
+<p>之后会获得几行回复，其中最后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">Log file is /home/pi/.vnc/raspberrypi:1.log</span><br><span class="line">New desktop is raspberrypi:1 (192.168.107.233:1)</span><br></pre></td></tr></table></figure>
+<p>此时树莓派已经开放了<code>1</code>端口给VNC使用，在Windows下将<code>192.168.107.233:1</code>输入VNC，便可以打开远程桌面看到树莓派的图形界面了。</p>
+<h2 id="安装中文支持">安装中文支持</h2>
+<p>首先安装中文字体库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install ttf-wqy-zenhei</span><br></pre></td></tr></table></figure>
+<p>打开配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config</span><br></pre></td></tr></table></figure>
+<p>依次选择<code>Localisation Options -&gt; Locale</code>勾选<code>zh_CN.UTF-8 UTF-8</code>然后选择<code>OK</code>。</p>
+<p>之后安装中文输入法：</p>
+<ol>
+<li>
+<p>**【推荐】**基于Fcitx输入法框架的google拼音输入法，在命令行中输入以下命令即可安装。</p>
+<p>安装命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install fcitx fcitx-googlepinyin fcitx-module-cloudpinyin fcitx-sunpinyin</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>SCIM支持多国语言的输入法，默认支持英语键盘、智能拼音、五笔字型、自然码、二笔等。</p>
+<p>安装命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install scim-pinyin</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Ibus输入法是一个基于Python开发的全新输入法框架，支持多种语言。</p>
+<p>安装命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ibus ibus-pinyin</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>然后重启树莓派：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+<p>即配置完成中文支持，同时按下<code>Ctrl</code>+<code>Space</code>还可以切换中文输入法。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag"># 树莓派</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/07/Drawbridge-Overview%EF%BC%88Drawbridge%E6%A6%82%E8%BF%B0%EF%BC%89/" rel="prev" title="Drawbridge Overview（Drawbridge概述）">
+      <i class="fa fa-chevron-left"></i> Drawbridge Overview（Drawbridge概述）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/09/%E5%85%B3%E4%BA%8ENext%E4%B8%BB%E9%A2%98%E9%97%AE%E9%A2%98%EF%BC%9AUncaught-TypeError-Cannot-read-property-replace-of-null/" rel="next" title="关于Next主题问题：Uncaught TypeError: Cannot read property 'replace' of null">
+      关于Next主题问题：Uncaught TypeError: Cannot read property 'replace' of null <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">Before the Start</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9%E6%A0%91%E8%8E%93%E6%B4%BE%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">为什么选择树莓派？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E6%A0%91%E8%8E%93%E6%B4%BE%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">为什么是树莓派？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E9%83%BD%E6%9C%89%E9%82%A3%E4%BA%9B%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">树莓派都有那些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%93%AA%E4%B8%AA%E6%A0%91%E8%8E%93%E6%B4%BE%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">选择哪个树莓派？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zero%E7%B3%BB%E5%88%97"><span class="nav-number">1.4.1.</span> <span class="nav-text">Zero系列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E7%89%88"><span class="nav-number">1.4.2.</span> <span class="nav-text">普通版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE400"><span class="nav-number">1.4.3.</span> <span class="nav-text">树莓派400</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84"><span class="nav-number">1.5.</span> <span class="nav-text">其他需要知道的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux%E4%B8%8D%E6%98%AFWindows"><span class="nav-number">1.5.1.</span> <span class="nav-text">Linux	不是Windows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARM%E4%B8%8D%E6%98%AFx86"><span class="nav-number">1.5.2.</span> <span class="nav-text">ARM	不是x86</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Start</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%AD%E4%B9%B0"><span class="nav-number">2.1.</span> <span class="nav-text">购买</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E7%89%88%E6%9C%AC%E8%B4%AD%E4%B9%B0"><span class="nav-number">2.1.1.</span> <span class="nav-text">选择版本购买</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E9%85%8D%E4%BB%B6%E6%88%96%E5%A5%97%E8%A3%85"><span class="nav-number">2.1.2.</span> <span class="nav-text">选择配件或套装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">2.2.</span> <span class="nav-text">准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F"><span class="nav-number">2.2.1.</span> <span class="nav-text">操作系统镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AESSH%E5%92%8CWLAN"><span class="nav-number">2.2.2.</span> <span class="nav-text">配置SSH和WLAN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%9C%BA%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.3.</span> <span class="nav-text">开机初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8D%A2%E6%BA%90"><span class="nav-number">2.4.</span> <span class="nav-text">换源</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">Others</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87VNC%E6%89%93%E5%BC%80%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E5%B9%B6%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.1.</span> <span class="nav-text">通过VNC打开图形界面并连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81"><span class="nav-number">3.2.</span> <span class="nav-text">安装中文支持</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

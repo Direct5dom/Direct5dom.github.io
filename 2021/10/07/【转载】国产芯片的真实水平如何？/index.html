@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="转载自：国产芯片的真实水平如何？ - 知乎 (zhihu.com) 原文发布日期：2021年10月7日 14:39">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【转载】国产芯片的真实水平如何？">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/07/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%9B%BD%E4%BA%A7%E8%8A%AF%E7%89%87%E7%9A%84%E7%9C%9F%E5%AE%9E%E6%B0%B4%E5%B9%B3%E5%A6%82%E4%BD%95%EF%BC%9F/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="转载自：国产芯片的真实水平如何？ - 知乎 (zhihu.com) 原文发布日期：2021年10月7日 14:39">
+<meta property="og:locale">
+<meta property="og:image" content="https://pic1.zhimg.com/50/v2-2ce9e66da435f4c0ed0d2cfbbd69458d_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-2ce9e66da435f4c0ed0d2cfbbd69458d_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pica.zhimg.com/50/v2-c8871a34d10a92bfcfb4b9f212bbbc67_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pica.zhimg.com/80/v2-c8871a34d10a92bfcfb4b9f212bbbc67_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic3.zhimg.com/50/v2-1a5eb9201cb82b3918df02ce5dee7f0e_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-1a5eb9201cb82b3918df02ce5dee7f0e_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/50/v2-dde0226f24a04c02c011897c38784a27_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-dde0226f24a04c02c011897c38784a27_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pica.zhimg.com/50/v2-8345369709b0adbd03adcf28603088b4_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pica.zhimg.com/80/v2-8345369709b0adbd03adcf28603088b4_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/50/v2-00cc1685960da4ffdc5a2906718d09c2_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-00cc1685960da4ffdc5a2906718d09c2_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/50/v2-258240b7e119940641e6bf779d7c5a55_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-258240b7e119940641e6bf779d7c5a55_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/50/v2-61ed54ac305238d1182c69d0ba367a6e_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-61ed54ac305238d1182c69d0ba367a6e_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic1.zhimg.com/50/v2-196ab13eba98273ef16b0dc143add13c_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-196ab13eba98273ef16b0dc143add13c_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/50/v2-4122e3af036cfe457eaec872db15ba1f_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-4122e3af036cfe457eaec872db15ba1f_720w.jpg?source=1940ef5c">
+<meta property="article:published_time" content="2021-10-07T06:39:00.000Z">
+<meta property="article:modified_time" content="2021-11-21T13:54:08.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="芯片">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.zhimg.com/50/v2-2ce9e66da435f4c0ed0d2cfbbd69458d_720w.jpg?source=1940ef5c">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/07/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%9B%BD%E4%BA%A7%E8%8A%AF%E7%89%87%E7%9A%84%E7%9C%9F%E5%AE%9E%E6%B0%B4%E5%B9%B3%E5%A6%82%E4%BD%95%EF%BC%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>【转载】国产芯片的真实水平如何？ | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/07/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%9B%BD%E4%BA%A7%E8%8A%AF%E7%89%87%E7%9A%84%E7%9C%9F%E5%AE%9E%E6%B0%B4%E5%B9%B3%E5%A6%82%E4%BD%95%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【转载】国产芯片的真实水平如何？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-07 14:39:00" itemprop="dateCreated datePublished" datetime="2021-10-07T14:39:00+08:00">2021-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-11-21 21:54:08" itemprop="dateModified" datetime="2021-11-21T21:54:08+08:00">2021-11-21</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>转载自：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/346260925/answer/2158438570">国产芯片的真实水平如何？ - 知乎 (zhihu.com)</a></p>
+<p>原文发布日期：2021年10月7日 14:39</p>
+<span id="more"></span>
+<p>在芯片领域，中美差距到底有多大？</p>
+<p>因为中国经济起步太晚，在追赶方面我们肯定是按先易后难的顺序搞的.</p>
+<p>芯片技术遵循摩尔定律，在同样价格的前提下，每18~24个月元器件的数目就会翻一倍，也就是性能翻一倍。</p>
+<p>这恐怖的进化速度代表整个芯片产业链能每2年就把一个先进技术搞成落后技术，慢一步你之前所有的投资都会全部废掉，根本不是以前的中国玩得起的。</p>
+<p>因为芯片技术的追赶难度在所有行业里明显属于最高级，所以我们放到后面去发展是非常正常的。</p>
+<p>那么中美的芯片技术差距有多大，是不是大到壮汉打小孩那种？</p>
+<p>中国芯片技术不如美国很多，但双方的技术差距，也没大家想象的那么大。</p>
+<p>完整的芯片制造链共有九大核心设备，只要有一个被卡断，整个芯片生产系统就会中断。</p>
+<p>光刻机，只是九大核心设备之一而已，并不代表你有了光刻机就能生产芯片。</p>
+<p>在这九大核心设备的领域，如果所有零件都采用纯粹的国产，不含一丝一毫的外国零件，那么中国到底能打造出什么程度的芯片产业链？</p>
+<p>还是让数据说话罢。</p>
+<h2 id="九大核心设备"><strong>九大核心设备</strong></h2>
+<p>列数据之前，要先列总纲，先介绍下芯片制造究竟需要哪九大核心设备。</p>
+<p>氧化扩散机，薄膜沉积设备，光刻机，涂胶显影机，刻蚀机，离子注入机，CMP抛光设备，检测设备，总共是八大设备。</p>
+<p>除此之外，还有一个清洗机，贯穿多个工序，不清洗是没办法进入下一环节的，因此总共是九大核心设备。</p>
+<p><img src="https://pic1.zhimg.com/50/v2-2ce9e66da435f4c0ed0d2cfbbd69458d_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic1.zhimg.com/80/v2-2ce9e66da435f4c0ed0d2cfbbd69458d_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>这九大高精尖设备组合在一起彼此配合，才能组成一个完整的生产线，然后才能生产出一颗小小的芯片。</p>
+<p>少了其中一个，你整个生产线都得瘫痪。</p>
+<h2 id="清洗机">清洗机</h2>
+<p>先谈清洗机，因为这东西看起来很不起眼，不就洗个东西么。</p>
+<p>芯片的清洗机，和你家的洗碗机那完全就是两码事，可不是冲冲水就完事了，那可是超高精密度的芯片。</p>
+<p>1 毫米=1000000 纳米，也就是说，5纳米=0.000005毫米，在这么细的缝隙里会有多种杂质需要无损清除，每个生产环节都会给缝隙内增加新的杂质，你说难不难？</p>
+<p>清洗机分几种原理，又各自由多少道工序组成，我今天就不说了，但你要知道清洗对于芯片制造意义非常重大，如果清洗达不到要求，那么产品的良率会低到惨不忍睹，直接导致经济效益丧失。</p>
+<p>在清洗机领域，马太效应非常明显，全球前四大企业总共占据了98%的市场份额。</p>
+<p>排第一是不是美国，而是日本，前两大厂商都是日本的，合计占据70%的市场份额，第三名是韩国的，占14.8%，日韩合计占据84.8%的市场。</p>
+<p><img src="https://pica.zhimg.com/50/v2-c8871a34d10a92bfcfb4b9f212bbbc67_720w.jpg?source=1940ef5c" alt="img"><img src="https://pica.zhimg.com/80/v2-c8871a34d10a92bfcfb4b9f212bbbc67_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>日韩很强，但中国在这个领域已经实现了从0到1的突破，拥有了上牌桌的资格。</p>
+<p>全球第五大清洗机公司，是中国的盛美半导体公司，虽然只占2.3%的全球市场份额，但已经拥有了一战之力，因为美国公司的市场份额也就12.5%，这还是中国企业占了后发劣势，别人不愿意冒险用中国产品的缘故。</p>
+<p>2021年5月25日，盛美半导体的SASP兆声波清洗技术，荣获中国科技进步一等奖。</p>
+<p>目前，全球最先进的清洗机是日本的，可以匹配5nm生产线。</p>
+<p>美国也能搞定5nm生产线，但市场竞争力不如日本。</p>
+<p>中国最先进的清洗机，可以匹配14nm生产线，目前在研技术5/7nm。</p>
+<p>我这里指的14nm级别清洗机，是纯国产零件组成的，哪怕美国带着全球一起断供中国也能自己造出来的纯国产清洗机。</p>
+<p>除此之外，中国还有替补梯队，北方华创目前可以造28nm的清洗机，至纯科技目前可以造28nm的清洗机，芯源微目前可以造28nm的清洗机，技术等级仅落后盛美一代。</p>
+<p><img src="https://pic3.zhimg.com/50/v2-1a5eb9201cb82b3918df02ce5dee7f0e_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic3.zhimg.com/80/v2-1a5eb9201cb82b3918df02ce5dee7f0e_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>这么短的时间内搞出14~28nm的技术强不强？</p>
+<p>反正，我觉得不算弱了。</p>
+<h2 id="氧化扩散机">氧化扩散机</h2>
+<p>氧化扩散设备，目前最先进的国家是日本，技术等级是5nm，占据了全球总共81%的市场份额。</p>
+<p>这个领域美国能造5nm产品，但市场份额就是打酱油的，自己都引用日本设备，目前日本拥有全套自产零件，因此美国的技术制裁令管不到日本的氧化炉身上，所以在这个领域我们很少提及，因为无需担心美国卡脖子，里面的美国零件很少。</p>
+<p>但中国的对手不止是美国，虽然日本目前和中国关系还可以，愿意提供设备，但我们也要防一手。</p>
+<p>只要不是中国的，那就是外国的，判断标准非常简单粗暴。</p>
+<p>目前，中国的北方华创可以独立生产14nm的氧化扩散炉，足以匹配14nm的芯片生产线。</p>
+<p>北方华创的产品目前占据国内市场6%，国际数据暂时没有。</p>
+<p>市场份额不多，但只要你要，产品还是可以提供的。</p>
+<h2 id="薄膜沉积设备">薄膜沉积设备</h2>
+<p>薄膜沉积设备领域最强的是美国和日本，都可以搞定5nm技术，两国合计占据70~80%左右的市场份额。</p>
+<p>目前，中国国内的存量薄膜沉积设备98%来自于进口，国产化率仅为2%，因为中国以前造不出来。</p>
+<p>但最近几年，中国取得了技术突破，最先进厂商为北方华创。</p>
+<p>目前，中国28nm级别的设备已经成功实现销售，14nm设备正在生产线进行磨合验证。</p>
+<p><img src="https://pic2.zhimg.com/50/v2-dde0226f24a04c02c011897c38784a27_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic2.zhimg.com/80/v2-dde0226f24a04c02c011897c38784a27_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>中国最先进厂商已成功实现销售，成功实现销售这六个字，足以看出国产设备要取得技术突破，要取得市场认可，到底有多难。</p>
+<p>除了北方华创，沈阳拓荆也很强，双方的技术等级都是一致的，目前都可以搞定14nm的技术，都正在研发7/5nm的技术。</p>
+<p><img src="https://pica.zhimg.com/50/v2-8345369709b0adbd03adcf28603088b4_720w.jpg?source=1940ef5c" alt="img"><img src="https://pica.zhimg.com/80/v2-8345369709b0adbd03adcf28603088b4_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>技术产品是研发出来了，甚至已经突破到了14nm，7/5nm的技术过几年也能搞出来，但产品很难卖，一直在亏本砸钱，闷头搞研发，暂时不考虑大规模销售的事。</p>
+<p>后发者想追赶，就是很难。</p>
+<p>怎么说呢，总算是突破了，中国已经掌握了14nm的技术</p>
+<p>没办法买产品支援来尽自己一份心意，我这里鼓个掌，不过分吧。</p>
+<h2 id="光刻机设备">光刻机设备</h2>
+<p>来到最出名的光刻机环节了，光刻机是整个芯片产业链中国最落后的一个环节，因此也成了各路媒体报道最多的对象。</p>
+<p>大家想必已经很熟悉了，但为了保持九大设备环节的完整性，我这里还是多说几句。</p>
+<p>目前全球光刻机设备最厉害的企业是荷兰的ASML，占据84%的市场份额，其他的市场份额基本是日本佳能和尼康的，再然后就没有了，所有国家都是打酱油的，包括美国。</p>
+<p>美国甚至都没有做光刻机的企业，只能造光刻机里面的光源。</p>
+<p>当然了，荷兰也有办法单独造出光刻机，核心零件被多个国家掌控着，光源来自于美国，镜头来自于日本，纳米级数控机械系统来自于德国，总共十万多个零件由西方各国几百家企业进行提供，然后由荷兰ASML组合成光刻机。</p>
+<p>美国的工程师说过：仅仅是光刻机其中的一个小零件我都调了整整十年！<br>
+荷兰ASML表示：我就算公开图纸，别人也造不出光刻机。</p>
+<p>其实，如果全球对荷兰ASML断供，他自己对着图纸也造不出光刻机。</p>
+<p>简单的说，光刻机是所有芯片核心设备里最复杂的一个，目前全球没有任何国家都实现完全的国产化，都必须通过国际合作才可以实现生产，包括美国和荷兰。</p>
+<p>因此，在光刻机领域，中国突破起来最为困难。</p>
+<p>光刻机的零部件实在是太多了，而光刻机整机的等级由最弱的那个部件来决定。</p>
+<p>因此，光刻机整机目前最先进的企业是上海微电子，目前成功突破90nm的技术，反复曝光下可强行生产28nm的芯片，但成本较高，没有经济价值，在研技术为65nm。</p>
+<p>虽然中国的纯国产光刻机只能达到90nm的技术等级，但你可别忘了这是在全球技术封锁的前提下实现的。</p>
+<p>像美国这种力度的技术断供制裁扔到了美国自己头上，他能造出什么等级的光刻机还真不好说。</p>
+<p>你只有个光源强，没用的，光刻机等级是由主要零件里最弱的那一环决定的。</p>
+<h2 id="涂胶显影机">涂胶显影机</h2>
+<p>全球涂胶显影设备市场中，日本TEL这一家公司的市占率达到87％，达到了绝对垄断地位。</p>
+<p>DNS公司，西美事公司，SCREEN公司，这三家公司合起来才占了13%。</p>
+<p>这个领域中外差距极大，以前根本就没有中国公司什么事。</p>
+<p>目前涂胶显影设备中国已经取得了突破，芯源微和沈阳芯源可以制造国产替代产品，目前已经达到了28nm的工艺水平，14nm设备即将研发成功。</p>
+<p>在中国国内市场，只有芯源微打开了市场，目前占据了4%的市场销售额，国际市场暂时就不想了。</p>
+<p><img src="https://pic2.zhimg.com/50/v2-00cc1685960da4ffdc5a2906718d09c2_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic2.zhimg.com/80/v2-00cc1685960da4ffdc5a2906718d09c2_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>很可怜，但短短几年取得了这种技术突破，很可贵。</p>
+<p>涂胶显影机设备的国产化替代率，已经取得了零的突破，而且目前的技术等级并不算太低，赶超速度非常快。</p>
+<h2 id="刻蚀机">刻蚀机</h2>
+<p>如果说光刻机是中国最弱的一个环节，那刻蚀机就是中国最强的一个环节。</p>
+<p>中国可以生产出5nm技术等级的刻蚀机！生产公司是中微半导体。</p>
+<p>目前，中微半导体的5nm级别刻蚀机已经卖掉了50多台，甚至成为了目前最先进5nm芯片生产线台积电的设备供应商。</p>
+<p><img src="https://pic2.zhimg.com/50/v2-258240b7e119940641e6bf779d7c5a55_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic2.zhimg.com/80/v2-258240b7e119940641e6bf779d7c5a55_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>目前，中微半导体正在研发3nm级别的刻蚀机技术，完全站在了国际最强第一线。</p>
+<p>但是中微半导体没赚多少钱。</p>
+<p>2015年2月4日，美国商务部签署命令，解除了针对中国的“刻蚀机禁令”，给出的理由是“中国已经从事实上获取了来自中国企业的、和美国产品数量、品质相当的刻蚀设备，继续实施国家安全出口管制措施已然毫无意义。”</p>
+<p>因为禁令的完全解除，后方劣势的中微公司很难推销出自己的产品，别人的生产线不愿意冒险采用你的机器。</p>
+<p>因此，中微半导体虽然有技术，但只拿下了全球1.4%的市场份额，这已经是中国第一强的刻蚀机企业了。</p>
+<p><img src="https://pic2.zhimg.com/50/v2-61ed54ac305238d1182c69d0ba367a6e_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic2.zhimg.com/80/v2-61ed54ac305238d1182c69d0ba367a6e_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>没什么好办法，这是美国的阳谋，他解除了技术禁令你总不能自己封掉吧，这和改革开放的宗旨相违背。</p>
+<p>现在，只能等中国3nm的刻蚀机研发成功了，谁先行一步，谁就占据天大的先机。</p>
+<h2 id="离子注入机">离子注入机</h2>
+<p>离子注入机属于仅次于光刻机的卡脖子环节。</p>
+<p>在这个领域被卡脖子，是因为此领域美国产品占据了绝对垄断地位，拿下了全球89%的市场份额。</p>
+<p>离子注入机市场规模很小，不值钱，在整套芯片生产线里，刻蚀机价值占比20%，光刻机价值占比20%，而离子注入机占比仅为3%，整个2020年的全球市场销售额只有18亿美元，属于一个小环节设备。</p>
+<p>但是整套芯片生产线是环环相扣的，缺一个就能断你整条生产线，哪一个环节都不能少。</p>
+<p>没有离子注入机，你其余97%的设备全部搞定都没有，这3%就能让你全线停工。</p>
+<p>所以离子注入机属于仅次于光刻机的卡脖子环节。</p>
+<p>目前，中国的中科信公司、凯世通公司，已经成功生产出工艺达到28nm的离子注入机，目前正在研发14nm的技术。</p>
+<p>市场份额几乎没有，毕竟是个市场新人，取得生产线企业的信任非常困难，但设备毕竟是研发出来了，目前还在继续砸钱研发。</p>
+<p>这么短时间弄出了28nm的设备，虽然因为时间短暂还没有成功打开市场。</p>
+<p>但我觉得，还行。</p>
+<h2 id="CMP抛光设备">CMP抛光设备</h2>
+<p>抛光设备最先进的国家是美国，可以搞定5nm的技术，占据了全球71%的市场份额。</p>
+<p>此领域卡脖子不严重的原因，是因为中国的华海清科和中电科已经搞定了14nm的技术，正在研发7/5nm的技术。</p>
+<p>当然，只占了15%的市场份额，而且只是国内市场。</p>
+<p>全球市场美国拿走了71.3%，日本拿走了26.7%，两者合计98%，人类其他所有国家共享2%。</p>
+<p>要不是中国不惜血本砸技术，硬生生的砸开了一道口子，我觉得连着2%都不会有。</p>
+<p>14nm已经相当先进，离7nm只差一代，只要肯砸钱，最多两三年就能搞定。</p>
+<h2 id="检测设备">检测设备</h2>
+<p>检测设备贯穿芯片制造每一个工艺，比清洗机用的还要频繁，及早检测出不良芯片淘汰掉可以大幅提高经济效益。</p>
+<p><img src="https://pic1.zhimg.com/50/v2-196ab13eba98273ef16b0dc143add13c_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic1.zhimg.com/80/v2-196ab13eba98273ef16b0dc143add13c_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>因此，这个环节的全球市场空间超百亿美元，相当的值钱。</p>
+<p>在这个领域，最先进的国家是美国，可以搞定3nm的技术，占据全球70%的市场份额。</p>
+<p>目前，中国的检测设备不惜重金砸出来了28nm的技术。</p>
+<p>至于市场份额和赚钱能力。。。</p>
+<p>有一点，那么一点点。</p>
+<p>报纸上是这么说的：</p>
+<blockquote>
+<p>“目前我国量检测设备基本已实现从0-1的阶段，已吹响国产替代号角，有望步入国产替代的快车道。”</p>
+</blockquote>
+<p>我翻译一下，就是在暂时基本没啥市场份额。</p>
+<p>但是，我国已经实现了从0到1的突破，砸出了我们自己的设备。</p>
+<p>28nm的已经搞定，正在研发14nm的。</p>
+<p>慢慢来，万事万物总有个过程，从0到1就行。</p>
+<h2 id="中国的芯片能力">中国的芯片能力</h2>
+<p>在美国的所有技术领域里，芯片是最强的一个，属于美国的技术荣耀。</p>
+<p>我们把芯片生产的多个核心设备拆解之后去看，发现其生产商要么是美国，要么是日本，要么就是韩国，德国有那么一点点，其余就是荷兰的光刻机了。</p>
+<p>日本和韩国基本就是美国的殖民地，国防都由美军负责的，美国让干啥就得干啥，德国领土上有美军基地，荷兰也处于美国的军事控制之下。</p>
+<p>因此，美国的芯片制裁才会那么有威力。</p>
+<p>你以为你对抗的是美国，实际上你对抗的是全世界。</p>
+<p>二战后，美国是新一代的日不落帝国，军事基地遍布全球，和美国为敌的国家基本都被打的经济崩盘了，没有能力在经济领域和美国产品一争长短。</p>
+<p>高科技产品，要么是美国造的，要么就是美国的盟国造的。</p>
+<p>所以美国的技术封锁和断供令才会看起来那么可怕，因为他是在挟天下大势来压你，远不止他自己一个国家的力量。</p>
+<p>芯片领域由于摩尔定律，是典型的赢家通吃，一步快步步快，后来者根本无法生存，所以美国系产品才得以垄断天下。</p>
+<p>硬顶着摩尔定律的压制去赶超芯片技术，全球没有国家敢这么做。</p>
+<p>但中国敢，而且看起来还做的很不错。</p>
+<p>目前，纯粹国产化的芯片生产线只能做到90nm的级别，因为目前纯国产的光刻机是90nm的。</p>
+<p>最弱的一环，决定了整个生产线的技术等级。</p>
+<p>这种比较其实并不公平，是因为这是拿中国一家去对比全世界，而且是拿中国几年冲刺的结果去对比全世界几十年的技术积累。</p>
+<p>2019年全球芯片营收在4123亿美元左右，中国大陆只占了5%，美国公司占了47%。</p>
+<p>看起来是10倍差距，但如果你把几大核心设备一拆分，就会发现中国的技术等级并不算弱，很多设备硬顶着卖不掉没盈利的压力，活生生的把技术水平给追上来的，赶超速度非常之快。</p>
+<p>下图把国内水平和全世界最顶级的水平进行对比，只分中国和外国。</p>
+<p><img src="https://pic2.zhimg.com/50/v2-4122e3af036cfe457eaec872db15ba1f_720w.jpg?source=1940ef5c" alt="img"><img src="https://pic2.zhimg.com/80/v2-4122e3af036cfe457eaec872db15ba1f_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>很明显，我们不算太弱，技术突击速度非常之快。</p>
+<p>很多核心设备我们研发出来之后根本卖不掉，因为是个新人，生产线企业不敢冒险接纳，生怕替换了一个产品影响到了整个生产线。</p>
+<p>但我们还是要不断的研发，不断砸钱去冲新技术。</p>
+<p>因为美国的制裁就像一个弹簧，你越强它就越弱，你越弱它就越强。</p>
+<p>如果你不能生产某个核心设备，那么制裁的大棒就会立刻砸到你头上。</p>
+<p>但如果你有了，根本不需要谈判，对方就会立刻解除限制。</p>
+<p>比如说，在芯片生产线上售价和昂贵的光刻机几乎等同的刻蚀机，美国就完全不封锁中国，因为中国有国产的刻蚀机，而且技术等级达到了5nm的最顶级级别，封锁刻蚀机毫无意义。</p>
+<p>所以你的眼光不要只盯着光刻机，这东西之所以报道多是因为中国还没有完成突破，是整个产业链里最落后的一环，但并不代表光刻机有多贵多稀罕，刻蚀机的价值占比和光刻机一样，都是生产线的20%，一样昂贵，中国活生生的给怼到了5nm的级别，直接逼的美国解除了技术封锁。</p>
+<p>中国目前的芯片技术等级比美国落后，这是事实，毕竟我们以前没有优先发展这个。</p>
+<p>但你要说中国追不上芯片技术，那你就错了，大错特错。</p>
+<p>芯片是一定会追上的，而且只需要几年时间，你把九大核心设备目前的技术等级全部拆开看之后，就知道中国的技术追逐速度到底有多快了。</p>
+<p>光刻机不等于芯片生产线的全部，而且只是生产线的一小部分。</p>
+<p>除光刻机外，中国所有的设备已经基本能生产主流成熟芯片的水平，占了整个生产线的80%。</p>
+<p>换句话说，中国凭一己之力，在短短几年时间里，弄出了80%的纯国产芯片生产线。</p>
+<p>那再给几年时间呢？</p>
+<p>据说光刻机技术明年就能突破28nm的水平。</p>
+<p>一旦28nm的国产光刻机技术被突破，中国立刻就能打造一条纯国产化的28nm芯片生产线，因为其余80%的技术设备早就已经全部就位，只等光刻机。</p>
+<p>不要觉得28nm的芯片没用，其实只有手机这么小的东西才会追逐最新的5nm和7nm芯片，绝大多数电子产品使用的都是14/28nm的芯片。</p>
+<p>等中国再突破14nm的光刻机，绝大多数芯片需求都能依靠纯国产设备搞定。</p>
+<p>中国和美国搞芯片博弈最大的底气就是中国那庞大的半导体需求市场，每年进口额高达3000亿美元。</p>
+<p>一旦美国的技术封锁时间长了，中国的设备厂商完全可能实现趁机驱逐美国产品的市场影响，趁机上位。</p>
+<p>而仅凭中国本土的市场份额需求，就足以养活这么多中国芯片公司。</p>
+<p>所以你封锁也好，不封锁也罢，对中国最大的影响不过是手机晚几年升级换代而已，其他对中国几乎是毫无影响。</p>
+<p>你不封锁，对中国有好处，封锁，对中国其实也有好处。</p>
+<p>因为中国的厂商爬技术等级爬的太快了。</p>
+<p>所以中国才会这么淡定，一点都不着急，爱卖不卖。</p>
+<p>再多封锁个两三年，你想卖我们都不要了。</p>
+<p>中美在经济上较量了两年多，美国本以为只要加了关税中国就得崩溃，没想到中国对美顺差居然越来越大，出口贸易不减反增。</p>
+<p>贸易战的爆发对中国来说本是祸事，但在正面战场上取得了优势之后反而变成了天大的好事。</p>
+<p>在经济领域，我们本来视美国如天人，认为美国陆军不能打的人有很多，认为美国经济不能打的人还真没几个。</p>
+<p>但真打起来，那可真是不打不知道。</p>
+<p>原来美国所谓的经济战，也就那么回事。</p>
+<p>作者：远方青木（ID：YFqingmu）</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%8A%AF%E7%89%87/" rel="tag"># 芯片</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/07/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002%EF%BC%9A%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6%E4%B8%8E%E6%BB%91%E8%BD%A8/" rel="prev" title="Open CV (Python) 学习笔记02：图像绘制与滑轨">
+      <i class="fa fa-chevron-left"></i> Open CV (Python) 学习笔记02：图像绘制与滑轨
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/08/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003%EF%BC%9A%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C/" rel="next" title="Open CV (Python) 学习笔记03：核心操作">
+      Open CV (Python) 学习笔记03：核心操作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E5%A4%A7%E6%A0%B8%E5%BF%83%E8%AE%BE%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">九大核心设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%85%E6%B4%97%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">清洗机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B0%A7%E5%8C%96%E6%89%A9%E6%95%A3%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">氧化扩散机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%96%84%E8%86%9C%E6%B2%89%E7%A7%AF%E8%AE%BE%E5%A4%87"><span class="nav-number">4.</span> <span class="nav-text">薄膜沉积设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%89%E5%88%BB%E6%9C%BA%E8%AE%BE%E5%A4%87"><span class="nav-number">5.</span> <span class="nav-text">光刻机设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%82%E8%83%B6%E6%98%BE%E5%BD%B1%E6%9C%BA"><span class="nav-number">6.</span> <span class="nav-text">涂胶显影机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%BB%E8%9A%80%E6%9C%BA"><span class="nav-number">7.</span> <span class="nav-text">刻蚀机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E5%AD%90%E6%B3%A8%E5%85%A5%E6%9C%BA"><span class="nav-number">8.</span> <span class="nav-text">离子注入机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMP%E6%8A%9B%E5%85%89%E8%AE%BE%E5%A4%87"><span class="nav-number">9.</span> <span class="nav-text">CMP抛光设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E8%AE%BE%E5%A4%87"><span class="nav-number">10.</span> <span class="nav-text">检测设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%9B%BD%E7%9A%84%E8%8A%AF%E7%89%87%E8%83%BD%E5%8A%9B"><span class="nav-number">11.</span> <span class="nav-text">中国的芯片能力</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

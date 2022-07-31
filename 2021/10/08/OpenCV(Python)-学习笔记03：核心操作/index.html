@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="图：Alan Mathison Turing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Open CV (Python) 学习笔记03：核心操作">
+<meta property="og:url" content="https://direct5dom.github.io/2021/10/08/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003%EF%BC%9A%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="图：Alan Mathison Turing">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/BGR_array.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/messi5.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/messi5_tow_ball.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/CV/OpenCV-muti.png?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/blending.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/overlay.jpg?raw=true">
+<meta property="article:published_time" content="2021-10-08T06:06:59.000Z">
+<meta property="article:modified_time" content="2022-05-25T15:00:48.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Open CV">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true">
+
+<link rel="canonical" href="https://direct5dom.github.io/2021/10/08/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003%EF%BC%9A%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>Open CV (Python) 学习笔记03：核心操作 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2021/10/08/OpenCV(Python)-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B003%EF%BC%9A%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Open CV (Python) 学习笔记03：核心操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-08 14:06:59" itemprop="dateCreated datePublished" datetime="2021-10-08T14:06:59+08:00">2021-10-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-25 23:00:48" itemprop="dateModified" datetime="2022-05-25T23:00:48+08:00">2022-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Open-CV-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Open CV 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/Alan_Turing_Aged_16_16_9.png?raw=true" alt="Alan_Turing_Aged_16_16_9.png"></p>
+<blockquote>
+<p>图：Alan Mathison Turing</p>
+</blockquote>
+<span id="more"></span>
+<h1>图像基本操作</h1>
+<blockquote>
+<p>本节中的几乎所有操作都主要与Numpy有关，而不是OpenCV。熟悉Numpy后才能使用OpenCV编写更好的优化代码。</p>
+</blockquote>
+<h2 id="一些基本知识">一些基本知识</h2>
+<p>每一个图像（不考虑格式和元数据等信息）都可以看作是一个矩阵。类似下方的样子：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/BGR_array.png?raw=true" alt="BGR_array.png"></p>
+<blockquote>
+<p>这是BGR图像的矩阵样式，由三个通道。如果是灰度图像则只有一个通道。</p>
+</blockquote>
+<blockquote>
+<p>有关BGR和RGB图像，这其实是一个历史遗留问题。因为很多图形硬件支持的顺序是BGR，顺应硬件的规格是为了提高效率。因为传输位图需要很高的带宽。在很多时候传输本身就是个瓶颈。因此OpenCV选择BGR是出于性能考虑，不过现在已经不太在乎这个了。</p>
+</blockquote>
+<hr>
+<p>首先我们先来导入库并加载图像作为准备：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>img = cv.imread(<span class="string">&#x27;Yang_Zhenning.jpg&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="访问和修改像素值">访问和修改像素值</h2>
+<p>正如上面所说，每张图片都可以看作是一个矩阵，这也是为什么我们可以用Numpy去处理图片的原因。</p>
+<p>我们可以利用Numpy的语法去访问具体的像素。对于BGR图片，他将会返回一组数值，分别是：蓝色、绿色、红色。对于灰度图像，则只返回对应的强度。</p>
+<p>我们这里通过Numpy语法访问<code>[100,100]</code>位置上的像素，并<code>print()</code>出结果，得到：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>px = img[<span class="number">100</span>,<span class="number">100</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( px )</span><br><span class="line">[<span class="number">30</span> <span class="number">57</span> <span class="number">41</span>]</span><br></pre></td></tr></table></figure>
+<p>当然也可以只显示其中一个数值，比如显示蓝色数值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>blue = img[<span class="number">100</span>,<span class="number">100</span>,<span class="number">0</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( blue )</span><br><span class="line"><span class="number">157</span></span><br></pre></td></tr></table></figure>
+<p>反过来，我们也可以用Numpy语法去修改像素值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>img[<span class="number">100</span>,<span class="number">100</span>] = [<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( img[<span class="number">100</span>,<span class="number">100</span>] )</span><br><span class="line">[<span class="number">255</span> <span class="number">255</span> <span class="number">255</span>]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>警告</strong>：</p>
+<p>Numpy是一个用于快速数组计算的优化库。所以简单地访问每个像素值并修改它将会非常缓慢，并且不鼓励这样做。</p>
+</blockquote>
+<blockquote>
+<p><strong>请注意</strong>：</p>
+<p>上面的方法通常用于选择数组的一个区域，比如前5行和后3列。对于单个像素访问，Numpy数组方法、<code>array.item()</code>和<code>array.itemset()</code>是更好的选择。但是，它们总是返回一个标量，因此，如果想访问所有的B、G、R值，您需要为每个值分别调用<code>array.item()</code>。</p>
+</blockquote>
+<p>更好的像素访问和编辑方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 访问红色值</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>img.item(<span class="number">10</span>,<span class="number">10</span>,<span class="number">2</span>)</span><br><span class="line"><span class="number">59</span></span><br><span class="line"><span class="comment"># 修改红色值</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>img.itemset((<span class="number">10</span>,<span class="number">10</span>,<span class="number">2</span>),<span class="number">100</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>img.item(<span class="number">10</span>,<span class="number">10</span>,<span class="number">2</span>)</span><br><span class="line"><span class="number">100</span></span><br></pre></td></tr></table></figure>
+<h2 id="访问图像属性">访问图像属性</h2>
+<p>图像的属性包括像素行列数、通道数、图形数据类型、像素数量等。</p>
+<p>图形的shape由<code>img.shape</code>访问。他是一个包含行数、列数和通道数的元组（如果图像是彩色的）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( img.shape )</span><br><span class="line">(<span class="number">725</span>, <span class="number">550</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>请注意</strong>：</p>
+<p>如果图像是灰度图像，则返回的元组只包含行数和列数，因此它是检查加载的图像是灰度图像还是彩色图像的好方法。</p>
+</blockquote>
+<p>使用<code>img.size</code>访问像素的总数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( img.size )</span><br><span class="line"><span class="number">1196250</span></span><br></pre></td></tr></table></figure>
+<p>图像数据类型由<code>img.dtype</code>获得：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( img.dtype )</span><br><span class="line">uint8</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>请注意</strong>：</p>
+<p>img。dtype在调试时非常重要，因为OpenCV-Python代码中的大量错误都是由无效的数据类型造成的。</p>
+</blockquote>
+<h2 id="图像感兴趣区域（ROI-Region-Of-Interest）">图像感兴趣区域（ROI, Region Of Interest）</h2>
+<p>有时需要处理的仅仅是图像的某些区域。</p>
+<p>比如寻找图像中的眼睛，我们不一定要从整张图片去寻找，可以从人脸的部分开始寻找。这提高了准确性（因为眼睛一定在脸上）和性能（因为缩小了搜索范围）。</p>
+<p>ROI也是使用Numpy的语法实现的，比如这张图：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/messi5.jpg?raw=true" alt="messi5.jpg"></p>
+<p>在这里，我选择球并复制它到图像中的另一个区域:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ball = img[<span class="number">280</span>:<span class="number">340</span>, <span class="number">330</span>:<span class="number">390</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>img[<span class="number">273</span>:<span class="number">333</span>, <span class="number">100</span>:<span class="number">160</span>] = ball</span><br></pre></td></tr></table></figure>
+<p>得到结果：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/messi5_tow_ball.png?raw=true" alt="messi5_tow_ball.png"></p>
+<h2 id="分割和合并图像通道">分割和合并图像通道</h2>
+<p>有时需要单独操作B、G、R通道，这种情况下需要将BGR图像分割为单个通道。</p>
+<p>OpenCV可以很简单的做到这点：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b,g,r = cv.split(img)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>img = cv.merge((b,g,r))</span><br></pre></td></tr></table></figure>
+<p>or</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = img[:,:,<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<p>假设你想把所有的红色像素设置为0 -你不需要首先分割通道。Numpy的语法可以更快更快：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>img[:,:,<span class="number">2</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>警告</strong>：</p>
+<p><code>cv.split()</code>是一个耗费性能的操作(就时间而言)。所以只有在必要时才使用它。否则就使用Numpy的语法。</p>
+</blockquote>
+<h2 id="为图像创建边框-填充">为图像创建边框(填充)</h2>
+<p>如果想为图像创建边框，比如相框，可以使用<code>cv.copyMakeBorder()</code>。但它在卷积运算、零填充等方面有更多的应用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Python:</span><br><span class="line">cv.copyMakeBorder(	src, top, bottom, left, right, borderType[, dst[, value]]	) -&gt;	dst</span><br></pre></td></tr></table></figure>
+<p>这个函数有以下参数：</p>
+<ul>
+<li>
+<p><strong><code>src</code></strong> - 输入图像</p>
+</li>
+<li>
+<p><strong><code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code></strong> - 在相应方向上以像素数表示的边框宽度</p>
+</li>
+<li>
+<p><strong><code>borderType</code></strong> - 定义要添加的边界类型的标志。图像边界用|表示。</p>
+<ul>
+<li>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Enumerator</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">BORDER_CONSTANT Python: cv.BORDER_CONSTANT</td>
+<td>`iiiiii</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_REPLICATE Python: cv.BORDER_REPLICATE</td>
+<td>`aaaaaa</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_REFLECT Python: cv.BORDER_REFLECT</td>
+<td>`fedcba</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_WRAP Python: cv.BORDER_WRAP</td>
+<td>`cdefgh</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_REFLECT_101 Python: cv.BORDER_REFLECT_101</td>
+<td>`gfedcb</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_TRANSPARENT Python: cv.BORDER_TRANSPARENT</td>
+<td>`uvwxyz</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_REFLECT101 Python: cv.BORDER_REFLECT101</td>
+<td>same as BORDER_REFLECT_101</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_DEFAULT Python: cv.BORDER_DEFAULT</td>
+<td>same as BORDER_REFLECT_101</td>
+</tr>
+<tr>
+<td style="text-align:left">BORDER_ISOLATED Python: cv.BORDER_ISOLATED</td>
+<td>do not look outside of ROI</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>value</code></strong> - 如果边框类型为cv.BORDER_CONSTANT，则该值为边框颜色。</p>
+</li>
+</ul>
+<p>一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">BLUE = [<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">img1 = cv.imread(<span class="string">&#x27;OpenCV.png&#x27;</span>)  <span class="comment"># 之前生成的OpenCV图像</span></span><br><span class="line"></span><br><span class="line">replicate = cv.copyMakeBorder(img1,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,cv.BORDER_REPLICATE)</span><br><span class="line">reflect = cv.copyMakeBorder(img1,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,cv.BORDER_REFLECT)</span><br><span class="line">reflect101 = cv.copyMakeBorder(img1,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,cv.BORDER_REFLECT_101)</span><br><span class="line">wrap = cv.copyMakeBorder(img1,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,cv.BORDER_WRAP)</span><br><span class="line">constant= cv.copyMakeBorder(img1,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>,cv.BORDER_CONSTANT,value=BLUE)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">231</span>),plt.imshow(img1,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;ORIGINAL&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">232</span>),plt.imshow(replicate,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;REPLICATE&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">233</span>),plt.imshow(reflect,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;REFLECT&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">234</span>),plt.imshow(reflect101,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;REFLECT_101&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">235</span>),plt.imshow(wrap,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;WRAP&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">236</span>),plt.imshow(constant,<span class="string">&#x27;gray&#x27;</span>),plt.title(<span class="string">&#x27;CONSTANT&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>得到结果（使用matplotlib显示图像。所以红色和蓝色通道将互换 (BGR和RGB)）：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/CV/OpenCV-muti.png?raw=true" alt="OpenCV-muti.png"></p>
+<h1>图像的算术运算</h1>
+<h2 id="图像加法（cv-add-）">图像加法（<code>cv.add()</code>）</h2>
+<p>OpenCV提供了一个简单的函数<code>cv.add()</code>来对两个图像进行加法操作。或者也可以通过Numpy操作<code>res = img1 + img2</code>。两个图像应该具有相同的深度和类型，或者第二个图像可以只是一个标量值。</p>
+<blockquote>
+<p><strong>请注意</strong>：<br>
+OpenCV加法和Numpy加法是有区别的。OpenCV加法是饱和运算，Numpy加法是模运算。两种加法对于结果溢出的数据，会通过某种方法使其在限定的数据范围内。</p>
+</blockquote>
+<p>一个简单的案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = np.uint8([<span class="number">250</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = np.uint8([<span class="number">10</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( cv.add(x,y) ) <span class="comment"># 250+10 = 260 =&gt; 255</span></span><br><span class="line">[[<span class="number">255</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>( x+y )          <span class="comment"># 250+10 = 260 % 256 = 4</span></span><br><span class="line">[<span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<p>当对两个图像执行加法时，这将更加可见。坚持使用OpenCV函数，因为它们将提供更好的结果。</p>
+<h2 id="图像混合（cv-addWeighted-）">图像混合（<code>cv.addWeighted()</code>）</h2>
+<p>图像混合也是将两个图像进行叠加，只不过和上面所说的图像加法不同。混合会赋予图像不同的权重，从而混合出透明感。用数学语言表达则是：<br>
+$$<br>
+g(x)=(1-a)f_{0}(x)+af_{1}(x)<br>
+$$<br>
+从 0 → 1 改变 α ，相当于从一个图像到另一个图像的过渡。</p>
+<p>比如我们混合两个图像，第一幅的权重为 0.7，第二幅则为 0.3，使用函数<code>cv.addWeighted()</code>对图像应用如下公式:<br>
+$$<br>
+dst=\alpha \cdot img1+\beta \cdot img2+\gamma<br>
+$$</p>
+<blockquote>
+<p>这里取γ为零。</p>
+</blockquote>
+<p>我们可以做一个简单的实例，首先选取两个图片，然后将它们叠加：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">img1 = cv.imread(<span class="string">&#x27;ml.png&#x27;</span>)</span><br><span class="line">img2 = cv.imread(<span class="string">&#x27;opencv-logo.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line">dst = cv.addWeighted(img1,<span class="number">0.7</span>,img2,<span class="number">0.3</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">cv.imshow(<span class="string">&#x27;dst&#x27;</span>,dst)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p>最终的结果类似这样：</p>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/blending.jpg?raw=true" alt="blending.jpg"></p>
+<h2 id="按位操作">按位操作</h2>
+<p>这包括按位<code>AND</code>，<code>OR</code>，<code>NOT</code> 和<code>XOR</code>运算。它们在提取图像的某一部分、定义和使用非矩形ROI等方面非常有用。</p>
+<p>假如我想加一个OpenCV的logo在一个图像上，如果只是简单的将两张图像想加，则会改变叠加处的颜色。如果进行上面所说的混叠操作，则会得到一个有透明效应的结果，但我希望得到一个不透明的logo。如果logo是一个矩形logo，那可以用上节所讲的ROI来做。但是OpenCV的logo是不规则形状的，所以用下面的bitwise操作来进行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载两张图片</span></span><br><span class="line">img1 = cv.imread(<span class="string">&#x27;messi5.jpg&#x27;</span>)</span><br><span class="line">img2 = cv.imread(<span class="string">&#x27;opencv-logo-white.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 我想把标志放在左上角，这样我就创造了一个ROI</span></span><br><span class="line">rows,cols,channels = img2.shape</span><br><span class="line">roi = img1[<span class="number">0</span>:rows, <span class="number">0</span>:cols]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 现在创建一个标识的蒙版，并创建它的反蒙版</span></span><br><span class="line">img2gray = cv.cvtColor(img2,cv.COLOR_BGR2GRAY)</span><br><span class="line">ret, mask = cv.threshold(img2gray, <span class="number">10</span>, <span class="number">255</span>, cv.THRESH_BINARY)</span><br><span class="line">mask_inv = cv.bitwise_not(mask)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 现在黑掉ROI的标识区域</span></span><br><span class="line">img1_bg = cv.bitwise_and(roi,roi,mask = mask_inv)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从标识图像中只取标识区域。</span></span><br><span class="line">img2_fg = cv.bitwise_and(img2,img2,mask = mask)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在ROI中加入logo，修改主图像</span></span><br><span class="line">dst = cv.add(img1_bg,img2_fg)</span><br><span class="line">img1[<span class="number">0</span>:rows, <span class="number">0</span>:cols ] = dst</span><br><span class="line"></span><br><span class="line">cv.imshow(<span class="string">&#x27;res&#x27;</span>,img1)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p><img src="https://github.com/Direct5dom/imageDB/blob/main/DB/overlay.jpg?raw=true" alt="overlay.jpg"></p>
+<h1>性能测量和改进技术</h1>
+<p>在进行图像处理时，由于每秒需要处理大量操作，因此我们的代码不仅要正确，还要更快。</p>
+<h2 id="使用OpenCV测量性能">使用OpenCV测量性能</h2>
+<p><code>cv.getTickCount()</code>函数返回参考事件（如机器开启时刻）到调用此函数的时钟周期数。因此，如果在函数执行之前和之后调用它，则会获得用于执行函数的时钟周期数。</p>
+<p><code>cv.getTickFrequency()</code>函数返回时钟周期的频率，或每秒钟的时钟周期数。</p>
+<p>因此，函数的执行时间：<br>
+$$<br>
+Time=\frac{(Count2-Count1)}{Frequency}<br>
+$$<br>
+其代码就是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e1 = cv.getTickCount()</span><br><span class="line"><span class="comment"># 你的代码在这里执行</span></span><br><span class="line">e2 = cv.getTickCount()</span><br><span class="line">time = (e2 - e1)/ cv.getTickFrequency()</span><br></pre></td></tr></table></figure>
+<p>一个具体的实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">img1 = cv.imread(<span class="string">&#x27;messi5.jpg&#x27;</span>)</span><br><span class="line">e1 = cv.getTickCount()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>,<span class="number">49</span>,<span class="number">2</span>):</span><br><span class="line">    img1 = cv.medianBlur(img1,i)</span><br><span class="line">e2 = cv.getTickCount()</span><br><span class="line">t = (e2 - e1)/cv.getTickFrequency()</span><br><span class="line"><span class="built_in">print</span>( t )</span><br><span class="line"><span class="comment"># 得到结果：0.3513441</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong>：<br>
+你可以用<code>time</code>模块做同样的事情。 使用<code>time.time()</code>函数代替<code>cv.getTickCount()</code>。 然后取两次的差值。</p>
+</blockquote>
+<h2 id="OpenCV中的默认优化">OpenCV中的默认优化</h2>
+<p>许多OpenCV函数都使用了SSE2、AVX等进行了优化，在使用时是默认启用的。</p>
+<p>可以使用<code>cv.useOptimized()</code>来检查是否启用，并使用<code>cv.setUseOptimized()</code>来执行启用/禁用的操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># check if optimization is enabled</span></span><br><span class="line">In [<span class="number">5</span>]: cv.useOptimized()</span><br><span class="line">Out[<span class="number">5</span>]: <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">6</span>]: %timeit res = cv.medianBlur(img,<span class="number">49</span>)</span><br><span class="line"><span class="number">10</span> loops, best of <span class="number">3</span>: <span class="number">34.9</span> ms per loop</span><br><span class="line">    </span><br><span class="line"><span class="comment"># Disable it</span></span><br><span class="line">In [<span class="number">7</span>]: cv.setUseOptimized(<span class="literal">False</span>)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">8</span>]: cv.useOptimized()</span><br><span class="line">Out[<span class="number">8</span>]: <span class="literal">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">9</span>]: %timeit res = cv.medianBlur(img,<span class="number">49</span>)</span><br><span class="line"><span class="number">10</span> loops, best of <span class="number">3</span>: <span class="number">64.1</span> ms per loop</span><br></pre></td></tr></table></figure>
+<p>如您所见，优化的中值过滤比未优化的版本快 2 倍。 如果您查看其来源，您会发现中值滤波是经过 SIMD 优化的。 因此，您可以使用它在代码顶部启用优化（请记住，默认情况下启用它）。</p>
+<h2 id="测量-IPython-中的性能">测量 IPython 中的性能</h2>
+<p>IPython中提供了一个命令<code>timeit</code>可以用于比较两个相似操作的性能。</p>
+<p>它运行代码几次以获得更准确的结果。</p>
+<blockquote>
+<p>注意，它们适用于测量单行代码。</p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">10</span>]: x = <span class="number">5</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">11</span>]: %timeit y=x**<span class="number">2</span></span><br><span class="line"><span class="number">10000000</span> loops, best of <span class="number">3</span>: <span class="number">73</span> ns per loop</span><br><span class="line">    </span><br><span class="line">In [<span class="number">12</span>]: %timeit y=x*x</span><br><span class="line"><span class="number">10000000</span> loops, best of <span class="number">3</span>: <span class="number">58.3</span> ns per loop</span><br><span class="line">    </span><br><span class="line">In [<span class="number">15</span>]: z = np.uint8([<span class="number">5</span>])</span><br><span class="line">    </span><br><span class="line">In [<span class="number">17</span>]: %timeit y=z*z</span><br><span class="line"><span class="number">1000000</span> loops, best of <span class="number">3</span>: <span class="number">1.25</span> us per loop</span><br><span class="line">    </span><br><span class="line">In [<span class="number">19</span>]: %timeit y=np.square(z)</span><br><span class="line"><span class="number">1000000</span> loops, best of <span class="number">3</span>: <span class="number">1.16</span> us per loop</span><br></pre></td></tr></table></figure>
+<p>可以看到<code>x = 5 ; y = x*x</code>是最快的，它比Numpy快20倍左右。如果是数组可能会快100倍。<em>（Numpy 开发人员正在解决这个问题）</em></p>
+<blockquote>
+<p><strong>注意</strong>：</p>
+<p>Python 标量运算比 Numpy 标量运算更快。 所以对于包含一两个元素的操作，Python 标量优于 Numpy 数组。 当数组的大小稍大时，Numpy 具有优势。</p>
+</blockquote>
+<p>我们再试一个例子。 这一次，我们将比较<code>cv.countNonZero()</code>和<code>np.count_nonzero()</code>对同一图像的性能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">35</span>]: %timeit z = cv.countNonZero(img)</span><br><span class="line"><span class="number">100000</span> loops, best of <span class="number">3</span>: <span class="number">15.8</span> us per loop</span><br><span class="line">    </span><br><span class="line">In [<span class="number">36</span>]: %timeit z = np.count_nonzero(img)</span><br><span class="line"><span class="number">1000</span> loops, best of <span class="number">3</span>: <span class="number">370</span> us per loop</span><br></pre></td></tr></table></figure>
+<p>可以看到OpenCV的函数比Numpy函数快了近25倍。</p>
+<blockquote>
+<p><strong>注意</strong>：</p>
+<p>通常，OpenCV函数比Numpy函数快。 因此，对于相同的操作，首选OpenCV函数。 但是，也有例外，尤其是当Numpy使用视图而不是副本时。</p>
+</blockquote>
+<h2 id="性能优化技术">性能优化技术</h2>
+<p>有几种技术和编码方法可以利用 Python 和 Numpy 的最大性能。这里仅注明相关的内容，并提供重要来源的链接。这里要注意的主要是，首先尝试以简单的方式实现算法。一旦它正常工作，对其进行分析，找到瓶颈并对其进行优化。</p>
+<ol>
+<li>尽量避免在 Python 中使用循环，尤其是双循环/三循环等。它们本质上很慢。</li>
+<li>将算法/代码矢量化到最大可能范围，因为 Numpy 和 OpenCV 针对向量运算进行了优化。</li>
+<li>利用缓存一致性。</li>
+<li>除非需要，否则永远不要复制数组。尝试使用视图。复制多维数组是一项耗费时间和空间都很多的操作。(译者注：译者认为这儿的意思是除非必要，否在尽量不要使用深拷贝)</li>
+</ol>
+<p>即使在完成所有这些操作之后，如果您的代码仍然很慢，或者使用大型循环是不可避免的，请使用其他库（如 Cython）来加快速度。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Open-CV/" rel="tag"># Open CV</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/07/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%9B%BD%E4%BA%A7%E8%8A%AF%E7%89%87%E7%9A%84%E7%9C%9F%E5%AE%9E%E6%B0%B4%E5%B9%B3%E5%A6%82%E4%BD%95%EF%BC%9F/" rel="prev" title="【转载】国产芯片的真实水平如何？">
+      <i class="fa fa-chevron-left"></i> 【转载】国产芯片的真实水平如何？
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/08/Linux%E7%9A%84etcissue%E3%80%81etcissue.net%E5%92%8Cetcmotd%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="Linux的/etc/issue、/etc/issue.net和/etc/motd的区别">
+      Linux的/etc/issue、/etc/issue.net和/etc/motd的区别 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">图像基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">一些基本知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%92%8C%E4%BF%AE%E6%94%B9%E5%83%8F%E7%B4%A0%E5%80%BC"><span class="nav-number">1.2.</span> <span class="nav-text">访问和修改像素值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%9B%BE%E5%83%8F%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">访问图像属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%84%9F%E5%85%B4%E8%B6%A3%E5%8C%BA%E5%9F%9F%EF%BC%88ROI-Region-Of-Interest%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">图像感兴趣区域（ROI, Region Of Interest）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E5%92%8C%E5%90%88%E5%B9%B6%E5%9B%BE%E5%83%8F%E9%80%9A%E9%81%93"><span class="nav-number">1.5.</span> <span class="nav-text">分割和合并图像通道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E5%9B%BE%E5%83%8F%E5%88%9B%E5%BB%BA%E8%BE%B9%E6%A1%86-%E5%A1%AB%E5%85%85"><span class="nav-number">1.6.</span> <span class="nav-text">为图像创建边框(填充)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">图像的算术运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%8A%A0%E6%B3%95%EF%BC%88cv-add-%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">图像加法（cv.add()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%B7%B7%E5%90%88%EF%BC%88cv-addWeighted-%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">图像混合（cv.addWeighted()）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%89%E4%BD%8D%E6%93%8D%E4%BD%9C"><span class="nav-number">2.3.</span> <span class="nav-text">按位操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">性能测量和改进技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8OpenCV%E6%B5%8B%E9%87%8F%E6%80%A7%E8%83%BD"><span class="nav-number">3.1.</span> <span class="nav-text">使用OpenCV测量性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenCV%E4%B8%AD%E7%9A%84%E9%BB%98%E8%AE%A4%E4%BC%98%E5%8C%96"><span class="nav-number">3.2.</span> <span class="nav-text">OpenCV中的默认优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E9%87%8F-IPython-%E4%B8%AD%E7%9A%84%E6%80%A7%E8%83%BD"><span class="nav-number">3.3.</span> <span class="nav-text">测量 IPython 中的性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF"><span class="nav-number">3.4.</span> <span class="nav-text">性能优化技术</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

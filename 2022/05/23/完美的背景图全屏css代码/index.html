@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="此博客的背景图采用CSS3.0方式实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="完美的背景图全屏CSS代码">
+<meta property="og:url" content="https://direct5dom.github.io/2022/05/23/%E5%AE%8C%E7%BE%8E%E7%9A%84%E8%83%8C%E6%99%AF%E5%9B%BE%E5%85%A8%E5%B1%8Fcss%E4%BB%A3%E7%A0%81/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="此博客的背景图采用CSS3.0方式实现">
+<meta property="og:locale">
+<meta property="og:image" content="https://direct5dom.github.io/images/background.jpg">
+<meta property="article:published_time" content="2022-05-23T14:04:32.000Z">
+<meta property="article:modified_time" content="2022-05-23T14:04:32.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="HTML">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://direct5dom.github.io/images/background.jpg">
+
+<link rel="canonical" href="https://direct5dom.github.io/2022/05/23/%E5%AE%8C%E7%BE%8E%E7%9A%84%E8%83%8C%E6%99%AF%E5%9B%BE%E5%85%A8%E5%B1%8Fcss%E4%BB%A3%E7%A0%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>完美的背景图全屏CSS代码 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2022/05/23/%E5%AE%8C%E7%BE%8E%E7%9A%84%E8%83%8C%E6%99%AF%E5%9B%BE%E5%85%A8%E5%B1%8Fcss%E4%BB%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          完美的背景图全屏CSS代码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-23 22:04:32" itemprop="dateCreated datePublished" datetime="2022-05-23T22:04:32+08:00">2022-05-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://direct5dom.github.io/images/background.jpg" alt="background.jpg (5760×2775) (direct5dom.github.io)"></p>
+<blockquote>
+<p>此博客的背景图采用CSS3.0方式实现</p>
+</blockquote>
+<span id="more"></span>
+<p>在写主题样式的时候经常会碰到用背景图铺满整个背景的需求，这里分享下使用方法</p>
+<p>需要的效果</p>
+<ol>
+<li>图片以背景的形式<a target="_blank" rel="noopener" href="https://huilang.me/perfect-full-page-background-image/">铺满整个屏幕</a>，不留空白区域</li>
+<li>保持图像的纵横比（图片不变形）</li>
+<li>图片居中</li>
+<li>不出现滚动条</li>
+<li>多浏览器支持</li>
+</ol>
+<p>以图片bg.jpg为例</p>
+<h2 id="CSS3-0">CSS3.0</h2>
+<p>归功于css3.0新增的一个属性<a target="_blank" rel="noopener" href="https://huilang.me/perfect-full-page-background-image/">background-size</a>，可以简单的实现这个效果，这里用fixed和center定位背景图，然后用background-size来使图片铺满，具体css如下</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">html</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">url</span>(<span class="string">bg.jpg</span>) no-repeat center center fixed;</span><br><span class="line">  -webkit-<span class="attribute">background-size</span>: cover;</span><br><span class="line">  -moz-<span class="attribute">background-size</span>: cover;</span><br><span class="line">  -o-<span class="attribute">background-size</span>: cover;</span><br><span class="line">  <span class="attribute">background-size</span>: cover;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段样式适用于以下浏览器</p>
+<ul>
+<li>Safari 3+</li>
+<li>Chrome</li>
+<li>IE 9+</li>
+<li>Opera 10+ (Opera 9.5 支持background-size属性 但是不支持cover)</li>
+<li>Firefox 3.6+</li>
+</ul>
+<p>这里你会发现ie8及以下版本不支持，这些蛋疼浏览器则需要添加下面的css来设置兼容</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">filter</span>: progid:DXImageTransform.Microsoft.<span class="built_in">AlphaImageLoader</span>(src=<span class="string">&#x27;.bg.jpg&#x27;</span>, sizingMethod=<span class="string">&#x27;scale&#x27;</span>);</span><br><span class="line">-ms-<span class="attribute">filter</span>: <span class="string">&quot;progid:DXImageTransform.Microsoft.AlphaImageLoader(src=&#x27;bg.jpg&#x27;, sizingMethod=&#x27;scale&#x27;)&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>这个用滤镜来兼容的写法并不是很完美，首先是图片路径，这里只能是相对于根目录的路径，或者用绝对路径；然后是图片纵横比改变了，是拉伸铺满的形式。尽管如此，总比留空白好多了吧（如果背景图bg.jpg的宽高够大，则可以不用这段，变成简单的平铺，比图片变形效果好写，大家可以尝试下）</p>
+<h2 id="用img形式来实现背景平铺效果">用img形式来实现背景平铺效果</h2>
+<p>首先在html中加入以下代码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;bg.jpg&quot;</span> <span class="attr">class</span>=<span class="string">&quot;bg&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后通过css来实现铺满效果（假设图片宽度1024px）</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span><span class="selector-class">.bg</span> &#123;</span><br><span class="line">    <span class="attribute">min-height</span>: <span class="number">100%</span>;</span><br><span class="line">    <span class="attribute">min-width</span>: <span class="number">1024px</span>;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">    <span class="attribute">height</span>: auto;</span><br><span class="line">    <span class="attribute">position</span>: fixed;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面这个是为了屏幕小于1024px宽时，图片仍然能居中显示（注意上面假设的图片宽度）</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">max-width</span>: <span class="number">1024px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">img</span><span class="selector-class">.bg</span> &#123;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">margin-left</span>: -<span class="number">512px</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>兼容以下浏览器</p>
+<ul>
+<li>以下浏览器的所有版本: Safari / Chrome / Opera / Firefox</li>
+<li>IE9+</li>
+<li>IE 7/8: 平铺效果支持，但是在小于1024px的屏幕下居中效果失效</li>
+</ul>
+<h2 id="JQ模拟的方法"><strong>JQ模拟的方法</strong></h2>
+<p>html部分</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;bg.jpg&quot;</span> <span class="attr">id</span>=<span class="string">&quot;bg&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>css部分</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#bg</span> &#123; <span class="attribute">position</span>: fixed; <span class="attribute">top</span>: <span class="number">0</span>; <span class="attribute">left</span>: <span class="number">0</span>; &#125;</span><br><span class="line"><span class="selector-class">.bgwidth</span> &#123; <span class="attribute">width</span>: <span class="number">100%</span>; &#125;</span><br><span class="line"><span class="selector-class">.bgheight</span> &#123; <span class="attribute">height</span>: <span class="number">100%</span>; &#125;</span><br></pre></td></tr></table></figure>
+<p>js部分</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">window</span>).load(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> theWindow        = $(<span class="built_in">window</span>),</span><br><span class="line">        $bg              = $(<span class="string">&quot;#bg&quot;</span>),</span><br><span class="line">        aspectRatio      = $bg.width() / $bg.height();</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">resizeBg</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ( (theWindow.width() / theWindow.height()) &lt; aspectRatio ) &#123;</span><br><span class="line">            $bg</span><br><span class="line">                .removeClass()</span><br><span class="line">                .addClass(<span class="string">&#x27;bgheight&#x27;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $bg</span><br><span class="line">                .removeClass()</span><br><span class="line">                .addClass(<span class="string">&#x27;bgwidth&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    theWindow.resize(resizeBg).trigger(<span class="string">&quot;resize&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/HTML/" rel="tag"># HTML</a>
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/21/RDP%E5%9B%BE%E5%BD%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E8%B0%83%E6%95%B4/" rel="prev" title="RDP图形性能优化调整">
+      <i class="fa fa-chevron-left"></i> RDP图形性能优化调整
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/25/%E5%85%B3%E4%BA%8E%E7%AC%94%E8%AE%B0%E6%9C%AC%E5%A4%96%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%B1%8F%E7%94%BB%E9%9D%A2%E6%92%95%E8%A3%82%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E4%B8%80%E5%88%99/" rel="next" title="关于笔记本外接显示屏画面撕裂的解决办法一则">
+      关于笔记本外接显示屏画面撕裂的解决办法一则 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS3-0"><span class="nav-number">1.</span> <span class="nav-text">CSS3.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8img%E5%BD%A2%E5%BC%8F%E6%9D%A5%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%B9%B3%E9%93%BA%E6%95%88%E6%9E%9C"><span class="nav-number">2.</span> <span class="nav-text">用img形式来实现背景平铺效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JQ%E6%A8%A1%E6%8B%9F%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">JQ模拟的方法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

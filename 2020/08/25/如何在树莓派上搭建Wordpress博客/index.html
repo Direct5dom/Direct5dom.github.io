@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="ipqy_K21pfQuExk7eQlsanv9Vn88RSP-CBMztGB1hpI">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"direct5dom.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="原文章于2020年8月25日发表于本人博客（现已关闭）  在树莓派上搭建一个博客，这个想法实际上有很久了。 年龄一大，眼睁睁看着那些不受控的博客网站一个个倒下。不少优质内容可能再无重现天日的机会，就感到害怕。 尤其对于我这种喜欢记录的人来说。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在树莓派上搭建WordPress博客">
+<meta property="og:url" content="https://direct5dom.github.io/2020/08/25/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E6%90%AD%E5%BB%BAWordpress%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:site_name" content="薛定谔的第四旋臂">
+<meta property="og:description" content="原文章于2020年8月25日发表于本人博客（现已关闭）  在树莓派上搭建一个博客，这个想法实际上有很久了。 年龄一大，眼睁睁看着那些不受控的博客网站一个个倒下。不少优质内容可能再无重现天日的机会，就感到害怕。 尤其对于我这种喜欢记录的人来说。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-08-25T08:57:55.000Z">
+<meta property="article:modified_time" content="2021-10-05T07:20:32.000Z">
+<meta property="article:author" content="司晓龍">
+<meta property="article:tag" content="树莓派">
+<meta property="article:tag" content="WordPress">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://direct5dom.github.io/2020/08/25/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E6%90%AD%E5%BB%BAWordpress%E5%8D%9A%E5%AE%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+
+  <title>如何在树莓派上搭建WordPress博客 | 薛定谔的第四旋臂</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">薛定谔的第四旋臂</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">司晓龍</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+    <!--音乐播放器-->
+      <link rel="stylesheet" href="/dist/APlayer.min.css">
+      <div id="aplayer"></div>
+      <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+      <script type="text/javascript" src="/dist/music.js"></script>
+      <!--音乐播放器-->
+
+  <script type="text/javascript" src="/Welcome/Welcome.js"></script>
+
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/index.html" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://direct5dom.github.io/2020/08/25/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E6%90%AD%E5%BB%BAWordpress%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="司晓龍">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薛定谔的第四旋臂">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何在树莓派上搭建WordPress博客
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-25 16:57:55" itemprop="dateCreated datePublished" datetime="2020-08-25T16:57:55+08:00">2020-08-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-05 15:20:32" itemprop="dateModified" datetime="2021-10-05T15:20:32+08:00">2021-10-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WordPress/" itemprop="url" rel="index"><span itemprop="name">WordPress</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>原文章于2020年8月25日发表于本人博客（现已关闭）</p>
+</blockquote>
+<p>在树莓派上搭建一个博客，这个想法实际上有很久了。</p>
+<p>年龄一大，眼睁睁看着那些不受控的博客网站一个个倒下。不少优质内容可能再无重现天日的机会，就感到害怕。</p>
+<p>尤其对于我这种喜欢记录的人来说。</p>
+<span id="more"></span>
+<hr>
+<p>废话少说，我们直接上教程。</p>
+<p>思路很简单，先在树莓派上搭建LAMP（Linux Apache Mysql PHP），然后内网穿透出去。</p>
+<p>这篇文章主要参考了一个CSDN上的博文，写的不是很详实，但是我按照其的做法成功了。然而就在我全部部署完毕后，那篇博文就404了。</p>
+<blockquote>
+<p>注：现在是2021年8月13日，那个文章又可以访问了，链接<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44803446/article/details/103739775">树莓派搭建Wordpress博客完整版-作着：凉拌糖醋鱼-发布事件： 2019-12-28 00:51:28</a>。</p>
+</blockquote>
+<hr>
+<h2 id="搭建LAMP（Linux-Apache-MySQL-MariaDB-PHP）">搭建LAMP（Linux Apache MySQL/MariaDB PHP）</h2>
+<p>LAMP，也就是：Linux+Apache+MySQL+PHP</p>
+<p>Linux指的是部署的系统，我这里采用树莓派官方的Raspberry Pi OS。SD卡烧录、系统设置、换下载源等步骤就不再赘述了。</p>
+<p>Apache，是世界使用排名第一的Web服务器软件，不做过多介绍。</p>
+<p>MySQL，我们要用到的数据库。实际使用中会用MariaDB替代。至于MariaDB和MySQL的关系，MariaDB是由原本开发MySQL的一些原始开发者领导，他们担心Oracle收购MySQL后会有一些隐患。MariaDB与MySQL保持这高度兼容性，并使用了一个新的存储引擎Aria。</p>
+<p>PHP，我们用到的语言（实际上你几乎不会碰到用PHP编写的情况，大部分内容都是可视化的）</p>
+<h3 id="更新源列表">更新源列表</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>没什么好说的，最好在下载安装软件前更新一次软件列表。</p>
+<h3 id="安装部署Apache">安装部署Apache</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install apache2</span><br><span class="line">systemctl status apache2 #检查是否开启Apache</span><br></pre></td></tr></table></figure>
+<p>一些指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/apache2 start #开启服务器</span><br><span class="line">/etc/init.d/apache2 stop #关闭服务器</span><br><span class="line">/etc/init.d/apache2 restart #重启服务器</span><br></pre></td></tr></table></figure>
+<p>此时可以访问：<code>＜树莓派的内网IP＞</code>来查看Apache的信息。</p>
+<h3 id="安装部署MySQL（MariaDB）">安装部署MySQL（MariaDB）</h3>
+<p>现在使用安装MySQL的指令，你会发现返回错误告诉你根本没有MySQL的包，可以选择MariaDB替代。我们就选MariaDB了。</p>
+<h4 id="安装MriaDB">安装MriaDB</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install mariadb-server </span><br></pre></td></tr></table></figure>
+<p>安装完成后就可以通过以下命令连接到MariaDB：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysql </span><br></pre></td></tr></table></figure>
+<p>出现如下讯息表示已成功连接到MariaDB了：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Welcome to the MariaDB monitor. Commands end with ; or \g. </span><br><span class="line">Your MariaDB connection id is 6 </span><br><span class="line">Server version: 10.1.38-MariaDB-0+deb9u1 Raspbian 9.0 </span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others. </span><br><span class="line"></span><br><span class="line">Type &#x27;help;&#x27; or &#x27;\h&#x27; for help. Type &#x27;\c&#x27; to clear the current input statement. </span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; </span><br></pre></td></tr></table></figure>
+<p><strong>配置密码访问</strong></p>
+<p>默认情况下MariaDB安装好后都没有配置访问用户的密码，如果需要远程连接时会无法连接。因此需要先对root用户设置密码。首先透过上一步中的命令连接至MariaDB，输入如下语句进行密码的修改：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use mysql; </span><br><span class="line">UPDATE user SET password=password(&#x27;password&#x27;) WHERE user=&#x27;root&#x27;; </span><br><span class="line">UPDATE user SET plugin=&#x27;mysql_native_password&#x27; WHERE user = &#x27;root&#x27;; </span><br><span class="line">flush privileges; </span><br><span class="line">exit </span><br></pre></td></tr></table></figure>
+<p>以上执行完成后，重启服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart mariadb </span><br></pre></td></tr></table></figure>
+<p>重启完成后，试用密码进行mariadb登录，验证是否修改成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p </span><br></pre></td></tr></table></figure>
+<p>输入上面设置的密码就可以看到第一步安装完成登录时一样的画面了。</p>
+<p><strong>配置MariaDB可远程连接</strong></p>
+<p>MariaDB默认只监听了127.0.0.1这个IP地址，这个时候是无法从外部连接到树莓派上MariaDB。<br>
+先使用一下命令打开配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf</span><br></pre></td></tr></table></figure>
+<p>打开文件后有一段如下的内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Instead of skip-networking the default is now to listen only on<span class="comment"># localhost which is more compatible and is not less secure.bind-address            = 127.0.0.1</span></span></span><br></pre></td></tr></table></figure>
+<p>bind-address表示只监听了127.0.0.1这个IP，将这一行的前面加上# 将这一行注释起来，这样MariaDB就监听了所有的IP。<br>
+此时从外部的电脑连接MariaDB会提示”<a target="_blank" rel="noopener" href="http://xxx.xxx.xxx">xxx.xxx.xxx</a> is not allowed to connect to this MariaDB Server”。同样使用上一步中的mysql命令连接到MariaDB，输入如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;password&#x27; WITH GRANT OPTION;--格式如下GRANT ALL PRIVILEGES ON *.* TO &#x27;user&#x27;@&#x27;remoteip&#x27; IDENTIFIED BY &#x27;password&#x27; WITH GRANT OPTION;--更新权限FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+<p>至此可从外部连接到树莓派上的MariaDB了。</p>
+<h3 id="安装PHP">安装PHP</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install php7</span><br></pre></td></tr></table></figure>
+<h4 id="安装phpmyadmin">安装phpmyadmin</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install phpmyadmin</span><br></pre></td></tr></table></figure>
+<p>然后可以通过访问：<code>＜树莓派的内网IP＞／phpmyadmin</code>进入控制面板。</p>
+<hr>
+<h2 id="安装WordPress">安装WordPress</h2>
+<p>首先下载WordPress的<code>.tar.gz</code>压缩包。因为官网下载速度过慢，可以考虑用镜像。</p>
+<p>将<code>.tar.gz</code>文件解压到<code>/var/www/html</code></p>
+<p>然后访问：<code>＜树莓派的内网IP＞</code>即可进入配置页面。</p>
+<p>对于配置好后，可以访问<code>＜树莓派的内网IP＞/wp-admin</code>进入管理员界面。</p>
+<p>配置内容很简单，中途可能遇到无法自动添加内容至某个文件的问题（可能是权限问题，全程在root下操作理论上可以避免），按照指示将其添加入对应文件即可。</p>
+<p>然后就按教程部署WordPress即可，不做赘述。</p>
+<hr>
+<h2 id="常见问题">常见问题</h2>
+<h3 id="phpmyadmin不工作">phpmyadmin不工作</h3>
+<p>在安装phpmyadmin后，访问：<code>＜树莓派的内网IP＞／phpmyadmin</code>提示页面未找到。</p>
+<p><strong>解决办法：</strong></p>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://askubuntu.com/questions/55280/phpmyadmin-is-not-working-after-i-installed-it">https://askubuntu.com/questions/55280/phpmyadmin-is-not-working-after-i-installed-it</a></p>
+<p>根据<a target="_blank" rel="noopener" href="https://askubuntu.com/questions/55280/phpmyadmin-is-not-working-after-i-installed-it">UbuntuWiki</a>（树莓派OS和Ubuntu操作相同）</p>
+<p>需要配置<code>apache2.conf</code>使phpMyAdmin正常工作。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gksu gedit /etc/apache2/apache2.conf</span><br></pre></td></tr></table></figure>
+<p>然后将以下行添加到文件的末尾。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Include /etc/phpmyadmin/apache.conf</span><br></pre></td></tr></table></figure>
+<p>然后重新启动apache</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/apache2 restart</span><br></pre></td></tr></table></figure>
+<h3 id="phpmyadmin报错">phpmyadmin报错</h3>
+<p>报错内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Warning in ./libraries/sql.lib.php#601count(): Parameter must be an array or an object that implements CountableBacktrace./libraries/sql.lib.php#2038: PMA_isRememberSortingOrder(array)./libraries/sql.lib.php#1984: PMA_executeQueryAndGetQueryResponse(array,boolean true,string &#x27;alternativegirls&#x27;,string &#x27;tgp_photo&#x27;,NULL,NULL,NULL,NULL,NULL,NULL,string &#x27;&#x27;,string &#x27;./themes/pmahomme/img/&#x27;,NULL,NULL,NULL,string &#x27;SELECT * FROM `tgp_photo`&#x27;,NULL,NULL,)./sql.php#216: PMA_executeQueryAndSendQueryResponse(array,boolean true,string &#x27;alternativegirls&#x27;,string &#x27;tgp_photo&#x27;,NULL,NULL,NULL,NULL,NULL,NULL,string &#x27;&#x27;,string &#x27;./themes/pmahomme/img/&#x27;,NULL,NULL,NULL,string &#x27;SELECT * FROM `tgp_photo`&#x27;,NULL,NULL,)./index.php#53: include(./sql.php)</span><br></pre></td></tr></table></figure>
+<p>这是因为官方的配置文件多个括号的问题（多个符号害死人系列）</p>
+<p><strong>解决办法：</strong></p>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/48001569/phpmyadmin-count-parameter-must-be-an-array-or-an-object-that-implements-co">https://stackoverflow.com/questions/48001569/phpmyadmin-count-parameter-must-be-an-array-or-an-object-that-implements-co</a></p>
+<p>简单的解决办法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sed -i &quot;s/|\s*\((count(\$analyzed_sql_results\[&#x27;select_expr&#x27;\]\)/| (\1)/g&quot; /usr/share/phpmyadmin/libraries/sql.lib.php</span><br></pre></td></tr></table></figure>
+<p>手工办法：</p>
+<p>打开<code>sql.lib.php</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /usr/share/phpmyadmin/libraries/sql.lib.php</span><br></pre></td></tr></table></figure>
+<p>找到<code>count($analyzed_sql_results[‘select_expr’]</code></p>
+<p>修改：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|| (count($analyzed_sql_results[&#x27;select_expr&#x27;] == 1)</span><br></pre></td></tr></table></figure>
+<p>为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|| ((count($analyzed_sql_results[&#x27;select_expr&#x27;]) == 1)</span><br></pre></td></tr></table></figure>
+<p><strong>WordPress上传内容报错：无法建立目录<code>wp-content/uploads/2020/08</code>。有没有上级目录的写权限？</strong></p>
+<p>这是Linux文件夹问题，进入root账户，到WordPress安装目录，开放wp-content文件夹的全部权限即可。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag"># 树莓派</a>
+              <a href="/tags/WordPress/" rel="tag"># WordPress</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/09/%E8%AE%BA%E8%8B%8F%E4%BF%84%E7%9A%84%E4%BE%B5%E7%95%A5%E6%80%A7-%E6%9D%A8%E6%8C%AF%E5%AE%81-%E3%80%8A%E6%98%8E%E6%8A%A5%E6%9C%88%E5%88%8A%E3%80%8B1979%E5%B9%B411%E6%9C%88%E5%8F%B7/" rel="prev" title="论苏俄的侵略性（杨振宁）">
+      <i class="fa fa-chevron-left"></i> 论苏俄的侵略性（杨振宁）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/07/%E4%BD%BF%E7%94%A8MySQL-WorkBench%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E5%8C%85%E6%8B%AC%E6%95%B0%E6%8D%AE%EF%BC%89/" rel="next" title="使用MySQL WorkBench导出数据库（包括数据）">
+      使用MySQL WorkBench导出数据库（包括数据） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BALAMP%EF%BC%88Linux-Apache-MySQL-MariaDB-PHP%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">搭建LAMP（Linux Apache MySQL&#x2F;MariaDB PHP）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%BA%90%E5%88%97%E8%A1%A8"><span class="nav-number">1.1.</span> <span class="nav-text">更新源列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Apache"><span class="nav-number">1.2.</span> <span class="nav-text">安装部署Apache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2MySQL%EF%BC%88MariaDB%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">安装部署MySQL（MariaDB）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85MriaDB"><span class="nav-number">1.3.1.</span> <span class="nav-text">安装MriaDB</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85PHP"><span class="nav-number">1.4.</span> <span class="nav-text">安装PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85phpmyadmin"><span class="nav-number">1.4.1.</span> <span class="nav-text">安装phpmyadmin</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85WordPress"><span class="nav-number">2.</span> <span class="nav-text">安装WordPress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#phpmyadmin%E4%B8%8D%E5%B7%A5%E4%BD%9C"><span class="nav-number">3.1.</span> <span class="nav-text">phpmyadmin不工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#phpmyadmin%E6%8A%A5%E9%94%99"><span class="nav-number">3.2.</span> <span class="nav-text">phpmyadmin报错</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="司晓龍"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">司晓龍</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Direct5dom" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Direct5dom" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">司晓龍</span>
+</div>
+  <div class="powered-by">
+    <!--Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> -->Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT</a> & <a href="https://direct5dom.github.io/" class="theme-link">司晓龍</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
